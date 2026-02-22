@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy | NetDebug Toolkit</title>
+  <style>
+    :root { --bg-top:#000000; --bg-bottom:#323131; --card:#1f1f1f; --border:#4a4a4a; --text:#f5f5f5; --muted:#c9c9c9; --brand:#FF5D24; }
+    html, body { min-height: 100%; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:linear-gradient(to bottom, var(--bg-top), var(--bg-bottom)); color:var(--text); }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 24px; }
+    a { color:var(--brand); }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px; }
+    h1 { margin-top:0; }
+    h2 { color: var(--brand); }
+    p, li { color:var(--muted); line-height:1.6; }
+    .muted { color:var(--muted); font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="muted"><a href="index.html">← Back to Home</a></p>
+    <article class="card">
+      <h1>Privacy Policy</h1>
+      <p><strong>Effective Date:</strong> 21 February 2026</p>
+      <p>NetDebug Toolkit respects your privacy. This Privacy Policy explains what data is handled by the app.</p>
+
+      <h2>1. Data Stored on Device</h2>
+      <p>The app stores saved hosts (optional host name and host IP/domain) locally on your device using on-device storage.</p>
+
+      <h2>2. Network Activity</h2>
+      <p>When you run a tool, the app sends network requests required to perform that diagnostic operation (for example DNS lookup, RDAP and IANA WHOIS lookups, port checks, and Public IP + Geo/ASN lookup) to the relevant endpoints. Whois requests may be sent to rdap.org, whois.iana.org, and referred WHOIS servers returned by registry responses.</p>
+
+      <h2>3. Third-Party Services</h2>
+      <p>The Whois tool can use RDAP and IANA WHOIS services to retrieve registration data for domains and IPs. The Public IP + Geo/ASN tool uses ipinfo.io. To provide these features, requests are sent to the relevant third-party endpoints and may include your requesting IP address as part of standard network communication. Responses may include registration metadata, IP, ASN, ISP, city, region, country, and coordinates.</p>
+
+      <h2>4. No Account Required</h2>
+      <p>The app does not require account sign-in and does not intentionally collect personal profile information for account creation.</p>
+
+      <h2>5. No Third-Party Analytics by Default</h2>
+      <p>The app does not include third-party analytics or advertising SDKs by default in this project setup.</p>
+
+      <h2>6. Data Sharing</h2>
+      <p>Saved hosts are not intentionally shared by the app as part of normal operation. However, network endpoints and third-party service providers used by tools (such as RDAP/WHOIS services and ipinfo.io) will receive the network traffic necessary to process your requests.</p>
+
+      <h2>7. Data Retention and Deletion</h2>
+      <p>Saved host data remains on your device until you edit or delete it. You can remove entries directly from the My Hosts list.</p>
+
+      <h2>8. Security</h2>
+      <p>Reasonable care is taken in app implementation, but no software can guarantee absolute security. Use caution when testing sensitive environments.</p>
+
+      <h2>9. Policy Updates</h2>
+      <p>This Privacy Policy may be updated. Updates become effective when published in the app.</p>
+
+      <h2>10. Contact</h2>
+      <p>If you have privacy questions, contact us at <a href="mailto:apps@developerinsider.co">apps@developerinsider.co</a>.</p>
+    </article>
+  </div>
+</body>
+</html>

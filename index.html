@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="NetDebug Toolkit helps developers and IT teams run Ping, DNS, Whois, Traceroute, Port Scan, LAN Scan, Subnet Calculator, and HTTP(S) checks." />
+  <title>NetDebug Toolkit</title>
+  <style>
+    :root {
+      --bg-top: #000000;
+      --bg-bottom: #323131;
+      --card: #1a1a1a;
+      --card-2: #242424;
+      --text: #f5f5f5;
+      --muted: #c9c9c9;
+      --brand: #FF5D24;
+      --brand-2: #FF5D24;
+      --border: #4a4a4a;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-bottom);
+      background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
+      background-repeat: no-repeat;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 24px; }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+    }
+    .brand {
+      font-weight: 700;
+      letter-spacing: .2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+    }
+    .brand-logo {
+      width: 70px;
+      height: 34px;
+      object-fit: contain;
+    }
+    .links a {
+      color: var(--muted); text-decoration: none; margin-left: 16px; font-size: 14px;
+    }
+    .links a:hover { color: var(--brand); }
+    .hero {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+    }
+    .panel {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+    h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; }
+    .hero-logo {
+      width: 74px;
+      height: 74px;
+      object-fit: contain;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      background: #111;
+      padding: 6px;
+    }
+    p { margin: 0; color: var(--muted); }
+    .cta { margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      border: 1px solid var(--border);
+      background: #2a2a2a;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn.primary { background: linear-gradient(180deg, #ff7a4d, var(--brand)); border-color: var(--brand); }
+    .chips { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      border: 1px solid var(--border);
+      color: #ffe6dc;
+      background: #3a231b;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .section-title { margin: 30px 0 12px; font-size: 20px; color: var(--brand); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 15px; color: var(--brand); }
+    .card p { font-size: 13px; }
+    footer {
+      margin-top: 28px;
+      padding: 16px 0 22px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .grid { grid-template-columns: 1fr; }
+      .links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <div class="brand">
+        <img class="brand-logo" src="netdebug.png" alt="NetDebug Toolkit logo" />
+        <span>Toolkit</span>
+      </div>
+      <nav class="links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="panel">
+        <h1>Network diagnostics for developers and IT teams</h1>
+        <p>Run Ping, DNS, Whois, Traceroute, Port Scan, LAN Scan, Subnet Calculator, HTTP(S) checks, and Public IP + Geo/ASN from one clean toolkit.</p>
+        <div class="cta">
+          <a href="https://apps.apple.com/app/id6759454574" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <img src="https://toolbox.marketingtools.apple.com/api/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store" />
+          </a>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 style="margin:0 0 8px;font-size:20px;">Why NetDebug Toolkit?</h2>
+        <p>Designed for practical troubleshooting with structured outputs, saved hosts, and fast repeat checks across essential networking workflows.</p>
+        <ul style="margin:12px 0 0;padding-left:18px;color:var(--muted)">
+          <li>View redirect chains and TLS summaries</li>
+          <li>Use custom DNS resolvers</li>
+          <li>Check open/closed/filtered TCP ports</li>
+          <li>Lookup registration data with fallback logic</li>
+        </ul>
+      </div>
+    </section>
+
+    <h2 class="section-title">Included Tools</h2>
+    <section class="grid">
+      <article class="card"><h3>Ping</h3><p>Host reachability and response timing.</p></article>
+      <article class="card"><h3>HTTP(S) Check</h3><p>Status, redirects, and TLS certificate summary.</p></article>
+      <article class="card"><h3>DNS Lookup</h3><p>Resolve records with optional custom resolver.</p></article>
+      <article class="card"><h3>Whois</h3><p>RDAP or IANA WHOIS mode for registration details.</p></article>
+      <article class="card"><h3>Traceroute</h3><p>Map route path and hop latency.</p></article>
+      <article class="card"><h3>Port Scan</h3><p>Scan custom port ranges and review outcomes.</p></article>
+      <article class="card"><h3>LAN Scan</h3><p>Find active devices on local subnet.</p></article>
+      <article class="card"><h3>Subnet Calculator</h3><p>Compute IPv4/IPv6 subnet boundaries and hosts.</p></article>
+      <article class="card"><h3>Public IP + Geo/ASN</h3><p>See WAN IP, ASN, ISP, and approximate location.</p></article>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <div>
+        <a href="support.html" style="color:var(--muted);text-decoration:none;margin-right:12px;">Support</a>
+        <a href="terms.html" style="color:var(--muted);text-decoration:none;margin-right:12px;">Terms</a>
+        <a href="privacy.html" style="color:var(--muted);text-decoration:none;">Privacy</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
