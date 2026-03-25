@@ -5,28 +5,200 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Terms and Conditions | NetDebug Toolkit</title>
   <style>
-    :root { --bg-top:#000000; --bg-bottom:#000000; --card:#1f1f1f; --border:#4a4a4a; --text:#f5f5f5; --muted:#c9c9c9; --brand:#FF5D24; }
-    html, body { min-height: 100%; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:linear-gradient(to bottom, var(--bg-top), var(--bg-bottom)); color:var(--text); }
-    .wrap { max-width: 860px; margin: 0 auto; padding: 24px; }
-    a { color:var(--brand); }
-    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px; }
-    h1 { margin-top:0; }
-    h2 { color: var(--brand); }
-    p, li { color:var(--muted); line-height:1.6; }
-    .muted { color:var(--muted); font-size:14px; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #050507;
+      --surface: #0e0e12;
+      --surface-2: #16161d;
+      --border: rgba(255,255,255,.08);
+      --border-hover: rgba(255,255,255,.15);
+      --text: #eaeaf0;
+      --text-secondary: #9898a8;
+      --brand: #FF5D24;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glow-bg {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(255,93,36,.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .3px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: color .2s, background .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      margin: 32px 0;
+    }
+
+    .content h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: 6px;
+    }
+
+    .effective-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .content h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand);
+      margin: 28px 0 8px;
+    }
+
+    .content h2:first-of-type {
+      margin-top: 20px;
+    }
+
+    .content p, .content li {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .content a {
+      color: var(--brand);
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+
+    .content a:hover {
+      opacity: .8;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer .copy {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    footer nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    footer nav a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    footer nav a:hover {
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
+  <div class="glow-bg"></div>
+
   <div class="wrap">
-    <p class="muted"><a href="/">← Back to Home</a></p>
-    <article class="card">
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="netdebug.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="content">
       <h1>Terms and Conditions</h1>
-      <p><strong>Effective Date:</strong> 23 March 2026</p>
+      <p class="effective-date">Effective Date: 23 March 2026</p>
       <p>These Terms and Conditions govern your use of NetDebug Toolkit. By using this app, you agree to these terms.</p>
 
       <h2>1. Purpose</h2>
-      <p>NetDebug Toolkit provides network diagnostics features such as ping, traceroute, DNS lookup, port scan, whois lookup (RDAP and IANA WHOIS), LAN scan, and Public IP + Geo/ASN lookup for troubleshooting and learning purposes.</p>
+      <p>NetDebug Toolkit provides network diagnostics features such as Ping, Traceroute, DNS Lookup, DNS Record Explorer, HTTP(S) Check, Port Scan, TCP/UDP Connect, LAN Scan, Subnet Calculator, Whois (RDAP and IANA WHOIS), Public IP + Geo/ASN, Speed/Latency Baseline, TLS Certificate Inspector, mDNS/Bonjour Browser, UPnP/NAT-PMP Discovery, and Wake-on-LAN for troubleshooting and learning purposes.</p>
 
       <h2>2. Acceptable Use</h2>
       <p>You agree to use the app only for lawful and authorized activities. You are responsible for ensuring you have permission to test, scan, or query any host, network, or service.</p>
@@ -58,6 +230,17 @@
       <h2>11. Contact</h2>
       <p>If you have questions about these terms, contact us at <a href="mailto:apps@developerinsider.co">apps@developerinsider.co</a>.</p>
     </article>
+
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+    </footer>
   </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

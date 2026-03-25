@@ -3,195 +3,736 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="NetDebug Toolkit helps developers and IT teams run Ping, DNS, Whois, Traceroute, Port Scan, LAN Scan, Subnet Calculator, and HTTP(S) checks." />
-  <title>NetDebug Toolkit</title>
+  <meta name="description" content="NetDebug Toolkit — 16 network diagnostic tools in one app. Ping, DNS Lookup, DNS Record Explorer, Whois, Traceroute, HTTP(S) Check, Port Scan, Port Connect, LAN Scan, Subnet Calculator, Public IP + Geo/ASN, Speed/Latency Baseline, TLS Inspector, Bonjour Browser, UPnP/NAT-PMP, and Wake-on-LAN." />
+  <title>NetDebug Toolkit — Network Diagnostics for Developers & IT Teams</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     :root {
-      --bg-top: #000000;
-      --bg-bottom: #000000;
-      --card: #1a1a1a;
-      --card-2: #242424;
-      --text: #f5f5f5;
-      --muted: #c9c9c9;
+      --bg: #050507;
+      --surface: #0e0e12;
+      --surface-2: #16161d;
+      --surface-3: #1e1e28;
+      --border: rgba(255,255,255,.08);
+      --border-hover: rgba(255,255,255,.15);
+      --text: #eaeaf0;
+      --text-secondary: #9898a8;
       --brand: #FF5D24;
-      --brand-2: #FF5D24;
-      --border: #4a4a4a;
+      --brand-glow: rgba(255,93,36,.15);
+      --brand-subtle: rgba(255,93,36,.08);
+      --gradient-brand: linear-gradient(135deg, #ff7a4d, #FF5D24, #e04800);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 32px rgba(0,0,0,.25);
     }
-    * { box-sizing: border-box; }
-    html, body { min-height: 100%; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-bottom);
-      background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
-      background-repeat: no-repeat;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+    /* Ambient glow */
+    .glow-bg {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(255,93,36,.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Navigation ── */
     .nav {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
     }
+
     .brand {
-      font-weight: 700;
-      letter-spacing: .2px;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      color: var(--text);
-    }
-    .brand-logo {
-      width: 70px;
-      height: 34px;
-      object-fit: contain;
-    }
-    .links a {
-      color: var(--muted); text-decoration: none; margin-left: 16px; font-size: 14px;
-    }
-    .links a:hover { color: var(--brand); }
-    .hero {
-      margin-top: 28px;
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 22px;
-    }
-    .panel {
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, var(--card), var(--card-2));
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.25);
-    }
-    h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; }
-    .hero-logo {
-      width: 74px;
-      height: 74px;
-      object-fit: contain;
-      border-radius: 14px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border);
-      background: #111;
-      padding: 6px;
-    }
-    p { margin: 0; color: var(--muted); }
-    .cta { margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn {
-      border: 1px solid var(--border);
-      background: #2a2a2a;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 10px;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .3px;
     }
-    .btn.primary { background: linear-gradient(180deg, #ff7a4d, var(--brand)); border-color: var(--brand); }
-    .chips { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .chip {
-      border: 1px solid var(--border);
-      color: #ffe6dc;
-      background: #3a231b;
-      padding: 5px 10px;
-      border-radius: 999px;
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: color .2s, background .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 72px 0 56px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--brand-subtle);
+      border: 1px solid rgba(255,93,36,.2);
+      color: var(--brand);
       font-size: 12px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      letter-spacing: .4px;
+      text-transform: uppercase;
     }
-    .section-title { margin: 30px 0 12px; font-size: 20px; color: var(--brand); }
-    .grid {
+
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      max-width: 720px;
+      margin: 0 auto 20px;
+    }
+
+    .hero h1 .accent {
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gradient-brand);
+      color: #fff;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(255,93,36,.3);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(255,93,36,.4);
+    }
+
+    .btn-download svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 500;
+      font-size: 14px;
+      padding: 12px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-3);
+    }
+
+    /* ── Stats Bar ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 0 0 56px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--brand);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ── Feature Cards (Why Section) ── */
+    .why {
+      padding: 48px 0;
+    }
+
+    .why-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .why-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: border-color .25s, box-shadow .25s;
+    }
+
+    .why-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow);
+    }
+
+    .why-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--brand-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .why-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .why-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Tools Section ── */
+    .tools-section {
+      padding: 48px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .category {
+      margin-bottom: 32px;
+    }
+
+    .category-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 12px;
+      padding-left: 2px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 12px;
     }
-    .card {
+
+    .tool-card {
+      background: var(--surface);
       border: 1px solid var(--border);
-      background: var(--card-2);
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: border-color .25s, transform .15s, box-shadow .25s;
     }
-    .card h3 { margin: 0 0 6px; font-size: 15px; color: var(--brand); }
-    .card p { font-size: 13px; }
+
+    .tool-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+
+    .tool-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .tool-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .tool-info p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── Platforms ── */
+    .platforms {
+      padding: 48px 0;
+      text-align: center;
+    }
+
+    .platform-badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .platform-badge span.icon {
+      font-size: 18px;
+    }
+
+    /* ── CTA Bottom ── */
+    .cta-bottom {
+      padding: 56px 0;
+      text-align: center;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, var(--surface-2), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 200px;
+      background: radial-gradient(ellipse, rgba(255,93,36,.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .cta-box p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    /* ── Footer ── */
     footer {
-      margin-top: 28px;
-      padding: 16px 0 22px;
       border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 13px;
+      padding: 24px 0 32px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
     }
+
+    footer .copy {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    footer nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    footer nav a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    footer nav a:hover {
+      color: var(--text);
+    }
+
+    /* ── Responsive ── */
     @media (max-width: 860px) {
-      .hero { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats { gap: 32px; }
     }
+
     @media (max-width: 620px) {
-      .grid { grid-template-columns: 1fr; }
-      .links { display: none; }
+      .hero { padding: 48px 0 36px; }
+      .why-grid { grid-template-columns: 1fr; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .nav-links a:not(:last-child) { display: none; }
+      .stats { gap: 24px; }
+      .stat-number { font-size: 24px; }
     }
   </style>
 </head>
 <body>
+  <div class="glow-bg"></div>
+
   <div class="wrap">
+    <!-- Navigation -->
     <header class="nav">
-      <div class="brand">
+      <a href="/" class="brand">
         <img class="brand-logo" src="netdebug.png" alt="NetDebug Toolkit logo" />
-        <span>Toolkit</span>
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="#tools">Tools</a>
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
       </div>
-      <nav class="links">
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">16 Built-in Tools</div>
+      <h1>Network diagnostics,<br><span class="accent">simplified.</span></h1>
+      <p class="hero-sub">
+        Ping, DNS, Whois, Traceroute, Port Scan, TLS Inspector, Wake-on-LAN, and more — all from one clean toolkit built for developers and IT teams.
+      </p>
+      <div class="hero-actions">
+        <a href="https://apps.apple.com/app/id6759454574" class="btn-download" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download on App Store
+        </a>
+        <a href="#tools" class="btn-secondary">
+          View all tools
+        </a>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">16</div>
+        <div class="stat-label">Network Tools</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Tool Categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Platforms (iOS + tvOS)</div>
+      </div>
+    </div>
+
+    <!-- Why Section -->
+    <section class="why">
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">&#9889;</div>
+          <h3>Fast & Structured Output</h3>
+          <p>Every tool returns clean, structured results designed for quick troubleshooting — not walls of text.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#128274;</div>
+          <h3>Privacy First</h3>
+          <p>All diagnostics run directly from your device. No accounts, no cloud sync, no data collection.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#9881;</div>
+          <h3>Saved Hosts</h3>
+          <p>Save frequently tested hosts and run any tool against them instantly with one tap.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section id="tools" class="tools-section">
+      <div class="section-header">
+        <h2>All 16 Tools</h2>
+        <p>Everything you need for network diagnostics, organized by workflow.</p>
+      </div>
+
+      <!-- Connectivity -->
+      <div class="category">
+        <div class="category-label">Connectivity</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon">&#128225;</div>
+            <div class="tool-info">
+              <h3>Ping</h3>
+              <p>Check host reachability and measure response time.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#127760;</div>
+            <div class="tool-info">
+              <h3>HTTP(S) Check</h3>
+              <p>Inspect status codes, redirect chains, and TLS summaries.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#9889;</div>
+            <div class="tool-info">
+              <h3>Speed / Latency Baseline</h3>
+              <p>Measure latency, jitter, download, and upload speed.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128739;</div>
+            <div class="tool-info">
+              <h3>Traceroute</h3>
+              <p>Trace the network path and latency to any destination.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128268;</div>
+            <div class="tool-info">
+              <h3>TCP/UDP Connect</h3>
+              <p>Test if a specific TCP or UDP host:port is reachable.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lookup & Info -->
+      <div class="category">
+        <div class="category-label">Lookup &amp; Info</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon">&#127758;</div>
+            <div class="tool-info">
+              <h3>Public IP + Geo/ASN</h3>
+              <p>View your public IP, ISP, ASN, and approximate location.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128196;</div>
+            <div class="tool-info">
+              <h3>Whois</h3>
+              <p>Look up domain or IP registration details via RDAP and WHOIS.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128270;</div>
+            <div class="tool-info">
+              <h3>DNS Lookup</h3>
+              <p>Resolve DNS records with optional custom resolver support.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128209;</div>
+            <div class="tool-info">
+              <h3>DNS Record Explorer</h3>
+              <p>Explore A, AAAA, CNAME, MX, TXT, NS, SRV records with TTL.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128272;</div>
+            <div class="tool-info">
+              <h3>TLS Certificate Inspector</h3>
+              <p>Inspect certificate expiry, SAN entries, issuer chain, and weak signals.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scanning & Discovery -->
+      <div class="category">
+        <div class="category-label">Scanning &amp; Discovery</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon">&#128295;</div>
+            <div class="tool-info">
+              <h3>Port Scan</h3>
+              <p>Scan selected TCP ports and review open/closed/filtered outcomes.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128421;</div>
+            <div class="tool-info">
+              <h3>LAN Scan</h3>
+              <p>Discover active devices on your local subnet.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#129518;</div>
+            <div class="tool-info">
+              <h3>Subnet Calculator</h3>
+              <p>Calculate subnet details, boundaries, and host counts from CIDR.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128246;</div>
+            <div class="tool-info">
+              <h3>mDNS / Bonjour Browser</h3>
+              <p>Discover .local Bonjour services like AirPlay, HomeKit, and printers.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128257;</div>
+            <div class="tool-info">
+              <h3>UPnP / NAT-PMP Discovery</h3>
+              <p>Detect gateway UPnP IGD and NAT-PMP with external-IP hints.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#9211;</div>
+            <div class="tool-info">
+              <h3>Wake-on-LAN</h3>
+              <p>Send a magic packet to wake compatible devices on your network.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platforms -->
+    <section class="platforms">
+      <h2>Available on</h2>
+      <div class="platform-badges">
+        <div class="platform-badge">
+          <span class="icon">&#128241;</span> iPhone &amp; iPad
+        </div>
+        <div class="platform-badge">
+          <span class="icon">&#128250;</span> Apple TV
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-bottom">
+      <div class="cta-box">
+        <h2>Ready to debug your network?</h2>
+        <p>Download NetDebug Toolkit for free on the App Store.</p>
+        <a href="https://apps.apple.com/app/id6759454574" class="btn-download" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download on App Store
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
       </nav>
-    </header>
-
-    <section class="hero">
-      <div class="panel">
-        <h1>Network diagnostics for developers and IT teams</h1>
-        <p>Run Ping, DNS, Whois, Traceroute, Port Scan, LAN Scan, Subnet Calculator, HTTP(S) checks, and Public IP + Geo/ASN from one clean toolkit.</p>
-        <div class="cta">
-          <a href="https://apps.apple.com/app/id6759454574" target="_blank" rel="noopener" aria-label="Download on the App Store">
-            <img src="https://toolbox.marketingtools.apple.com/api/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store" />
-          </a>
-        </div>
-      </div>
-      <div class="panel">
-        <h2 style="margin:0 0 8px;font-size:20px;">Why NetDebug Toolkit?</h2>
-        <p>Designed for practical troubleshooting with structured outputs, saved hosts, and fast repeat checks across essential networking workflows.</p>
-        <ul style="margin:12px 0 0;padding-left:18px;color:var(--muted)">
-          <li>View redirect chains and TLS summaries</li>
-          <li>Use custom DNS resolvers</li>
-          <li>Check open/closed/filtered TCP ports</li>
-          <li>Lookup registration data with fallback logic</li>
-        </ul>
-      </div>
-    </section>
-
-    <h2 class="section-title">Included Tools</h2>
-    <section class="grid">
-      <article class="card"><h3>Ping</h3><p>Host reachability and response timing.</p></article>
-      <article class="card"><h3>HTTP(S) Check</h3><p>Status, redirects, and TLS certificate summary.</p></article>
-      <article class="card"><h3>DNS Lookup</h3><p>Resolve records with optional custom resolver.</p></article>
-      <article class="card"><h3>Whois</h3><p>RDAP or IANA WHOIS mode for registration details.</p></article>
-      <article class="card"><h3>Traceroute</h3><p>Map route path and hop latency.</p></article>
-      <article class="card"><h3>Port Scan</h3><p>Scan custom port ranges and review outcomes.</p></article>
-      <article class="card"><h3>LAN Scan</h3><p>Find active devices on local subnet.</p></article>
-      <article class="card"><h3>Subnet Calculator</h3><p>Compute IPv4/IPv6 subnet boundaries and hosts.</p></article>
-      <article class="card"><h3>Public IP + Geo/ASN</h3><p>See WAN IP, ASN, ISP, and approximate location.</p></article>
-    </section>
-
-    <footer>
-      <div>© <span id="year"></span> Developer Insider. All rights reserved.</div>
-      <div>
-        <a href="support.html" style="color:var(--muted);text-decoration:none;margin-right:12px;">Support</a>
-        <a href="terms.html" style="color:var(--muted);text-decoration:none;margin-right:12px;">Terms</a>
-        <a href="privacy.html" style="color:var(--muted);text-decoration:none;">Privacy</a>
-      </div>
     </footer>
   </div>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
