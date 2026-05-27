@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["3PQ7E4L589.co.developerinsider.NetDebugToolkit"],
+        "components": [
+          {
+            "/": "/open/*",
+            "comment": "Open a NetDebug Toolkit tool with optional pre-filled inputs and auto-run/export query parameters."
+          }
+        ]
+      }
+    ]
+  }
+}
