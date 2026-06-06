@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="My Automation: build one-tap workflows chaining multiple NetDebug Toolkit tools, with structured exports and deeplinks." />
+  <title>My Automation | NetDebug Toolkit Docs</title>
+  <link rel="stylesheet" href="docs.css" />
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="../" class="brand">
+        <img class="brand-logo" src="../netdebug.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="../#tools">Tools</a>
+        <a href="../docs.html" class="active">Docs</a>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <div class="docs-layout">
+      <!-- ── Sidebar ── -->
+      <aside class="toc">
+        <div class="toc-section">
+          <div class="toc-section-title">Documentation</div>
+          <a href="../docs.html">Overview</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Automation</div>
+          <a href="deeplinks.html">Deeplinks</a>
+          <a href="my-automation.html" aria-current="page">My Automation</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Connectivity</div>
+          <a href="ping.html">Ping</a>
+          <a href="http-check.html">HTTP(S) Check</a>
+          <a href="speed-latency-baseline.html">Speed/Latency Baseline</a>
+          <a href="iperf3.html">iperf3 Client</a>
+          <a href="traceroute.html">Traceroute</a>
+          <a href="port-connect.html">TCP/UDP Connect</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Lookup & Info</div>
+          <a href="public-ip-geo-asn.html">Public IP + Geo/ASN</a>
+          <a href="whois.html">Whois</a>
+          <a href="dns-lookup.html">DNS Lookup</a>
+          <a href="dns-record-explorer.html">DNS Record Explorer</a>
+          <a href="tls-cert-inspector.html">TLS Cert Inspector</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Scanning & Discovery</div>
+          <a href="port-scan.html">Port Scan</a>
+          <a href="lan-scan.html">LAN Scan</a>
+          <a href="subnet-calculator.html">Subnet Calculator</a>
+          <a href="bonjour-browser.html">Bonjour Browser</a>
+          <a href="upnp-nat-pmp.html">UPnP / NAT-PMP</a>
+        </div>
+      </aside>
+
+      <!-- ── Content ── -->
+      <main class="content">
+        <div class="page-header">
+          <span class="crumb">Feature</span>
+          <h1>My Automation</h1>
+          <p>Chain several tools into a single one-tap workflow. Each automation runs every step in sequence, shows all the results on one screen, and exports them as a polished PDF, image, or text report.</p>
+        </div>
+
+        <section class="section">
+          <h3 id="my-automation-flow">Build a workflow</h3>
+          <p>From the home screen, open <strong>My Automation</strong> and tap the <code>+</code> button. Give the automation a name (for example, <em>Morning Connectivity Check</em>) and add one step per tool you want to run. Each step has its own target and tool-specific options — so a single automation can ping <code>1.1.1.1</code>, traceroute a server, look up a DNS record on a custom resolver, and check a TLS certificate, all in a row.</p>
+          <ul>
+            <li><strong>Reorderable</strong>: drag the rows to change the sequence; the runner executes top to bottom.</li>
+            <li><strong>Mixed targets</strong>: every step has its own input — automations don't share a single host.</li>
+            <li><strong>Live progress</strong>: per-step status pills (running / passed / failed / cancelled) appear as the run progresses.</li>
+            <li><strong>Run export</strong>: tap the share button on the run screen to export the entire run as PDF, PNG, or text. The PDF/image layout has a colored cover, run summary, and one card per tool with the tool's category color, target, options, status, duration, and monospace output.</li>
+            <li><strong>Share the automation</strong>: the same share menu also lets you <strong>Copy Deeplink</strong> (a Universal Link that opens this automation) and <strong>Export Automation</strong> (the workflow definition as a portable file you can send to a teammate or import on another device).</li>
+          </ul>
+
+          <h3 id="my-automation-deeplinks">Automation deeplinks</h3>
+          <p>Each saved automation gets a unique deeplink ID (slug) that is auto-generated from the name during creation — for example, <em>Morning Connectivity Check</em> becomes <code>morning-connectivity-check</code>. The slug is editable while you create the automation and is locked once saved. The slug must be unique across all your saved automations; editing the slug while creating shows a clear error if it collides with another automation.</p>
+
+          <p>Open a saved automation by slug using the same URL forms as a tool deeplink — replace <code>&lt;tool&gt;</code> with <code>automation/&lt;slug&gt;</code>:</p>
+<pre><code><span class="scheme">netdebug://</span>automation/&lt;slug&gt;?<span class="key">autorun</span>=<span class="value">&lt;true|false&gt;</span>&amp;<span class="key">export</span>=<span class="value">&lt;text|pdf|image&gt;</span>
+<span class="scheme">co.developerinsider.NetDebugToolkit://</span>automation/&lt;slug&gt;?...
+<span class="scheme">https://netdebug.developerinsider.co/open/</span>automation/&lt;slug&gt;?...</code></pre>
+
+          <p>The <code>autorun</code> (default <code>true</code>) and <code>export</code> (iOS only) parameters behave the same as on a single-tool deeplink. The runner pushes the matching automation onto the navigation stack, kicks off all the steps in order, and presents the share sheet with the chosen format once everything finishes. If the slug doesn't match any saved automation, the app shows a clear "Automation Not Found" view with the slug that was requested.</p>
+
+          <h4>Examples</h4>
+<pre><code><span class="comment"># Run an automation and export the full report as PDF</span>
+<span class="scheme">netdebug://</span>automation/<span class="value">morning-connectivity-check</span>?<span class="key">export</span>=<span class="value">pdf</span>
+
+<span class="comment"># Open it without auto-running so the user can review the steps first</span>
+<span class="scheme">netdebug://</span>automation/<span class="value">network-triage</span>?<span class="key">autorun</span>=<span class="value">false</span>
+
+<span class="comment"># Share via Universal Link in a runbook</span>
+<span class="scheme">https://netdebug.developerinsider.co/open/</span>automation/<span class="value">api-checks</span>?<span class="key">export</span>=<span class="value">image</span></code></pre>
+
+          <h3 id="my-automation-share">Export, import &amp; copy a deeplink</h3>
+          <p>Automations are portable. From a single automation's run screen, open the share menu (the <strong>↑</strong> icon) for two extra actions below the run-export options:</p>
+          <ul>
+            <li><strong>Copy Deeplink</strong> — copies the Universal Link (<code>https://netdebug.developerinsider.co/open/automation/&lt;slug&gt;</code>) to the clipboard so you can paste it into notes, a runbook, Shortcuts, or a message.</li>
+            <li><strong>Export Automation</strong> — writes the workflow definition (name, deeplink ID, and every step with its tool-specific options) to a portable <code>.json</code> file and opens the share sheet.</li>
+          </ul>
+          <p>You can also swipe left on any row in the <strong>My Automation</strong> list to export just that automation, or use the list's <strong>⋯</strong> menu to <strong>Export All Automations</strong> into a single file. To bring automations back, choose <strong>Import Automations</strong> from the same menu and pick a previously exported file — the steps and options are recreated, and any deeplink ID that would collide with an existing automation is automatically given a unique suffix.</p>
+          <div class="callout">
+            <strong>Note.</strong> Exported files describe the workflow only — they don't contain any run output or personal data. Importing never overwrites an existing automation; each imported workflow is added as a new entry.
+          </div>
+
+          <h3 id="my-automation-pricing">Free tier &amp; unlock</h3>
+          <p>The free tier lets you keep up to <strong>2 automations</strong>, each with up to <strong>5 steps</strong>. That's enough to set up a "morning triage" workflow and a "production sanity" workflow side-by-side without paying anything.</p>
+          <p>If you hit either limit, the app prompts you to unlock <strong>Unlimited Automations</strong> as a one-time purchase. After that you can create as many automations as you like with no per-step cap.</p>
+          <p>Prefer one purchase that also turns off ads? The <strong>Remove Ads + Unlimited Automations</strong> bundle unlocks both at a discount. You'll see it on <strong>Settings → Purchases</strong> until you own one of the individual purchases.</p>
+          <p>Everything is restorable from <strong>Settings → Purchases → Restore Purchases</strong> on any device signed in with the same Apple ID.</p>
+
+          <div class="callout">
+            <strong>Tip.</strong> Automations are stored locally on your device and are not synced to iCloud. To move them between devices — or share them with a teammate — use <strong>Export Automation</strong> / <strong>Import Automations</strong> as described above.
+          </div>
+
+          <h3 id="my-automation-tvos">On Apple TV</h3>
+          <p>Apple TV runs the same automation editor and runner as iPhone and iPad, with a few platform-shaped differences:</p>
+          <ul>
+            <li><strong>Step editor</strong> — each step has clear <strong>Save</strong> and <strong>Cancel</strong> buttons; nothing changes until you press Save. The automation's Save button stays pinned to the bottom and becomes active as soon as the workflow has one step.</li>
+            <li><strong>Export by QR code</strong> — Apple TV doesn't have a share sheet, so the export action shows a QR code (and the link, in case you'd rather type it). Scan it from a phone or laptop on the same Wi-Fi to download the PDF, image, or text file. The TV switches to a <em>Downloaded ✓</em> confirmation once it's fetched and tidies up automatically when you close the sheet.</li>
+            <li><strong>Importing automations</strong> — Apple TV can export, but importing is iPhone/iPad only. Send yourself the exported file and import it from there.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

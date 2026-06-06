@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The NetDebug Toolkit deeplink reference — URL forms, common parameters, per-tool slugs, Universal Link setup, and examples." />
+  <title>Deeplinks | NetDebug Toolkit Docs</title>
+  <link rel="stylesheet" href="docs.css" />
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="../" class="brand">
+        <img class="brand-logo" src="../netdebug.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="../#tools">Tools</a>
+        <a href="../docs.html" class="active">Docs</a>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <div class="docs-layout">
+      <!-- ── Sidebar ── -->
+      <aside class="toc">
+        <div class="toc-section">
+          <div class="toc-section-title">Documentation</div>
+          <a href="../docs.html">Overview</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Automation</div>
+          <a href="deeplinks.html" aria-current="page">Deeplinks</a>
+          <a href="my-automation.html">My Automation</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Connectivity</div>
+          <a href="ping.html">Ping</a>
+          <a href="http-check.html">HTTP(S) Check</a>
+          <a href="speed-latency-baseline.html">Speed/Latency Baseline</a>
+          <a href="iperf3.html">iperf3 Client</a>
+          <a href="traceroute.html">Traceroute</a>
+          <a href="port-connect.html">TCP/UDP Connect</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Lookup & Info</div>
+          <a href="public-ip-geo-asn.html">Public IP + Geo/ASN</a>
+          <a href="whois.html">Whois</a>
+          <a href="dns-lookup.html">DNS Lookup</a>
+          <a href="dns-record-explorer.html">DNS Record Explorer</a>
+          <a href="tls-cert-inspector.html">TLS Cert Inspector</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Scanning & Discovery</div>
+          <a href="port-scan.html">Port Scan</a>
+          <a href="lan-scan.html">LAN Scan</a>
+          <a href="subnet-calculator.html">Subnet Calculator</a>
+          <a href="bonjour-browser.html">Bonjour Browser</a>
+          <a href="upnp-nat-pmp.html">UPnP / NAT-PMP</a>
+        </div>
+      </aside>
+
+      <!-- ── Content ── -->
+      <main class="content">
+        <div class="page-header">
+          <span class="crumb">Automation</span>
+          <h1>Deeplinks &amp; Universal Links</h1>
+          <p>Open any tool from a URL — pre-filled, auto-run, and optionally auto-exported. Use these in runbooks, dashboards, Shortcuts, MDM payloads, or just a browser bookmark.</p>
+        </div>
+
+        <section class="section">
+          <h3 id="deeplink-format">URL format</h3>
+          <p>Three URL forms are supported. They all resolve to the same tool and behave identically.</p>
+
+          <h4>Custom URL schemes (work everywhere the app is installed)</h4>
+<pre><code><span class="scheme">netdebug://</span>&lt;tool&gt;?<span class="key">target</span>=<span class="value">&lt;value&gt;</span>&amp;<span class="key">option</span>=<span class="value">&lt;value&gt;</span>...
+<span class="scheme">co.developerinsider.NetDebugToolkit://</span>&lt;tool&gt;?<span class="key">target</span>=<span class="value">&lt;value&gt;</span>&amp;...</code></pre>
+
+          <h4>Universal Link (recommended for sharing via email, Slack, iMessage)</h4>
+<pre><code><span class="scheme">https://netdebug.developerinsider.co/open/</span>&lt;tool&gt;?<span class="key">target</span>=<span class="value">&lt;value&gt;</span>&amp;...</code></pre>
+          <p>Universal Link URLs open the app directly when tapped on a device that has NetDebug Toolkit installed; otherwise they fall back to <a href="https://apps.apple.com/app/id6759454574">the App Store</a>. Only paths under <code>/open/*</code> are universal-linked — the marketing site, support, terms, and privacy pages still open in Safari.</p>
+
+          <h3 id="common-params">Common parameters</h3>
+          <table class="params-table">
+            <thead>
+              <tr><th>Key</th><th>Values</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>target</code></td>
+                <td>any string</td>
+                <td>Host, IP, URL, MAC, or subnet — depending on the tool. Aliases: <code>host</code>, <code>url</code>, <code>domain</code>, <code>subnet</code>, <code>cidr</code>, <code>mac</code>.</td>
+              </tr>
+              <tr>
+                <td><code>autorun</code></td>
+                <td><code>true</code> (default) / <code>false</code></td>
+                <td>With <code>false</code>, the tool opens with inputs pre-filled but does not run. Alias: <code>run</code>.</td>
+              </tr>
+              <tr>
+                <td><code>export</code></td>
+                <td><code>text</code>, <code>pdf</code>, <code>image</code></td>
+                <td>iOS only. After the run completes the share sheet appears with the export attached. Boolean aliases (<code>true</code>, <code>1</code>, <code>yes</code>) map to <code>text</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 id="tool-slugs">Tool slugs</h3>
+          <p>The tool segment is the URL host for the custom schemes, and the path component after <code>/open/</code> for the Universal Link form. Slug matching is case-insensitive; the friendly enum names (e.g. <code>httpCheck</code>) and a few aliases (e.g. <code>iperf</code>, <code>cert</code>, <code>tracert</code>, <code>natpmp</code>) are also accepted.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Tool</th><th>Slug</th><th>Tool-specific parameters</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="ping.html">Ping</a></td><td><code>ping</code></td><td><code>method=icmp|httpHead</code>, <code>count=&lt;int&gt;</code> (0 = infinite)</td></tr>
+              <tr><td><a href="http-check.html">HTTP(S) Check</a></td><td><code>http</code></td><td>—</td></tr>
+              <tr><td><a href="public-ip-geo-asn.html">Public IP + Geo/ASN</a></td><td><code>publicip</code></td><td>—</td></tr>
+              <tr><td><a href="speed-latency-baseline.html">Speed/Latency Baseline</a></td><td><code>speed</code></td><td><code>download=&lt;MB&gt;</code>, <code>upload=&lt;MB&gt;</code> (1, 2, 8, 16, 32, 64)</td></tr>
+              <tr><td><a href="iperf3.html">iperf3 Client</a></td><td><code>iperf3</code></td><td><code>port=&lt;1..65535&gt;</code>, <code>duration=&lt;1..60&gt;</code>, <code>direction=upload|download</code></td></tr>
+              <tr><td><a href="subnet-calculator.html">Subnet Calculator</a></td><td><code>subnet</code></td><td>—</td></tr>
+              <tr><td><a href="traceroute.html">Traceroute</a></td><td><code>traceroute</code></td><td>—</td></tr>
+              <tr><td><a href="whois.html">Whois</a></td><td><code>whois</code></td><td><code>mode=rdap|whois</code></td></tr>
+              <tr><td><a href="dns-lookup.html">DNS Lookup</a></td><td><code>dns</code></td><td><code>server=&lt;resolver-ip&gt;</code>. Target accepts a hostname (forward A/AAAA) or an IPv4/IPv6 literal (reverse PTR).</td></tr>
+              <tr><td><a href="dns-record-explorer.html">DNS Record Explorer</a></td><td><code>dnsexplorer</code></td><td><code>server=&lt;resolver-ip&gt;</code>. Hostname target queries A/AAAA/CNAME/MX/TXT/NS/SRV; an IPv4/IPv6 literal narrows to PTR.</td></tr>
+              <tr><td><a href="tls-cert-inspector.html">TLS Cert Inspector</a></td><td><code>tls</code></td><td>—</td></tr>
+              <tr><td><a href="port-scan.html">Port Scan</a></td><td><code>portscan</code></td><td><code>ports=22,80,443</code> or <code>ports=1-1024</code></td></tr>
+              <tr><td><a href="port-connect.html">TCP/UDP Connect</a></td><td><code>portconnect</code></td><td><code>port=&lt;1..65535&gt;</code>, <code>protocol=tcp|udp</code>, <code>udpprofile=none|dns|ntp|snmp|sip|radius|tftp|memcached</code></td></tr>
+              <tr><td><a href="lan-scan.html">LAN Scan</a></td><td><code>lanscan</code></td><td><code>subnet=&lt;CIDR&gt;</code>, <code>mode=fast|deep</code></td></tr>
+              <tr><td><a href="bonjour-browser.html">Bonjour Browser</a></td><td><code>bonjour</code></td><td>—</td></tr>
+              <tr><td><a href="upnp-nat-pmp.html">UPnP/NAT-PMP</a></td><td><code>upnp</code></td><td><code>gateways=192.168.1.1,10.0.0.1</code></td></tr>
+              <tr><td><a href="wake-on-lan.html">Wake-on-LAN</a></td><td><code>wol</code></td><td><code>mac=&lt;address&gt;</code>, <code>broadcast=&lt;ip&gt;</code>, <code>port=&lt;1..65535&gt;</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3 id="automation-deeplinks">Automation deeplinks</h3>
+          <p>Saved automations have their own deeplink shape — replace <code>&lt;tool&gt;</code> with <code>automation/&lt;slug&gt;</code> where the slug is the deeplink ID assigned during automation creation. See the <a href="my-automation.html">My Automation</a> page for details.</p>
+<pre><code><span class="scheme">netdebug://</span>automation/&lt;slug&gt;?<span class="key">autorun</span>=<span class="value">&lt;true|false&gt;</span>&amp;<span class="key">export</span>=<span class="value">&lt;text|pdf|image&gt;</span></code></pre>
+
+          <h3 id="copy-from-app">Copy a deeplink from the app</h3>
+          <p>You don't have to assemble these URLs by hand. On any tool screen, open the <strong>Export</strong> menu (the <strong>↑</strong> share icon in the top bar) and choose <strong>Copy Deeplink</strong> — the app builds the Universal Link for that tool with your <em>current</em> target and options already filled in and copies it to the clipboard. For example, configuring Ping with <code>1.1.1.1</code>, ICMP, count 10 and tapping Copy Deeplink yields:</p>
+<pre><code><span class="scheme">https://netdebug.developerinsider.co/open/</span>ping?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">count</span>=<span class="value">10</span>&amp;<span class="key">method</span>=<span class="value">icmp</span></code></pre>
+          <p>Saved automations work the same way: the run screen's share menu has a <strong>Copy Deeplink</strong> action that copies the automation's Universal Link. Copied links always use the <code>https://netdebug.developerinsider.co/open/</code> form so they're safe to paste into email, Slack, iMessage, or a runbook.</p>
+
+          <h3 id="universal-links">Universal Links setup</h3>
+          <p>Universal Links use Apple's standard <a href="https://developer.apple.com/documentation/xcode/supporting-associated-domains">associated-domains</a> mechanism. The required association file is served from:</p>
+<pre><code>https://netdebug.developerinsider.co/.well-known/apple-app-site-association</code></pre>
+          <p>iOS fetches this file once after install and routes matching URLs into the app. The file restricts handled paths to <code>/open/*</code> so the rest of the site stays in Safari.</p>
+
+          <h3 id="examples">Examples</h3>
+<pre><code><span class="comment"># Ping with auto-export as PDF</span>
+<span class="scheme">netdebug://</span>ping?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">method</span>=<span class="value">icmp</span>&amp;<span class="key">count</span>=<span class="value">10</span>&amp;<span class="key">export</span>=<span class="value">pdf</span>
+
+<span class="comment"># DNS lookup via Cloudflare resolver</span>
+<span class="scheme">netdebug://</span>dns?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">server</span>=<span class="value">1.1.1.1</span>
+
+<span class="comment"># Universal Link variant — share this in email/Slack/iMessage</span>
+<span class="scheme">https://netdebug.developerinsider.co/open/</span>iperf3?<span class="key">target</span>=<span class="value">10.0.0.1</span>&amp;<span class="key">port</span>=<span class="value">5201</span>&amp;<span class="key">duration</span>=<span class="value">20</span>&amp;<span class="key">direction</span>=<span class="value">download</span>
+
+<span class="comment"># Open Wake-on-LAN with fields pre-filled but don't fire the magic packet yet</span>
+<span class="scheme">netdebug://</span>wol?<span class="key">mac</span>=<span class="value">AA:BB:CC:DD:EE:FF</span>&amp;<span class="key">broadcast</span>=<span class="value">192.168.1.255</span>&amp;<span class="key">port</span>=<span class="value">9</span>&amp;<span class="key">autorun</span>=<span class="value">false</span>
+
+<span class="comment"># Deep LAN scan with auto-export as image</span>
+<span class="scheme">netdebug://</span>lanscan?<span class="key">subnet</span>=<span class="value">192.168.1.0/24</span>&amp;<span class="key">mode</span>=<span class="value">deep</span>&amp;<span class="key">export</span>=<span class="value">image</span>
+
+<span class="comment"># UDP NTP probe</span>
+<span class="scheme">netdebug://</span>portconnect?<span class="key">target</span>=<span class="value">time.apple.com</span>&amp;<span class="key">protocol</span>=<span class="value">udp</span>&amp;<span class="key">udpprofile</span>=<span class="value">ntp</span></code></pre>
+
+          <div class="callout">
+            <strong>Tip.</strong> Run tools only on hosts and networks you are authorized to test. Results can vary due to DNS behavior, firewall policy, and network conditions.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

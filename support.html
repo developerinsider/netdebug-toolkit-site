@@ -59,6 +59,8 @@
       justify-content: space-between;
       padding: 20px 0;
       border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .brand {
@@ -83,6 +85,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
+      row-gap: 4px;
     }
 
     .nav-links a {
@@ -95,9 +99,13 @@
       transition: color .2s, background .2s;
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover, .nav-links a.active {
       color: var(--text);
       background: var(--surface-2);
+    }
+
+    .nav-links a.active {
+      color: var(--brand);
     }
 
     .page-header {
@@ -150,13 +158,13 @@
       margin-bottom: 6px;
     }
 
-    a:not(.brand):not(.nav-links a) {
+    .card a, .email-box a {
       color: var(--brand);
       text-decoration: none;
       transition: opacity .2s;
     }
 
-    a:not(.brand):not(.nav-links a):hover {
+    .card a:hover, .email-box a:hover {
       opacity: .8;
     }
 
@@ -214,6 +222,8 @@
 
     @media (max-width: 620px) {
       .grid { grid-template-columns: 1fr; }
+      .nav-links a { font-size: 12.5px; padding: 5px 10px; }
+      .wrap { padding: 0 16px; }
     }
   </style>
 </head>
@@ -227,7 +237,9 @@
         NetDebug Toolkit
       </a>
       <div class="nav-links">
-        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+        <a href="docs.html">Docs</a>
+        <a href="support.html" class="active">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
       </div>
@@ -275,6 +287,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="docs.html">Docs</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>

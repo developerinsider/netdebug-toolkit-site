@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="NetDebug Toolkit — 16 network diagnostic tools in one app. Ping, DNS Lookup, DNS Record Explorer, Whois, Traceroute, HTTP(S) Check, Port Scan, Port Connect, LAN Scan, Subnet Calculator, Public IP + Geo/ASN, Speed/Latency Baseline, TLS Inspector, Bonjour Browser, UPnP/NAT-PMP, and Wake-on-LAN." />
+  <meta name="description" content="NetDebug Toolkit — 17 network diagnostic tools and the My Automation workflow builder in one app. Ping, DNS Lookup, DNS Record Explorer, Whois, Traceroute, HTTP(S) Check, iperf3 Client, Port Scan, Port Connect, LAN Scan, Subnet Calculator, Public IP + Geo/ASN, Speed/Latency Baseline, TLS Inspector, Bonjour Browser, UPnP/NAT-PMP, and Wake-on-LAN — plus one-tap automations that chain any combination into a single report." />
   <title>NetDebug Toolkit — Network Diagnostics for Developers & IT Teams</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -65,6 +65,8 @@
       justify-content: space-between;
       padding: 20px 0;
       border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .brand {
@@ -89,6 +91,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
+      row-gap: 4px;
     }
 
     .nav-links a {
@@ -160,50 +164,27 @@
       flex-wrap: wrap;
     }
 
-    .btn-download {
+    /* Official "Download on the App Store" badge (Apple Marketing Guidelines).
+       The badge artwork is never recolored or restyled; we only scale it while
+       preserving its aspect ratio and reserve the required clear space. */
+    .app-store-badge {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      background: var(--gradient-brand);
-      color: #fff;
-      font-weight: 600;
-      font-size: 15px;
-      padding: 13px 28px;
-      border-radius: 12px;
+      /* Clear space ≥ 1/4 of badge height on all sides per Apple guidelines. */
+      padding: 13px 0;
       text-decoration: none;
-      box-shadow: 0 4px 20px rgba(255,93,36,.3);
-      transition: transform .2s, box-shadow .2s;
+      transition: transform .2s, opacity .2s;
     }
 
-    .btn-download:hover {
+    .app-store-badge img {
+      height: 52px;
+      width: auto;
+      display: block;
+    }
+
+    .app-store-badge:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 28px rgba(255,93,36,.4);
-    }
-
-    .btn-download svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-weight: 500;
-      font-size: 14px;
-      padding: 12px 22px;
-      border-radius: 12px;
-      text-decoration: none;
-      transition: border-color .2s, background .2s;
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--border-hover);
-      background: var(--surface-3);
+      opacity: .85;
     }
 
     /* ── Stats Bar ── */
@@ -477,7 +458,9 @@
       .hero { padding: 48px 0 36px; }
       .why-grid { grid-template-columns: 1fr; }
       .tools-grid { grid-template-columns: 1fr; }
-      .nav-links a:not(:last-child) { display: none; }
+      /* Keep every nav link reachable on phones; just compress the chrome. */
+      .nav-links a { font-size: 12.5px; padding: 5px 10px; }
+      .wrap { padding: 0 16px; }
       .stats { gap: 24px; }
       .stat-number { font-size: 24px; }
     }
@@ -495,6 +478,7 @@
       </a>
       <div class="nav-links">
         <a href="#tools">Tools</a>
+        <a href="docs.html">Docs</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
@@ -503,18 +487,14 @@
 
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-badge">16 Built-in Tools</div>
+      <div class="hero-badge">17 Tools + Automations</div>
       <h1>Network diagnostics,<br><span class="accent">simplified.</span></h1>
       <p class="hero-sub">
-        Ping, DNS, Whois, Traceroute, Port Scan, TLS Inspector, Wake-on-LAN, and more — all from one clean toolkit built for developers and IT teams.
+        Ping, DNS, Whois, Traceroute, Port Scan, TLS Inspector, Wake-on-LAN, and more — chain any of them into one-tap workflows with the new My Automation builder.
       </p>
       <div class="hero-actions">
-        <a href="https://apps.apple.com/app/id6759454574" class="btn-download" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          Download on App Store
-        </a>
-        <a href="#tools" class="btn-secondary">
-          View all tools
+        <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+          <img src="app-store-badge.svg" alt="Download on the App Store" width="156" height="52" />
         </a>
       </div>
     </section>
@@ -522,7 +502,7 @@
     <!-- Stats -->
     <div class="stats">
       <div class="stat">
-        <div class="stat-number">16</div>
+        <div class="stat-number">17</div>
         <div class="stat-label">Network Tools</div>
       </div>
       <div class="stat">
@@ -530,8 +510,8 @@
         <div class="stat-label">Tool Categories</div>
       </div>
       <div class="stat">
-        <div class="stat-number">2</div>
-        <div class="stat-label">Platforms (iOS + tvOS)</div>
+        <div class="stat-number">1-tap</div>
+        <div class="stat-label">Automation Workflows</div>
       </div>
     </div>
 
@@ -540,18 +520,18 @@
       <div class="why-grid">
         <div class="why-card">
           <div class="why-icon">&#9889;</div>
-          <h3>Fast & Structured Output</h3>
-          <p>Every tool returns clean, structured results designed for quick troubleshooting — not walls of text.</p>
-        </div>
-        <div class="why-card">
-          <div class="why-icon">&#128274;</div>
-          <h3>Privacy First</h3>
-          <p>All diagnostics run directly from your device. No accounts, no cloud sync, no data collection.</p>
+          <h3>My Automation</h3>
+          <p>Chain any combination of tools into a one-tap workflow. See every result on one screen, export the whole run as PDF, PNG, or text, and trigger it from a deeplink.</p>
         </div>
         <div class="why-card">
           <div class="why-icon">&#9881;</div>
           <h3>Saved Hosts</h3>
-          <p>Save frequently tested hosts and run any tool against them instantly with one tap.</p>
+          <p>Save frequently tested hosts and run any tool against them instantly with one tap. Export the result as PDF, PNG, or text, and trigger it from a deeplink.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#9889;</div>
+          <h3>Fast & Structured Output</h3>
+          <p>Every tool returns clean, structured results designed for quick troubleshooting — not walls of text.</p>
         </div>
       </div>
     </section>
@@ -559,7 +539,7 @@
     <!-- Tools -->
     <section id="tools" class="tools-section">
       <div class="section-header">
-        <h2>All 16 Tools</h2>
+        <h2>All 17 Tools</h2>
         <p>Everything you need for network diagnostics, organized by workflow.</p>
       </div>
 
@@ -586,6 +566,13 @@
             <div class="tool-info">
               <h3>Speed / Latency Baseline</h3>
               <p>Measure latency, jitter, download, and upload speed.</p>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">&#128202;</div>
+            <div class="tool-info">
+              <h3>iperf3 Client</h3>
+              <p>TCP throughput tests against an external iperf3 server.</p>
             </div>
           </div>
           <div class="tool-card">
@@ -715,9 +702,8 @@
       <div class="cta-box">
         <h2>Ready to debug your network?</h2>
         <p>Download NetDebug Toolkit for free on the App Store.</p>
-        <a href="https://apps.apple.com/app/id6759454574" class="btn-download" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          Download on App Store
+        <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+          <img src="app-store-badge.svg" alt="Download on the App Store" width="156" height="52" />
         </a>
       </div>
     </section>
@@ -726,6 +712,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="docs.html">Docs</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>

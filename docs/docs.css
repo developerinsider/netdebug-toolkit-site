@@ -1,0 +1,566 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #050507;
+      --surface: #0e0e12;
+      --surface-2: #16161d;
+      --surface-3: #1e1e28;
+      --border: rgba(255,255,255,.08);
+      --border-hover: rgba(255,255,255,.15);
+      --text: #eaeaf0;
+      --text-secondary: #9898a8;
+      --text-tertiary: #6b6b7d;
+      --brand: #FF5D24;
+      --brand-glow: rgba(255,93,36,.15);
+      --brand-subtle: rgba(255,93,36,.08);
+      --gradient-brand: linear-gradient(135deg, #ff7a4d, #FF5D24, #e04800);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 32px rgba(0,0,0,.25);
+      --mono: 'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glow-bg {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(255,93,36,.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Navigation ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      /* Wrap onto a second row on narrow viewports so every link stays
+         reachable on phones. On desktop there is plenty of width so the
+         row never wraps. */
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .3px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      row-gap: 4px;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: color .2s, background .2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .nav-links a.active {
+      color: var(--brand);
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      padding: 56px 0 32px;
+      max-width: 760px;
+    }
+
+    .page-header .crumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--brand-subtle);
+      border: 1px solid rgba(255,93,36,.2);
+      color: var(--brand);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .page-header h1 {
+      font-size: clamp(32px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    /* ── Two-column layout ── */
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 48px;
+      padding: 16px 0 64px;
+    }
+
+    /* ── Sidebar TOC ── */
+    .toc {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+
+    .toc-section {
+      margin-bottom: 24px;
+    }
+
+    .toc-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    .toc a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+      line-height: 1.5;
+    }
+
+    .toc a:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    /* ── Content ── */
+    .content {
+      min-width: 0;
+    }
+
+    .section {
+      margin-bottom: 56px;
+      scroll-margin-top: 24px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 28px 0 12px;
+    }
+
+    .section h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 16px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .section p, .section li {
+      color: var(--text-secondary);
+      font-size: 14.5px;
+      line-height: 1.7;
+    }
+
+    .section p { margin-bottom: 14px; }
+
+    .section ul, .section ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+
+    .section li {
+      margin-bottom: 4px;
+    }
+
+    .section a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    .section a:hover {
+      text-decoration: underline;
+    }
+
+    .lead {
+      font-size: 16px;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    /* ── Code / pre ── */
+    code {
+      font-family: var(--mono);
+      font-size: 0.88em;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: #ffb491;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      overflow-x: auto;
+      margin: 12px 0 18px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    pre code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: var(--text);
+      font-size: inherit;
+    }
+
+    pre .scheme  { color: #ff9d6c; }
+    pre .key     { color: #c0a5ff; }
+    pre .value   { color: #9bd6ff; }
+    pre .comment { color: var(--text-tertiary); }
+
+    /* ── Param table ── */
+    .params-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 18px;
+      font-size: 13.5px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .params-table th,
+    .params-table td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .params-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .params-table th {
+      background: var(--surface-2);
+      font-weight: 600;
+      color: var(--text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .params-table td {
+      color: var(--text-secondary);
+    }
+
+    .params-table td code {
+      white-space: nowrap;
+    }
+
+    /* ── Tool card ── */
+    .tool {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      scroll-margin-top: 24px;
+    }
+
+    .tool-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .tool-emoji {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .tool-head h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .tool-head .slug {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--brand);
+      background: var(--brand-subtle);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: .3px;
+    }
+
+    .tool p, .tool li {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    .tool h4 {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 16px 0 8px;
+    }
+
+    .tool ul {
+      padding-left: 20px;
+      margin-bottom: 8px;
+    }
+
+    .tool li {
+      margin-bottom: 3px;
+    }
+
+    .tool .deeplink-example {
+      margin-top: 8px;
+    }
+
+    /* ── Note / callout ── */
+    .callout {
+      background: var(--brand-subtle);
+      border: 1px solid rgba(255,93,36,.18);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin: 16px 0 20px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .callout strong {
+      color: var(--brand);
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer .copy {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    footer nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    footer nav a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    footer nav a:hover {
+      color: var(--text);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .docs-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      /* On narrow viewports the 30+ link sidebar dominates the page above
+         the actual content, so we hide it entirely. Users still reach
+         other tools via the top-nav "Docs" link (which now wraps into the
+         visible nav row on mobile) — that goes back to the docs hub
+         (`docs.html`) where tools are listed as tappable tiles. Desktop
+         is untouched: the sidebar only disappears under 860px. */
+      .toc {
+        display: none;
+      }
+      .params-table {
+        font-size: 12.5px;
+      }
+      .tool {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .page-header { padding: 32px 0 20px; }
+      /* Slightly tighter link chrome so the wrapped row reads as a
+         secondary toolbar rather than a stack of buttons. */
+      .nav-links a {
+        font-size: 12.5px;
+        padding: 5px 10px;
+      }
+      .wrap { padding: 0 16px; }
+      .section h2 { font-size: 24px; }
+      .section p, .section li { font-size: 14px; }
+      .tool { padding: 18px; }
+      /* Wide param tables get horizontal scroll on small screens so
+         columns aren't crushed into illegible widths. Layout reverts to
+         normal flow at >620px. */
+      .params-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+      }
+    }
+
+    /* ── Sidebar current-page highlight ── */
+    .toc a[aria-current="page"] {
+      color: var(--brand);
+      background: var(--brand-subtle);
+      font-weight: 600;
+    }
+
+    /* ── Hub grid (landing page tool tiles) ── */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 12px 0 28px;
+    }
+
+    .hub-tile {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, transform .2s, background .2s;
+    }
+
+    .hub-tile:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-2);
+      transform: translateY(-1px);
+    }
+
+    .hub-tile .hub-emoji {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .hub-tile .hub-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .hub-tile .hub-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: var(--mono);
+    }
+
+    .hub-tile.feature {
+      border-color: rgba(255,93,36,.25);
+    }
+
+    .hub-tile.feature .hub-emoji {
+      background: var(--brand-subtle);
+    }

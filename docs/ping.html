@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Ping usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <title>Ping | NetDebug Toolkit Docs</title>
+  <link rel="stylesheet" href="docs.css" />
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="../" class="brand">
+        <img class="brand-logo" src="../netdebug.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="../#tools">Tools</a>
+        <a href="../docs.html" class="active">Docs</a>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <div class="docs-layout">
+      <!-- ── Sidebar ── -->
+      <aside class="toc">
+        <div class="toc-section">
+          <div class="toc-section-title">Documentation</div>
+          <a href="../docs.html">Overview</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Automation</div>
+          <a href="deeplinks.html">Deeplinks</a>
+          <a href="my-automation.html">My Automation</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Connectivity</div>
+          <a href="ping.html" aria-current="page">Ping</a>
+          <a href="http-check.html">HTTP(S) Check</a>
+          <a href="speed-latency-baseline.html">Speed/Latency Baseline</a>
+          <a href="iperf3.html">iperf3 Client</a>
+          <a href="traceroute.html">Traceroute</a>
+          <a href="port-connect.html">TCP/UDP Connect</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Lookup & Info</div>
+          <a href="public-ip-geo-asn.html">Public IP + Geo/ASN</a>
+          <a href="whois.html">Whois</a>
+          <a href="dns-lookup.html">DNS Lookup</a>
+          <a href="dns-record-explorer.html">DNS Record Explorer</a>
+          <a href="tls-cert-inspector.html">TLS Cert Inspector</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Scanning & Discovery</div>
+          <a href="port-scan.html">Port Scan</a>
+          <a href="lan-scan.html">LAN Scan</a>
+          <a href="subnet-calculator.html">Subnet Calculator</a>
+          <a href="bonjour-browser.html">Bonjour Browser</a>
+          <a href="upnp-nat-pmp.html">UPnP / NAT-PMP</a>
+        </div>
+      </aside>
+
+      <!-- ── Content ── -->
+      <main class="content">
+        <div class="page-header">
+          <span class="crumb">Connectivity</span>
+          <h1>Ping</h1>
+          <p>Check if a host is reachable and how quickly it responds.</p>
+        </div>
+
+        <article class="tool">
+          <div class="tool-head">
+            <div class="tool-emoji">&#128225;</div>
+            <div>
+              <h3>Ping</h3>
+              <span class="slug">ping</span>
+            </div>
+          </div>
+          <h4>Input</h4>
+          <ul>
+            <li>Target: domain or IP address (for example <code>example.com</code> or <code>1.1.1.1</code>).</li>
+          </ul>
+          <h4>Options</h4>
+          <ul>
+            <li><strong>Method</strong>
+              <ul>
+                <li><code>icmp</code>: classic ICMP echo. Good for low-level reachability and latency.</li>
+                <li><code>httpHead</code>: sends an HTTP HEAD request instead. Useful when ICMP is blocked but web traffic is allowed.</li>
+              </ul>
+            </li>
+            <li><strong>Count</strong>: number of requests to send. <code>0</code> = run continuously until stopped.</li>
+          </ul>
+          <h4>Output</h4>
+          <ul>
+            <li>Per-request latency.</li>
+            <li>Success/failure per sequence.</li>
+            <li>Final summary (packet loss and round-trip stats).</li>
+          </ul>
+          <h4>Tips</h4>
+          <ul>
+            <li>If ICMP fails, try the HTTP HEAD method.</li>
+            <li>Use a small count (4 or 5) for quick checks.</li>
+          </ul>
+          <h4>Deeplink</h4>
+<pre class="deeplink-example"><code><span class="scheme">netdebug://</span>ping?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">method</span>=<span class="value">icmp</span>&amp;<span class="key">count</span>=<span class="value">10</span></code></pre>
+          <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
+        </article>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

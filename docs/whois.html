@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Whois usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <title>Whois | NetDebug Toolkit Docs</title>
+  <link rel="stylesheet" href="docs.css" />
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="../" class="brand">
+        <img class="brand-logo" src="../netdebug.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="../#tools">Tools</a>
+        <a href="../docs.html" class="active">Docs</a>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <div class="docs-layout">
+      <!-- ── Sidebar ── -->
+      <aside class="toc">
+        <div class="toc-section">
+          <div class="toc-section-title">Documentation</div>
+          <a href="../docs.html">Overview</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Automation</div>
+          <a href="deeplinks.html">Deeplinks</a>
+          <a href="my-automation.html">My Automation</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Connectivity</div>
+          <a href="ping.html">Ping</a>
+          <a href="http-check.html">HTTP(S) Check</a>
+          <a href="speed-latency-baseline.html">Speed/Latency Baseline</a>
+          <a href="iperf3.html">iperf3 Client</a>
+          <a href="traceroute.html">Traceroute</a>
+          <a href="port-connect.html">TCP/UDP Connect</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Lookup & Info</div>
+          <a href="public-ip-geo-asn.html">Public IP + Geo/ASN</a>
+          <a href="whois.html" aria-current="page">Whois</a>
+          <a href="dns-lookup.html">DNS Lookup</a>
+          <a href="dns-record-explorer.html">DNS Record Explorer</a>
+          <a href="tls-cert-inspector.html">TLS Cert Inspector</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Scanning & Discovery</div>
+          <a href="port-scan.html">Port Scan</a>
+          <a href="lan-scan.html">LAN Scan</a>
+          <a href="subnet-calculator.html">Subnet Calculator</a>
+          <a href="bonjour-browser.html">Bonjour Browser</a>
+          <a href="upnp-nat-pmp.html">UPnP / NAT-PMP</a>
+        </div>
+      </aside>
+
+      <!-- ── Content ── -->
+      <main class="content">
+        <div class="page-header">
+          <span class="crumb">Lookup & Info</span>
+          <h1>Whois</h1>
+          <p>Look up registration and ownership-related data for a domain or IP.</p>
+        </div>
+
+        <article class="tool">
+          <div class="tool-head">
+            <div class="tool-emoji">&#128196;</div>
+            <div>
+              <h3>Whois</h3>
+              <span class="slug">whois</span>
+            </div>
+          </div>
+          <h4>Input</h4>
+          <ul>
+            <li>Domain or IP address.</li>
+          </ul>
+          <h4>Options</h4>
+          <ul>
+            <li><strong>Lookup mode</strong>:
+              <ul>
+                <li><code>rdap</code> (default): tries RDAP first and falls back to WHOIS if RDAP has no result.</li>
+                <li><code>whois</code>: uses IANA WHOIS only, no RDAP fallback.</li>
+              </ul>
+            </li>
+          </ul>
+          <h4>Output</h4>
+          <ul>
+            <li>Registrar/registry object details.</li>
+            <li>Status and lifecycle events.</li>
+            <li>Nameservers.</li>
+            <li>Source info (RDAP or WHOIS).</li>
+          </ul>
+          <h4>Tips</h4>
+          <ul>
+            <li>Availability of fields depends on registry and TLD policies.</li>
+            <li>For domains, nameserver details help diagnose delegation issues.</li>
+            <li>Use RDAP for structured output; use WHOIS when you specifically need classic WHOIS text output.</li>
+          </ul>
+          <h4>Deeplink</h4>
+<pre class="deeplink-example"><code><span class="scheme">netdebug://</span>whois?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">mode</span>=<span class="value">rdap</span></code></pre>
+          <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
+        </article>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
