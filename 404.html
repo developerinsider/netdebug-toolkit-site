@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="That NetDebug Toolkit page could not be found. Jump back to the tool documentation hub, support, or the home page." />
+  <title>Page Not Found | NetDebug Toolkit</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#050507" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #050507;
+      --surface: #0e0e12;
+      --surface-2: #16161d;
+      --border: rgba(255,255,255,.08);
+      --border-hover: rgba(255,255,255,.15);
+      --text: #eaeaf0;
+      --text-secondary: #9898a8;
+      --brand: #FF5D24;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .glow-bg {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(255,93,36,.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 20px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -.01em;
+    }
+
+    .brand-logo { height: 26px; width: auto; display: block; }
+
+    .nav-links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 72px 0; }
+
+    .code {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 6vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 14px;
+    }
+
+    .lede { color: var(--text-secondary); max-width: 56ch; margin-bottom: 32px; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .btn:hover { border-color: var(--border-hover); }
+
+    .btn-primary { background: var(--brand); border-color: var(--brand); color: #0b0b0d; }
+    .btn-primary:hover { filter: brightness(1.08); }
+
+    .suggest {
+      margin-top: 44px;
+      padding: 20px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .suggest h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .suggest ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+    .suggest a { color: var(--text); text-decoration: none; font-size: 14px; }
+    .suggest a:hover { color: var(--brand); }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px 20px;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    footer nav { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    footer a { color: var(--text-secondary); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="code">Error 404</div>
+      <h1>This page isn't on the map</h1>
+      <p class="lede">
+        The address you followed doesn't resolve to anything here. It may have moved when the
+        site changed domains, or the link may simply be mistyped.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/">Go to home page</a>
+        <a class="btn" href="/docs.html">Browse tool docs</a>
+        <a class="btn" href="/support.html">Contact support</a>
+      </div>
+
+      <div class="suggest">
+        <h2>Popular pages</h2>
+        <ul>
+          <li><a href="/docs/ping.html">Ping</a></li>
+          <li><a href="/docs/traceroute.html">Traceroute</a></li>
+          <li><a href="/docs/dns-lookup.html">DNS Lookup</a></li>
+          <li><a href="/docs/port-scan.html">Port Scan</a></li>
+          <li><a href="/docs/whois.html">Whois</a></li>
+          <li><a href="/docs/my-automation.html">My Automation</a></li>
+          <li><a href="/docs/deeplinks.html">Deeplinks</a></li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+    <nav>
+      <a href="/docs.html">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

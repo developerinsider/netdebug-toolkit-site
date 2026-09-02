@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Path MTU Discovery usage notes, options, output, and deeplink reference for NetDebug Toolkit. Find the largest packet a path carries and detect MTU black holes." />
+  <title>Path MTU Discovery | NetDebug Toolkit Docs</title>
+  <link rel="canonical" href="https://netdebug.app/docs/path-mtu.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Path MTU Discovery | NetDebug Toolkit Docs" />
+  <meta property="og:description" content="Path MTU Discovery usage notes, options, output, and deeplink reference for NetDebug Toolkit. Find the largest packet a path carries and detect MTU black holes." />
+  <meta property="og:url" content="https://netdebug.app/docs/path-mtu.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit — 20 network diagnostic tools in one app" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Path MTU Discovery | NetDebug Toolkit Docs" />
+  <meta name="twitter:description" content="Path MTU Discovery usage notes, options, output, and deeplink reference for NetDebug Toolkit. Find the largest packet a path carries and detect MTU black holes." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="docs.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Path MTU Discovery",
+  "name": "Path MTU Discovery | NetDebug Toolkit Docs",
+  "description": "Path MTU Discovery usage notes, options, output, and deeplink reference for NetDebug Toolkit. Find the largest packet a path carries and detect MTU black holes.",
+  "url": "https://netdebug.app/docs/path-mtu.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Documentation",
+      "item": "https://netdebug.app/docs.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Path MTU Discovery",
+      "item": "https://netdebug.app/docs/path-mtu.html"
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="../" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="../#tools">Tools</a>
+        <a href="../docs.html" class="active">Docs</a>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <div class="docs-layout">
+      <!-- ── Sidebar ── -->
+      <aside class="toc">
+        <div class="toc-section">
+          <div class="toc-section-title">Documentation</div>
+          <a href="../docs.html">Overview</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Automation</div>
+          <a href="deeplinks.html">Deeplinks</a>
+          <a href="my-automation.html">My Automation</a>
+          <a href="run-history.html">Run History &amp; Trends</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Connectivity</div>
+          <a href="ping.html">Ping</a>
+          <a href="http-check.html">HTTP(S) Check</a>
+          <a href="speed-latency-baseline.html">Speed/Latency Baseline</a>
+          <a href="iperf3.html">iperf3 Client</a>
+          <a href="traceroute.html">Traceroute</a>
+          <a href="path-mtu.html" aria-current="page">Path MTU Discovery</a>
+          <a href="port-connect.html">TCP/UDP Connect</a>
+          <a href="ntp-check.html">NTP Time Check</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Lookup & Info</div>
+          <a href="public-ip-geo-asn.html">Public IP + Geo/ASN</a>
+          <a href="whois.html">Whois</a>
+          <a href="dns-lookup.html">DNS Lookup</a>
+          <a href="dns-record-explorer.html">DNS Record Explorer</a>
+          <a href="tls-cert-inspector.html">TLS Cert Inspector</a>
+        </div>
+        <div class="toc-section">
+          <div class="toc-section-title">Scanning & Discovery</div>
+          <a href="port-scan.html">Port Scan</a>
+          <a href="external-port-check.html">External Port Check</a>
+          <a href="lan-scan.html">LAN Scan</a>
+          <a href="subnet-calculator.html">Subnet Calculator</a>
+          <a href="bonjour-browser.html">Bonjour Browser</a>
+          <a href="upnp-nat-pmp.html">UPnP / NAT-PMP</a>
+        </div>
+      </aside>
+
+      <!-- ── Content ── -->
+      <main class="content">
+        <div class="page-header">
+          <span class="crumb">Connectivity</span>
+          <h1>Path MTU Discovery</h1>
+          <p>Find the largest packet a path actually carries, and detect the MTU black holes that make connections hang for no visible reason.</p>
+        </div>
+
+        <article class="tool">
+          <div class="tool-head">
+            <div class="tool-emoji">&#128207;</div>
+            <div>
+              <h3>Path MTU Discovery</h3>
+              <span class="slug">mtu</span>
+            </div>
+          </div>
+
+          <p>An <strong>MTU black hole</strong> is why a connection can look perfectly healthy and still hang. Small packets get through, so DNS resolves, TCP connects and TLS negotiates. Then the first full-size data packet vanishes with no error and the transfer stalls forever. Pages load halfway. VPNs connect but move no traffic.</p>
+
+          <h4>Input</h4>
+          <ul>
+            <li>Target: any host or IP (for example <code>1.1.1.1</code>, <code>8.8.8.8</code>, or <code>example.com</code>).</li>
+            <li>Pick a target that answers ICMP echo. Public resolvers are reliable; many web servers are not.</li>
+          </ul>
+
+          <h4>Options</h4>
+          <ul>
+            <li><strong>Mode — Auto</strong> (default) searches for the path MTU. Well-known values are probed first (9216, 9000, 4000, 1500, 1492, 1480, 1460, 1400, 1280, 576), then the search narrows to the exact byte. Because MTU is monotonic the ladder is bisected rather than walked, so a full search costs roughly eight probes.</li>
+            <li><strong>Mode — Manual</strong> sends a single probe at one size you choose, the equivalent of <code>ping -D -s</code>. It reports not just pass or fail but <em>which</em> failure: a router reporting Fragmentation Needed, or a silent drop.</li>
+            <li><strong>IP Version</strong>: Auto, IPv4, or IPv6. Auto prefers IPv4 because more hosts answer ICMPv4 echo.</li>
+            <li><strong>Size</strong> (Manual mode) is the <strong>MTU</strong> — the total IP packet size — not the ICMP payload. The derived payload is shown beneath the field, so <code>MTU 1500 = 1472 bytes payload + 8 ICMP + 20 IP</code>. That 1472 is the number <code>ping -s</code> would take.</li>
+            <li><strong>Locate the constriction</strong> (Auto mode) walks the route after measuring, to find which hop stops forwarding full-size packets. Adds one probe per hop.</li>
+          </ul>
+
+          <h4>Output</h4>
+          <ul>
+            <li><strong>Local link</strong>: medium (Wi-Fi, Ethernet, Cellular), interface name, and link MTU. Any active VPN tunnel is listed with its own MTU.</li>
+            <li><strong>Result</strong>: the measured path MTU, the matching well-known value if there is one (1492 is reported as PPPoE), the derived payload, and the next-hop MTU if a router reported one.</li>
+            <li><strong>Verdict</strong> — the part that matters: <em>No constraint</em>; <em>Reduced MTU, working correctly</em>; <em>MTU black hole</em>; or <em>Inconclusive</em> when the target blocks ICMP entirely.</li>
+            <li><strong>Where it drops</strong>, when the per-hop sweep runs: the first hop that refuses to forward a full-size packet.</li>
+            <li><strong>Tunnel planning</strong>: safe inner MTU for WireGuard, IPsec, OpenVPN, L2TP/IPsec, GRE, and PPPoE at the measured path MTU.</li>
+            <li><strong>Probes</strong>: every size tried and what came back, in order.</li>
+          </ul>
+
+          <h4>Tips</h4>
+          <ul>
+            <li><strong>A reduced MTU is not automatically a problem.</strong> If routers report it, path MTU discovery is doing its job. Only the black-hole verdict needs fixing.</li>
+            <li><strong>Fix a black hole at the router, not on this device.</strong> Enable MSS clamping, or remove a double-NAT layer. Lowering this device's MTU only helps this device.</li>
+            <li><strong>TCP often survives; UDP does not.</strong> Most PPPoE routers rewrite the TCP handshake (MSS clamping) so browsing works even with a mismatch. There is no equivalent for QUIC/HTTP3, WireGuard or IPsec, which is why "the web is fine but my VPN is broken" is the classic symptom.</li>
+            <li><strong>Double NAT makes black holes more likely.</strong> The ICMP that reports the smaller MTU is addressed to whichever NAT last rewrote the packet, and every extra NAT layer is another chance for it to be lost on the way back.</li>
+            <li><strong>Jumbo frames need a wired link.</strong> The search is capped at what your interface can actually emit, so on Wi-Fi (1500) jumbo sizes are skipped and the reason is stated in the output. On an Ethernet-connected Apple TV, or an iPad with a USB-C Ethernet adapter negotiating jumbo, those sizes are probed automatically.</li>
+            <li><strong>A VPN lowers the ceiling.</strong> When a tunnel is up, its MTU governs what the device can emit, and it is reported alongside the physical link.</li>
+            <li>Pair it with <a href="traceroute.html">Traceroute</a>: Traceroute shows <em>where</em> the path goes, Path MTU Discovery shows <em>how much</em> it will carry.</li>
+          </ul>
+
+          <h4>Deeplink</h4>
+<pre class="deeplink-example"><code><span class="scheme">netdebug://</span>mtu?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">family</span>=<span class="value">v4</span>&amp;<span class="key">hops</span>=<span class="value">true</span>
+<span class="scheme">netdebug://</span>mtu?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">mode</span>=<span class="value">manual</span>&amp;<span class="key">size</span>=<span class="value">1500</span></code></pre>
+          <p>A size below the family minimum (68 for IPv4, 1280 for IPv6) is ignored. A size <em>above</em> your link MTU is accepted — the resulting local rejection is itself a useful result.</p>
+          <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
+        </article>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="../support.html">Support</a>
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
-  <title>Wake-on-LAN Sender | NetDebug Toolkit Docs</title>
-  <link rel="canonical" href="https://netdebug.app/docs/wake-on-lan.html" />
+  <meta name="description" content="External Port Check usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <title>External Port Check | NetDebug Toolkit Docs</title>
+  <link rel="canonical" href="https://netdebug.app/docs/external-port-check.html" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="theme-color" content="#050507" />
   <meta name="apple-itunes-app" content="app-id=6759454574" />
@@ -16,26 +16,26 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="NetDebug Toolkit" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:title" content="Wake-on-LAN Sender | NetDebug Toolkit Docs" />
-  <meta property="og:description" content="Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
-  <meta property="og:url" content="https://netdebug.app/docs/wake-on-lan.html" />
+  <meta property="og:title" content="External Port Check | NetDebug Toolkit Docs" />
+  <meta property="og:description" content="External Port Check usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <meta property="og:url" content="https://netdebug.app/docs/external-port-check.html" />
   <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="NetDebug Toolkit — 20 network diagnostic tools in one app" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Wake-on-LAN Sender | NetDebug Toolkit Docs" />
-  <meta name="twitter:description" content="Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <meta name="twitter:title" content="External Port Check | NetDebug Toolkit Docs" />
+  <meta name="twitter:description" content="External Port Check usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
   <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
   <link rel="stylesheet" href="docs.css" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Wake-on-LAN Sender",
-  "name": "Wake-on-LAN Sender | NetDebug Toolkit Docs",
-  "description": "Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit.",
-  "url": "https://netdebug.app/docs/wake-on-lan.html",
+  "headline": "External Port Check",
+  "name": "External Port Check | NetDebug Toolkit Docs",
+  "description": "External Port Check usage notes, options, output, and deeplink reference for NetDebug Toolkit.",
+  "url": "https://netdebug.app/docs/external-port-check.html",
   "inLanguage": "en",
   "image": "https://netdebug.app/assets/og-image.png",
   "isPartOf": {
@@ -78,8 +78,8 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Wake-on-LAN Sender",
-      "item": "https://netdebug.app/docs/wake-on-lan.html"
+      "name": "External Port Check",
+      "item": "https://netdebug.app/docs/external-port-check.html"
     }
   ]
 }
@@ -127,7 +127,7 @@
           <a href="path-mtu.html">Path MTU Discovery</a>
           <a href="port-connect.html">TCP/UDP Connect</a>
           <a href="ntp-check.html">NTP Time Check</a>
-          <a href="wake-on-lan.html" aria-current="page">Wake-on-LAN</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
         </div>
         <div class="toc-section">
           <div class="toc-section-title">Lookup & Info</div>
@@ -140,7 +140,7 @@
         <div class="toc-section">
           <div class="toc-section-title">Scanning & Discovery</div>
           <a href="port-scan.html">Port Scan</a>
-          <a href="external-port-check.html">External Port Check</a>
+          <a href="external-port-check.html" aria-current="page">External Port Check</a>
           <a href="lan-scan.html">LAN Scan</a>
           <a href="subnet-calculator.html">Subnet Calculator</a>
           <a href="bonjour-browser.html">Bonjour Browser</a>
@@ -151,44 +151,46 @@
       <!-- ── Content ── -->
       <main class="content">
         <div class="page-header">
-          <span class="crumb">Connectivity</span>
-          <h1>Wake-on-LAN Sender</h1>
-          <p>Send a magic packet to wake a compatible device on your local network.</p>
+          <span class="crumb">Scanning & Discovery</span>
+          <h1>External Port Check</h1>
+          <p>Ask a server on the internet to connect back to a port on your public IP — the real "can the internet reach me?" test.</p>
         </div>
 
         <article class="tool">
           <div class="tool-head">
-            <div class="tool-emoji">&#9211;</div>
+            <div class="tool-emoji">&#128225;</div>
             <div>
-              <h3>Wake-on-LAN Sender</h3>
-              <span class="slug">wol</span>
+              <h3>External Port Check</h3>
+              <span class="slug">reachme</span>
             </div>
           </div>
           <h4>Input</h4>
           <ul>
-            <li>Target MAC address (for example <code>AA:BB:CC:DD:EE:FF</code>).</li>
+            <li>Port: the TCP port on your public IP to test (<code>1</code>–<code>65535</code>). Set up port forwarding on your router for this port first.</li>
+            <li>No host is entered — your public IP is detected server-side, so the check always targets you.</li>
           </ul>
-          <h4>Options</h4>
+          <h4>How it works</h4>
           <ul>
-            <li><strong>Broadcast IPv4 address</strong>: optional, defaults to <code>255.255.255.255</code>.</li>
-            <li><strong>UDP Port</strong>: optional, defaults to <code>9</code>. Valid range <code>1</code>–<code>65535</code>.</li>
+            <li>A device can't prove this about itself: connecting to your own public IP from inside the LAN hits NAT loopback or fails.</li>
+            <li>The app calls a NetDebug helper server on the internet, which attempts a TCP handshake back to <code>your-public-ip:port</code>.</li>
+            <li>Because the connection originates outside your network, the result reflects real inbound reachability. The server only ever connects back to your own IP — it is not a general port scanner.</li>
           </ul>
           <h4>Output</h4>
           <ul>
-            <li>Canonical target MAC address.</li>
-            <li>Destination broadcast address and port.</li>
-            <li>Magic packet size (<code>102</code> bytes).</li>
-            <li>Send result status.</li>
+            <li><strong>Open</strong> — the handshake succeeded; the internet can reach the port. Port forwarding and firewall are working.</li>
+            <li><strong>Closed</strong> — your IP is reachable but nothing is listening (connection refused). The port is not forwarded to a running service.</li>
+            <li><strong>Filtered</strong> — no response before timeout. Inbound traffic is being dropped: no port forward, a firewall, or carrier-grade NAT (CGNAT).</li>
+            <li>Your public IP, the tested port, and connect time in milliseconds.</li>
           </ul>
           <h4>Tips</h4>
           <ul>
-            <li>Wake-on-LAN works only if the target device, BIOS/UEFI settings, and network path support it.</li>
-            <li>If global broadcast does not work, try your subnet-directed broadcast (e.g. <code>192.168.1.255</code>).</li>
-            <li>Use this only on networks and devices you are authorized to manage.</li>
+            <li>Start the service you are forwarding before testing — a forward to a stopped service reads as Closed.</li>
+            <li>Filtered on every port often means carrier-grade NAT: your ISP shares one public IP across many customers, so inbound forwarding is impossible without a static IP or IPv6.</li>
+            <li>Pair with UPnP / NAT-PMP to check whether your router can create the forward automatically, and with Port Scan to see what is open on a host from the inside.</li>
           </ul>
           <h4>Deeplink</h4>
-<pre class="deeplink-example"><code><span class="scheme">netdebug://</span>wol?<span class="key">mac</span>=<span class="value">AA:BB:CC:DD:EE:FF</span>&amp;<span class="key">broadcast</span>=<span class="value">192.168.1.255</span>&amp;<span class="key">port</span>=<span class="value">9</span></code></pre>
-          <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
+<pre class="deeplink-example"><code><span class="scheme">netdebug://</span>reachme?<span class="key">port</span>=<span class="value">8080</span></code></pre>
+          <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current port already filled in.</p>
         </article>
       </main>
     </div>

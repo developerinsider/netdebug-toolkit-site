@@ -5,7 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="HTTP(S) Check usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
   <title>HTTP(S) Check | NetDebug Toolkit Docs</title>
+  <link rel="canonical" href="https://netdebug.app/docs/http-check.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="HTTP(S) Check | NetDebug Toolkit Docs" />
+  <meta property="og:description" content="HTTP(S) Check usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <meta property="og:url" content="https://netdebug.app/docs/http-check.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit — 20 network diagnostic tools in one app" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HTTP(S) Check | NetDebug Toolkit Docs" />
+  <meta name="twitter:description" content="HTTP(S) Check usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
   <link rel="stylesheet" href="docs.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "HTTP(S) Check",
+  "name": "HTTP(S) Check | NetDebug Toolkit Docs",
+  "description": "HTTP(S) Check usage notes, options, output, and deeplink reference for NetDebug Toolkit.",
+  "url": "https://netdebug.app/docs/http-check.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Documentation",
+      "item": "https://netdebug.app/docs.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "HTTP(S) Check",
+      "item": "https://netdebug.app/docs/http-check.html"
+    }
+  ]
+}
+  </script>
 </head>
 <body>
   <div class="glow-bg"></div>
@@ -14,7 +92,7 @@
     <!-- Navigation -->
     <header class="nav">
       <a href="../" class="brand">
-        <img class="brand-logo" src="../netdebug.png" alt="NetDebug Toolkit logo" />
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
         NetDebug Toolkit
       </a>
       <div class="nav-links">
@@ -37,6 +115,7 @@
           <div class="toc-section-title">Automation</div>
           <a href="deeplinks.html">Deeplinks</a>
           <a href="my-automation.html">My Automation</a>
+          <a href="run-history.html">Run History &amp; Trends</a>
         </div>
         <div class="toc-section">
           <div class="toc-section-title">Connectivity</div>
@@ -45,7 +124,9 @@
           <a href="speed-latency-baseline.html">Speed/Latency Baseline</a>
           <a href="iperf3.html">iperf3 Client</a>
           <a href="traceroute.html">Traceroute</a>
+          <a href="path-mtu.html">Path MTU Discovery</a>
           <a href="port-connect.html">TCP/UDP Connect</a>
+          <a href="ntp-check.html">NTP Time Check</a>
           <a href="wake-on-lan.html">Wake-on-LAN</a>
         </div>
         <div class="toc-section">
@@ -59,6 +140,7 @@
         <div class="toc-section">
           <div class="toc-section-title">Scanning & Discovery</div>
           <a href="port-scan.html">Port Scan</a>
+          <a href="external-port-check.html">External Port Check</a>
           <a href="lan-scan.html">LAN Scan</a>
           <a href="subnet-calculator.html">Subnet Calculator</a>
           <a href="bonjour-browser.html">Bonjour Browser</a>
@@ -89,8 +171,10 @@
           <h4>What it checks</h4>
           <ul>
             <li>Final URL and status code.</li>
-            <li>Response time.</li>
-            <li>HTTP protocol version (HTTP/1.1, HTTP/2, or HTTP/3 QUIC).</li>
+            <li>Response time, broken down into DNS, TCP, TLS, request, time to first byte, and transfer.</li>
+            <li>HTTP protocol version, plus whether HTTP/3 is actually supported rather than only advertised.</li>
+            <li>IPv4 and IPv6 reachability, measured separately.</li>
+            <li>Security headers, graded A-F.</li>
             <li>Server and content type (if available).</li>
             <li>Redirect chain.</li>
             <li>TLS certificate summary for HTTPS endpoints.</li>
@@ -99,7 +183,12 @@
           <ul>
             <li>Use a full URL if you want to test a specific path.</li>
             <li>Check the redirect chain when a status code looks unexpected.</li>
-            <li>The protocol field shows which HTTP version was negotiated (HTTP/2 and HTTP/3 offer better performance).</li>
+            <li>In the timing breakdown, a large DNS figure points at the resolver, a large TLS figure at certificate or handshake cost, and a large time to first byte at the server itself.</li>
+            <li>A reused connection has no DNS or TCP phase, which is why those lines can be absent.</li>
+            <li>HTTP/3 is probed directly, because browsers and apps often negotiate HTTP/2 until they have seen the server advertise HTTP/3 once.</li>
+            <li>If HTTP/3 is advertised but the probe fails, UDP port 443 is probably blocked on your network rather than missing on the server.</li>
+            <li>Published IPv6 that does not connect is worth fixing: clients that prefer IPv6 stall before falling back, which users experience as a slow first load.</li>
+            <li>Security header grading ignores HSTS on plain HTTP, and accepts a Content-Security-Policy <code>frame-ancestors</code> directive in place of <code>X-Frame-Options</code>.</li>
           </ul>
           <h4>Deeplink</h4>
 <pre class="deeplink-example"><code><span class="scheme">netdebug://</span>http?<span class="key">target</span>=<span class="value">https://example.com/api/health</span></code></pre>

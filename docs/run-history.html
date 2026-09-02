@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
-  <title>Wake-on-LAN Sender | NetDebug Toolkit Docs</title>
-  <link rel="canonical" href="https://netdebug.app/docs/wake-on-lan.html" />
+  <meta name="description" content="Run History & Trends: NetDebug Toolkit saves every tool and automation run on-device and charts latency, speed, and more over time." />
+  <title>Run History &amp; Trends | NetDebug Toolkit Docs</title>
+  <link rel="canonical" href="https://netdebug.app/docs/run-history.html" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="theme-color" content="#050507" />
   <meta name="apple-itunes-app" content="app-id=6759454574" />
@@ -16,26 +16,26 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="NetDebug Toolkit" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:title" content="Wake-on-LAN Sender | NetDebug Toolkit Docs" />
-  <meta property="og:description" content="Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
-  <meta property="og:url" content="https://netdebug.app/docs/wake-on-lan.html" />
+  <meta property="og:title" content="Run History &amp; Trends | NetDebug Toolkit Docs" />
+  <meta property="og:description" content="Run History &amp; Trends: NetDebug Toolkit saves every tool and automation run on-device and charts latency, speed, and more over time." />
+  <meta property="og:url" content="https://netdebug.app/docs/run-history.html" />
   <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="NetDebug Toolkit — 20 network diagnostic tools in one app" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Wake-on-LAN Sender | NetDebug Toolkit Docs" />
-  <meta name="twitter:description" content="Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit." />
+  <meta name="twitter:title" content="Run History &amp; Trends | NetDebug Toolkit Docs" />
+  <meta name="twitter:description" content="Run History &amp; Trends: NetDebug Toolkit saves every tool and automation run on-device and charts latency, speed, and more over time." />
   <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
   <link rel="stylesheet" href="docs.css" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Wake-on-LAN Sender",
-  "name": "Wake-on-LAN Sender | NetDebug Toolkit Docs",
-  "description": "Wake-on-LAN Sender usage notes, options, output, and deeplink reference for NetDebug Toolkit.",
-  "url": "https://netdebug.app/docs/wake-on-lan.html",
+  "headline": "Run History & Trends",
+  "name": "Run History & Trends | NetDebug Toolkit Docs",
+  "description": "Run History & Trends: NetDebug Toolkit saves every tool and automation run on-device and charts latency, speed, and more over time.",
+  "url": "https://netdebug.app/docs/run-history.html",
   "inLanguage": "en",
   "image": "https://netdebug.app/assets/og-image.png",
   "isPartOf": {
@@ -78,8 +78,8 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Wake-on-LAN Sender",
-      "item": "https://netdebug.app/docs/wake-on-lan.html"
+      "name": "Run History & Trends",
+      "item": "https://netdebug.app/docs/run-history.html"
     }
   ]
 }
@@ -115,7 +115,7 @@
           <div class="toc-section-title">Automation</div>
           <a href="deeplinks.html">Deeplinks</a>
           <a href="my-automation.html">My Automation</a>
-          <a href="run-history.html">Run History &amp; Trends</a>
+          <a href="run-history.html" aria-current="page">Run History &amp; Trends</a>
         </div>
         <div class="toc-section">
           <div class="toc-section-title">Connectivity</div>
@@ -127,7 +127,7 @@
           <a href="path-mtu.html">Path MTU Discovery</a>
           <a href="port-connect.html">TCP/UDP Connect</a>
           <a href="ntp-check.html">NTP Time Check</a>
-          <a href="wake-on-lan.html" aria-current="page">Wake-on-LAN</a>
+          <a href="wake-on-lan.html">Wake-on-LAN</a>
         </div>
         <div class="toc-section">
           <div class="toc-section-title">Lookup & Info</div>
@@ -151,45 +151,51 @@
       <!-- ── Content ── -->
       <main class="content">
         <div class="page-header">
-          <span class="crumb">Connectivity</span>
-          <h1>Wake-on-LAN Sender</h1>
-          <p>Send a magic packet to wake a compatible device on your local network.</p>
+          <span class="crumb">Feature</span>
+          <h1>Run History &amp; Trends</h1>
+          <p>Every tool run and every automation step is saved on your device, so you can look back at what happened — and chart how latency, speed, and reachability change over time.</p>
         </div>
 
-        <article class="tool">
-          <div class="tool-head">
-            <div class="tool-emoji">&#9211;</div>
-            <div>
-              <h3>Wake-on-LAN Sender</h3>
-              <span class="slug">wol</span>
-            </div>
+        <section class="section">
+          <h3 id="run-history-list">Run History</h3>
+          <p>Open <strong>Run History</strong> from the home screen's Quick Access group, or from a saved host's tools screen to see just that host's runs. Each entry records the tool, target, time, duration, status (completed / cancelled / failed), the full output, and — for tools that produce numbers — structured metrics used by the charts.</p>
+          <ul>
+            <li><strong>Filter &amp; search</strong> — narrow the list to one tool, or search by target.</li>
+            <li><strong>Detail screen</strong> — view the complete saved output plus metadata, then <strong>Run Again</strong> (re-opens the tool with the same target and auto-runs), <strong>Export</strong> (text / PDF / image, the same share flow as a live run), or <strong>Delete</strong>.</li>
+            <li><strong>Clear History</strong> — wipe all saved runs from the History screen's menu.</li>
+            <li><strong>Automation runs</strong> — steps run inside an automation are saved too, tagged with the automation's name.</li>
+          </ul>
+
+          <h3 id="run-history-trends">Trends</h3>
+          <p>The <strong>Trends</strong> screen (from the History menu) draws a line chart of one metric over time, filterable by target and time range (7 / 30 / 90 days):</p>
+          <ul>
+            <li><strong>Download</strong> &amp; <strong>Upload</strong> (Mbps) — from Speed/Latency Baseline and iperf3.</li>
+            <li><strong>Latency</strong> &amp; <strong>Jitter</strong> (ms), <strong>Packet Loss</strong> (%) — from Ping (and Speed latency).</li>
+            <li><strong>Clock Offset</strong> (s) — from NTP Time Check.</li>
+            <li><strong>HTTP Response</strong> (ms) — from HTTP(S) Check.</li>
+          </ul>
+          <p>Each metric is scoped to the tools that produce it, so unrelated series never share an axis. Run a tool against the same target a few times and the trend takes shape.</p>
+
+          <h3 id="run-history-retention">Free, with tiered retention</h3>
+          <p>Run History and Trends are <strong>free</strong>. How long runs are kept depends on the one-time purchases you already own — the highest tier applies (they don't stack):</p>
+          <table class="params-table">
+            <thead><tr><th>What you own</th><th>Runs kept for</th></tr></thead>
+            <tbody>
+              <tr><td>Nothing (free)</td><td>3 days</td></tr>
+              <tr><td>Remove Ads</td><td>7 days</td></tr>
+              <tr><td>Unlimited Automations</td><td>14 days</td></tr>
+              <tr><td>Remove Ads + Unlimited Automations (Bundle)</td><td>Unlimited</td></tr>
+            </tbody>
+          </table>
+          <p>On the free and standalone tiers, runs older than the window are pruned automatically. The History screen footer shows your current window and a <strong>Keep runs longer</strong> shortcut to <strong>Settings → Purchases</strong>.</p>
+
+          <div class="callout">
+            <strong>Private by design.</strong> Run history lives only on your device (SwiftData). It is never uploaded, synced, or shared anywhere. Deleting a run, clearing history, or reaching the retention window removes it for good.
           </div>
-          <h4>Input</h4>
-          <ul>
-            <li>Target MAC address (for example <code>AA:BB:CC:DD:EE:FF</code>).</li>
-          </ul>
-          <h4>Options</h4>
-          <ul>
-            <li><strong>Broadcast IPv4 address</strong>: optional, defaults to <code>255.255.255.255</code>.</li>
-            <li><strong>UDP Port</strong>: optional, defaults to <code>9</code>. Valid range <code>1</code>–<code>65535</code>.</li>
-          </ul>
-          <h4>Output</h4>
-          <ul>
-            <li>Canonical target MAC address.</li>
-            <li>Destination broadcast address and port.</li>
-            <li>Magic packet size (<code>102</code> bytes).</li>
-            <li>Send result status.</li>
-          </ul>
-          <h4>Tips</h4>
-          <ul>
-            <li>Wake-on-LAN works only if the target device, BIOS/UEFI settings, and network path support it.</li>
-            <li>If global broadcast does not work, try your subnet-directed broadcast (e.g. <code>192.168.1.255</code>).</li>
-            <li>Use this only on networks and devices you are authorized to manage.</li>
-          </ul>
-          <h4>Deeplink</h4>
-<pre class="deeplink-example"><code><span class="scheme">netdebug://</span>wol?<span class="key">mac</span>=<span class="value">AA:BB:CC:DD:EE:FF</span>&amp;<span class="key">broadcast</span>=<span class="value">192.168.1.255</span>&amp;<span class="key">port</span>=<span class="value">9</span></code></pre>
-          <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
-        </article>
+
+          <h3 id="run-history-tvos">On Apple TV</h3>
+          <p>Apple TV has the same History and Trends screens. Delete a run from its context menu, and export a saved run's output over the local network as a QR code — scan it from a phone or laptop on the same Wi-Fi to download the file.</p>
+        </section>
       </main>
     </div>
 
