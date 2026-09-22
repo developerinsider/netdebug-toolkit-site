@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Magic packets are fire and forget, so a failed wake gives you no feedback at all. Learn why the broadcast address matters, which BIOS and OS settings are required, and why Windows Fast Startup breaks it completely." />
+  <title>Wake-on-LAN Not Working? The Full Checklist</title>
+  <link rel="canonical" href="https://netdebug.app/blog/wake-on-lan-not-working.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Wake-on-LAN Not Working? The Full Checklist" />
+  <meta property="og:description" content="Magic packets are fire and forget, so a failed wake gives you no feedback at all. Learn why the broadcast address matters, which BIOS and OS settings are required, and why Windows Fast Startup breaks it completely." />
+  <meta property="og:url" content="https://netdebug.app/blog/wake-on-lan-not-working.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Networking" />
+  <meta property="article:tag" content="wake on lan not working" />
+  <meta property="article:tag" content="magic packet" />
+  <meta property="article:tag" content="wake on lan setup" />
+  <meta property="article:tag" content="wake on lan over internet" />
+  <meta property="article:tag" content="wol broadcast address" />
+  <meta property="article:tag" content="windows fast startup wake on lan" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Wake-on-LAN Not Working? The Full Checklist" />
+  <meta name="twitter:description" content="Magic packets are fire and forget, so a failed wake gives you no feedback at all. Learn why the broadcast address matters, which BIOS and OS settings are required, and why Windows Fast Startup breaks it completely." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Wake-on-LAN Not Working? The Full Checklist",
+  "headline": "Wake-on-LAN not working? Here is the whole chain to check",
+  "description": "Magic packets are fire and forget, so a failed wake gives you no feedback at all. Learn why the broadcast address matters, which BIOS and OS settings are required, and why Windows Fast Startup breaks it completely.",
+  "url": "https://netdebug.app/blog/wake-on-lan-not-working.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "wake on lan not working, magic packet, wake on lan setup, wake on lan over internet, wol broadcast address, windows fast startup wake on lan",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Wake-on-LAN not working? Here is the whole chain to check",
+      "item": "https://netdebug.app/blog/wake-on-lan-not-working.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is my Wake-on-LAN packet not waking the computer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The most common cause is sending it to the machine's old IP address instead of the subnet broadcast address. A sleeping machine has no IP, so delivery depends on a cached ARP entry that expires after a while. Send to the broadcast address, such as 192.168.1.255 on a /24 network."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What broadcast address should I use for Wake-on-LAN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The highest address in your subnet. For 192.168.1.0/24 that is 192.168.1.255. On any other prefix the number is different, so calculate it from your address and mask rather than guessing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does Wake-on-LAN work from sleep but not after shutdown?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually Windows Fast Startup, which hibernates the kernel instead of shutting down and powers the network adapter off completely. Disabling Fast Startup in Power Options normally fixes it. Some BIOS setups also have a separate option for waking from a full power off state."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Wake-on-LAN work over Wi-Fi?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Rarely and unreliably. Wake-on-Wireless-LAN exists but support is inconsistent, and many laptops power the wireless card down entirely when they sleep. Wake-on-LAN is designed for wired connections and works far more dependably on Ethernet."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use Wake-on-LAN over the internet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not directly in most cases, because routers generally refuse to forward directed broadcasts from the internet. The reliable options are an always on device inside the network that sends the packet locally, a VPN into your own network, or a router that supports a static ARP entry for the target."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which MAC address should I use for Wake-on-LAN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The wired network adapter's address. Machines usually have several, including Wi-Fi, Bluetooth and virtual adapters created by VPN or virtualisation software. Using the wrong one fails silently with no indication of the mistake."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Wake-on-LAN work across VLANs or subnets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not by default. The magic packet is a broadcast, and routers do not forward broadcasts between networks. Sending from a guest network or a different VLAN will not reach the target unless the router is specifically configured to forward directed broadcasts."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Networking</span>
+        <h1>Wake-on-LAN not working? Here is the whole chain to check</h1>
+        <p class="standfirst">There is no error message, by design. Eight things have to be true and nothing tells you which one is not, so here they are in the order worth checking.</p>
+        <div class="post-meta">
+          <span>8 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>Wake-on-LAN is one of those features that either works immediately or refuses to work for reasons nobody can see. There is no error message. You send the packet, nothing happens, and there is no feedback anywhere to tell you which of the eight possible prerequisites was not met.</p>
+
+        <p>That is the real difficulty: the sender gets no confirmation by design. A magic packet is fire and forget, so "it did not work" could mean the packet never left, never arrived, arrived at the wrong address, or arrived perfectly at a machine that was configured to ignore it.</p>
+
+        <p>Here is the whole chain, in the order worth checking.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#how">How a magic packet actually works</a></li>
+            <li><a href="#broadcast">The broadcast address is the usual culprit</a></li>
+            <li><a href="#machine">Settings on the machine you are waking</a></li>
+            <li><a href="#fast-startup">The Windows Fast Startup trap</a></li>
+            <li><a href="#network">Network conditions that silently block it</a></li>
+            <li><a href="#internet">Waking a machine over the internet</a></li>
+            <li><a href="#checklist">The full checklist</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="how">How a magic packet actually works</h2>
+
+        <p>When a machine sleeps, its network card stays partly powered and keeps watching the wire. It is not running an operating system, it has no IP address, and it cannot participate in anything. It is listening for exactly one pattern.</p>
+
+        <p>That pattern is the magic packet: six bytes of <code>FF</code> followed by the target's MAC address repeated sixteen times. The card scans every frame it sees for that sequence, and when it finds its own address repeated, it tells the motherboard to power up.</p>
+
+        <p>Three things follow from this and they explain nearly every failure:</p>
+
+        <ul>
+          <li><strong>The packet is addressed by MAC, not by IP.</strong> The sleeping machine has no IP address for you to send to.</li>
+          <li><strong>It has to be delivered as a broadcast</strong>, because nothing on the network knows where that MAC address lives while the machine is asleep.</li>
+          <li><strong>Broadcasts stay inside one subnet.</strong> Routers do not forward them, which is why this works on a LAN and needs help across the internet.</li>
+        </ul>
+
+        <p>The packet itself is usually wrapped in UDP and sent to port <code>9</code> or <code>7</code>, but the port barely matters: the network card is pattern matching on the payload, not listening on a port in any normal sense. Port 9 is the common convention.</p>
+
+        <h2 id="broadcast">The broadcast address is the usual culprit</h2>
+
+        <p>This is the mistake that accounts for most failures, and it is subtle because the wrong answer sometimes works.</p>
+
+        <p>People send the magic packet to the sleeping machine's old IP address, for example <code>192.168.1.40</code>. To deliver that, your device needs to know which MAC address sits at <code>192.168.1.40</code>, and it looks that up in its ARP cache. If the machine went to sleep recently the entry may still be there and the packet gets delivered. An hour later the entry has expired, nothing answers the lookup, and the packet is silently dropped.</p>
+
+        <p>Hence the classic report: "it worked once and then stopped."</p>
+
+        <p><strong>Send to the subnet broadcast address instead.</strong> For a <code>/24</code> network like <code>192.168.1.0/24</code>, that is <code>192.168.1.255</code>. Every device on the segment receives it, including the sleeping network card, and no address lookup is needed.</p>
+
+        <p>If you are not sure what your broadcast address is, a <a href="/docs/subnet-calculator.html">subnet calculator</a> gives it directly from your address and prefix. It is always the highest address in the range, and on anything other than a <code>/24</code> it is not the number people guess.</p>
+
+<div class="ndt-launch" data-tool="wol" data-mac="AA:BB:CC:DD:EE:FF" data-broadcast="192.168.1.255" data-port="9">
+          <a href="https://netdebug.app/open/wol?mac=AA:BB:CC:DD:EE:FF&amp;broadcast=192.168.1.255&amp;port=9" rel="nofollow">Open Wake-on-LAN in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># Right: subnet broadcast, port 9</span>
+<span class="scheme">https://netdebug.app/open/</span>wol?<span class="key">mac</span>=<span class="value">AA:BB:CC:DD:EE:FF</span>&amp;<span class="key">broadcast</span>=<span class="value">192.168.1.255</span>&amp;<span class="key">port</span>=<span class="value">9</span>
+
+<span class="comment"># Open it pre-filled without sending, to check the values first</span>
+<span class="scheme">https://netdebug.app/open/</span>wol?<span class="key">mac</span>=<span class="value">AA:BB:CC:DD:EE:FF</span>&amp;<span class="key">broadcast</span>=<span class="value">192.168.1.255</span>&amp;<span class="key">autorun</span>=<span class="value">false</span></code></pre>
+
+        <p>While you are checking values, confirm the MAC address is the right one. Machines have several: wired, wireless, Bluetooth, and often virtual adapters from VPN software or virtualisation. Wake-on-LAN almost always needs the <strong>wired</strong> adapter's address. Copying the Wi-Fi MAC by mistake is a common and completely invisible error.</p>
+
+        <div class="app-cta">
+          <h3>Send a magic packet from your phone</h3>
+          <p>The Wake-on-LAN sender in NetDebug Toolkit takes a MAC address, broadcast address and port, and LAN Scan helps you confirm the target came back up. Save it as an automation or a deeplink and you can wake a machine from your home screen.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="machine">Settings on the machine you are waking</h2>
+
+        <p>Wake-on-LAN usually needs enabling in two separate places, and both have to agree.</p>
+
+        <h3>In the BIOS or UEFI</h3>
+        <p>Look for "Wake on LAN", "Power On by PCI-E", "Resume by PCI-E Device", "Power On by Onboard LAN" or similar wording. Manufacturers name it inconsistently and it is frequently disabled by default. There may also be a separate setting controlling whether the machine can wake from full shutdown as opposed to only from sleep.</p>
+
+        <h3>In the operating system</h3>
+        <p>On Windows, open Device Manager, find the network adapter, and check the Power Management tab. Two boxes matter: "Allow this device to wake the computer" and "Only allow a magic packet to wake the computer." The second one is worth enabling, because without it the card will wake on all sorts of ordinary broadcast traffic and the machine will refuse to stay asleep.</p>
+        <p>The adapter's Advanced tab often carries additional entries such as "Wake on Magic Packet" and "Shutdown Wake-On-Lan" that need to be enabled separately.</p>
+        <p>On Linux, check with <code>ethtool</code> that the wake setting includes <code>g</code> for magic packet, and make it persist across reboots, because many distributions reset it. On macOS, the setting is "Wake for network access" in Energy Saver or Battery settings.</p>
+
+        <h3>Power settings that undo it</h3>
+        <p>Some systems cut power to PCIe devices entirely in deeper sleep states, which stops the card listening. If waking from sleep works and waking from shutdown does not, this is usually why, and the BIOS often has a separate option for exactly that case.</p>
+
+        <h2 id="fast-startup">The Windows Fast Startup trap</h2>
+
+        <p>This one deserves its own section because it breaks Wake-on-LAN completely while looking like nothing is wrong.</p>
+
+        <p>Windows Fast Startup does not really shut the machine down. It logs you out and then hibernates the kernel, so the next boot is quicker. As part of that process it powers the network adapter down fully, which means the card is not listening and no magic packet will ever reach it.</p>
+
+        <p>The signature is unmistakable once you know it: <strong>waking from sleep works, waking after a shutdown never does.</strong></p>
+
+        <p>Turning Fast Startup off (Control Panel, Power Options, "Choose what the power buttons do", then uncheck "Turn on fast startup") costs a few seconds of boot time and makes Wake-on-LAN work from a powered off state. On most machines with an SSD the difference is barely noticeable.</p>
+
+        <h2 id="network">Network conditions that silently block it</h2>
+
+        <h3>Wi-Fi</h3>
+        <p>Wake-on-Wireless-LAN exists but support is patchy, and many laptops power the wireless card down completely when they sleep. If the target is on Wi-Fi and nothing you try works, that is very likely the reason. Wake-on-LAN is fundamentally a wired feature.</p>
+
+        <h3>Different subnets or VLANs</h3>
+        <p>Broadcasts do not cross a router. If your phone is on a guest network or a separate VLAN, the packet reaches your phone's segment and stops there. Some routers can forward directed broadcasts between VLANs, but it is off by default and often not available at all on consumer gear.</p>
+
+        <h3>Managed switches</h3>
+        <p>Some switches with energy saving features power down ports that have been idle. A port that has gone quiet may not deliver the broadcast to the sleeping machine at all.</p>
+
+        <h3>The machine never had a DHCP lease</h3>
+        <p>Less about waking and more about what happens after. If it wakes but you cannot reach it, check whether it got an address. Run a <a href="/docs/lan-scan.html">LAN Scan</a> thirty seconds after sending the packet: if a new device appeared, the wake worked and your problem is now something else entirely.</p>
+
+        <h2 id="internet">Waking a machine over the internet</h2>
+
+        <p>This is much harder than it sounds and the naive approach almost never works.</p>
+
+        <p>Forwarding UDP port 9 to a subnet broadcast address is the obvious idea, and most routers refuse to do it, because forwarding directed broadcasts from the internet is a well known amplification attack vector. Some firmware allows it, most does not.</p>
+
+        <p>Three approaches that do work:</p>
+
+        <ul>
+          <li><strong>Use an always on device inside the network.</strong> A Raspberry Pi, a NAS, a smart home hub or a router with a Wake-on-LAN feature built in. You connect to that, and it sends the magic packet locally. This is the most reliable option by a wide margin.</li>
+          <li><strong>Use a VPN into your own network.</strong> Once you are on the LAN, it is an ordinary local wake. Most modern routers can run a VPN server, and this solves several other remote access problems at once.</li>
+          <li><strong>Configure a static ARP entry on the router.</strong> Map the sleeping machine's IP to its MAC permanently, then forward the port to that IP. The router delivers it without needing a lookup. This requires router firmware that supports static ARP entries, which usually means something running OpenWrt or a business grade device.</li>
+        </ul>
+
+        <p>Whichever you choose, remember that your home IP address probably changes, so you also need dynamic DNS or a service that handles it.</p>
+
+        <h2 id="checklist">The full checklist</h2>
+
+        <ol class="steps">
+          <li>
+            <strong>Confirm the MAC address, specifically the wired one</strong>
+            <p>Not Wi-Fi, not Bluetooth, not a virtual adapter. Check it on the machine itself while it is awake.</p>
+          </li>
+          <li>
+            <strong>Send to the subnet broadcast address, not the host IP</strong>
+            <p><code>192.168.1.255</code> for a typical <code>/24</code>. Use a subnet calculator if your network is anything else.</p>
+          </li>
+          <li>
+            <strong>Enable it in the BIOS or UEFI</strong>
+            <p>Including the separate option for waking from a full shutdown if there is one.</p>
+          </li>
+          <li>
+            <strong>Enable it in the operating system</strong>
+            <p>Both the "allow this device to wake" box and the magic packet option, plus any adapter specific entries on the Advanced tab.</p>
+          </li>
+          <li>
+            <strong>Turn off Windows Fast Startup</strong>
+            <p>If sleep wakes and shutdown does not, this is almost certainly the answer.</p>
+          </li>
+          <li>
+            <strong>Use a wired connection</strong>
+            <p>Wireless waking is unreliable and often simply unsupported.</p>
+          </li>
+          <li>
+            <strong>Send from the same subnet</strong>
+            <p>Not from a guest network, not from a different VLAN, not over the internet without one of the approaches above.</p>
+          </li>
+          <li>
+            <strong>Verify with a scan rather than by guessing</strong>
+            <p>Send the packet, wait thirty seconds, then scan the subnet. Either a new device appeared or it did not, and now you know which prerequisite to revisit.</p>
+          </li>
+        </ol>
+
+        <h2>The short version</h2>
+
+        <p>The magic packet is matched by MAC address on a network card that has no IP, which is why it has to arrive as a broadcast. Send it to the subnet broadcast address rather than the machine's old IP, use the wired adapter's MAC, enable the feature in both the BIOS and the operating system, and turn off Windows Fast Startup if waking from shutdown never works. Over the internet, put an always on device or a VPN inside the network and wake locally from there.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>Why is my Wake-on-LAN packet not waking the computer?</h3>
+          <p>The most common cause is sending it to the machine's old IP address instead of the subnet broadcast address. A sleeping machine has no IP, so delivery depends on a cached ARP entry that expires after a while. Send to the broadcast address, such as 192.168.1.255 on a /24 network.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What broadcast address should I use for Wake-on-LAN?</h3>
+          <p>The highest address in your subnet. For 192.168.1.0/24 that is 192.168.1.255. On any other prefix the number is different, so calculate it from your address and mask rather than guessing.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why does Wake-on-LAN work from sleep but not after shutdown?</h3>
+          <p>Usually Windows Fast Startup, which hibernates the kernel instead of shutting down and powers the network adapter off completely. Disabling Fast Startup in Power Options normally fixes it. Some BIOS setups also have a separate option for waking from a full power off state.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does Wake-on-LAN work over Wi-Fi?</h3>
+          <p>Rarely and unreliably. Wake-on-Wireless-LAN exists but support is inconsistent, and many laptops power the wireless card down entirely when they sleep. Wake-on-LAN is designed for wired connections and works far more dependably on Ethernet.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I use Wake-on-LAN over the internet?</h3>
+          <p>Not directly in most cases, because routers generally refuse to forward directed broadcasts from the internet. The reliable options are an always on device inside the network that sends the packet locally, a VPN into your own network, or a router that supports a static ARP entry for the target.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Which MAC address should I use for Wake-on-LAN?</h3>
+          <p>The wired network adapter's address. Machines usually have several, including Wi-Fi, Bluetooth and virtual adapters created by VPN or virtualisation software. Using the wrong one fails silently with no indication of the mistake.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does Wake-on-LAN work across VLANs or subnets?</h3>
+          <p>Not by default. The magic packet is a broadcast, and routers do not forward broadcasts between networks. Sending from a guest network or a different VLAN will not reach the target unless the router is specifically configured to forward directed broadcasts.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/subnet-mask-and-cidr-explained.html">Subnet mask and CIDR explained</a>
+          <a href="/blog/who-is-on-my-wifi.html">Who is on my Wi-Fi? Listing every device</a>
+          <a href="/docs/wake-on-lan.html">Wake-on-LAN documentation</a>
+          <a href="/docs/subnet-calculator.html">Subnet Calculator documentation</a>
+          <a href="/blog/server-keeps-dropping-off-network.html">Why your NAS keeps dropping off the network</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

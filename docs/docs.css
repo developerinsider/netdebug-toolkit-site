@@ -564,3 +564,268 @@
     .hub-tile.feature .hub-emoji {
       background: var(--brand-subtle);
     }
+
+    /* ── Launch widget (assets/netdebug-launch.js) ──
+       Lives here rather than in a third stylesheet because both the docs
+       pages and the blog posts already load this file. The `.ndt-launch`
+       container holds a plain fallback link until the script replaces it. */
+    .ndt-launch {
+      margin: 16px 0 20px;
+    }
+
+    .ndt-launch > a {
+      color: var(--brand);
+      font-size: 14px;
+    }
+
+    .ndt-box {
+      background: var(--surface);
+      border: 1px solid rgba(255,93,36,.22);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .ndt-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ndt-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--brand-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .ndt-name {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .ndt-slug {
+      display: inline-block;
+      margin-top: 3px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--brand);
+      background: var(--brand-subtle);
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+
+    .ndt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .ndt-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .ndt-field label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .ndt-field input[type="text"],
+    .ndt-field input[type="number"],
+    .ndt-field select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 13.5px;
+      padding: 9px 11px;
+      /* iOS zooms the page when a focused field is under 16px, so the mobile
+         rule below bumps it back up rather than letting the layout jump. */
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .ndt-field select {
+      font-family: 'Inter', sans-serif;
+      background-image: linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+                        linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+      background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-right: 30px;
+    }
+
+    .ndt-field input:focus,
+    .ndt-field select:focus {
+      outline: none;
+      border-color: rgba(255,93,36,.45);
+    }
+
+    .ndt-field.ndt-check {
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ndt-field.ndt-check label {
+      order: 2;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .ndt-field.ndt-check input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--brand);
+      flex-shrink: 0;
+    }
+
+    .ndt-hint {
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: var(--text-tertiary);
+    }
+
+    .ndt-more {
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .ndt-more summary {
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      list-style: none;
+      user-select: none;
+    }
+
+    .ndt-more summary::-webkit-details-marker { display: none; }
+
+    .ndt-more summary::before {
+      content: '+ ';
+      color: var(--brand);
+    }
+
+    .ndt-more[open] summary::before { content: '\2212 '; }
+
+    .ndt-more .ndt-grid { margin-top: 12px; }
+
+    .ndt-preview {
+      margin-top: 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      overflow-x: auto;
+    }
+
+    .ndt-url {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .ndt-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ndt-btn {
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      transition: opacity .2s, background .2s, border-color .2s;
+    }
+
+    /* The buttons are anchors inside article body copy, where `.post-body a`
+       (blog) and `.section a` (docs) already set `color: var(--brand)` and a
+       bottom border. Both are specificity 0-1-1 and would beat a plain
+       `.ndt-primary`, painting brand-on-brand text that is literally
+       invisible. These selectors are 0-2-1 on purpose: do not "simplify"
+       them back to a single class. */
+    .ndt-box a.ndt-btn,
+    .ndt-box a.ndt-btn:hover {
+      border-bottom: 0;
+      text-decoration: none;
+    }
+
+    .ndt-box a.ndt-primary,
+    .ndt-box a.ndt-primary:hover,
+    .ndt-btn.ndt-primary {
+      background: var(--brand);
+      color: #14060a;
+    }
+
+    .ndt-box a.ndt-primary:hover,
+    .ndt-btn.ndt-primary:hover {
+      opacity: .88;
+    }
+
+    .ndt-box a.ndt-secondary,
+    .ndt-box a.ndt-secondary:hover,
+    .ndt-btn.ndt-secondary {
+      background: var(--surface-2);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .ndt-btn.ndt-secondary:hover,
+    .ndt-box a.ndt-secondary:hover { border-color: var(--border-hover); }
+
+    .ndt-btn.ndt-disabled,
+    .ndt-box a.ndt-disabled {
+      opacity: .45;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .ndt-note {
+      margin: 12px 0 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text-tertiary);
+    }
+
+    @media (max-width: 620px) {
+      .ndt-box { padding: 16px; }
+      .ndt-grid { grid-template-columns: 1fr; }
+      /* 16px stops iOS zooming the viewport when a field takes focus. */
+      .ndt-field input[type="text"],
+      .ndt-field input[type="number"],
+      .ndt-field select { font-size: 16px; }
+      .ndt-btn { flex: 1 1 auto; }
+    }

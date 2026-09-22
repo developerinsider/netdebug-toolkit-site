@@ -84,6 +84,7 @@
   ]
 }
   </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
 </head>
 <body>
   <div class="glow-bg"></div>
@@ -98,6 +99,8 @@
       <div class="nav-links">
         <a href="../#tools">Tools</a>
         <a href="../docs.html" class="active">Docs</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../deeplink-generator.html">Generator</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>
@@ -190,6 +193,9 @@
             <li>Use a small count (4 or 5) for quick checks.</li>
           </ul>
           <h4>Deeplink</h4>
+          <div class="ndt-launch" data-tool="ping" data-target="1.1.1.1" data-method="icmp" data-count="10">
+            <a href="https://netdebug.app/open/ping?target=1.1.1.1&amp;method=icmp&amp;count=10" rel="nofollow">Open Ping in NetDebug Toolkit</a>
+          </div>
 <pre class="deeplink-example"><code><span class="scheme">netdebug://</span>ping?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">method</span>=<span class="value">icmp</span>&amp;<span class="key">count</span>=<span class="value">10</span></code></pre>
           <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
         </article>
@@ -200,6 +206,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="../blog.html">Blog</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>

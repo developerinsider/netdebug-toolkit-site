@@ -84,6 +84,7 @@
   ]
 }
   </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
 </head>
 <body>
   <div class="glow-bg"></div>
@@ -98,6 +99,8 @@
       <div class="nav-links">
         <a href="../#tools">Tools</a>
         <a href="../docs.html" class="active">Docs</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../deeplink-generator.html">Generator</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>
@@ -204,6 +207,9 @@
           </ul>
 
           <h4>Deeplink</h4>
+          <div class="ndt-launch" data-tool="mtu" data-target="1.1.1.1" data-family="v4" data-hops="true">
+            <a href="https://netdebug.app/open/mtu?target=1.1.1.1&amp;family=v4&amp;hops=true" rel="nofollow">Open Path MTU Discovery in NetDebug Toolkit</a>
+          </div>
 <pre class="deeplink-example"><code><span class="scheme">netdebug://</span>mtu?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">family</span>=<span class="value">v4</span>&amp;<span class="key">hops</span>=<span class="value">true</span>
 <span class="scheme">netdebug://</span>mtu?<span class="key">target</span>=<span class="value">1.1.1.1</span>&amp;<span class="key">mode</span>=<span class="value">manual</span>&amp;<span class="key">size</span>=<span class="value">1500</span></code></pre>
           <p>A size below the family minimum (68 for IPv4, 1280 for IPv6) is ignored. A size <em>above</em> your link MTU is accepted — the resulting local rejection is itself a useful result.</p>
@@ -216,6 +222,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="../blog.html">Blog</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>

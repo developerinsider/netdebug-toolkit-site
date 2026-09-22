@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="502 Bad Gateway, 503 Service Unavailable and 504 Gateway Timeout are all server side, but they point at different failures. Learn what each means, how Cloudflare&#x27;s 520 to 526 codes differ, and how to check whether a site is really down." />
+  <title>502 Bad Gateway vs 503 vs 504: What Each One Really Means</title>
+  <link rel="canonical" href="https://netdebug.app/blog/502-503-504-gateway-errors-explained.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="502 Bad Gateway vs 503 vs 504: What Each One Really Means" />
+  <meta property="og:description" content="502 Bad Gateway, 503 Service Unavailable and 504 Gateway Timeout are all server side, but they point at different failures. Learn what each means, how Cloudflare&#x27;s 520 to 526 codes differ, and how to check whether a site is really down." />
+  <meta property="og:url" content="https://netdebug.app/blog/502-503-504-gateway-errors-explained.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Web" />
+  <meta property="article:tag" content="502 bad gateway" />
+  <meta property="article:tag" content="504 gateway timeout" />
+  <meta property="article:tag" content="503 service unavailable" />
+  <meta property="article:tag" content="cloudflare error 522" />
+  <meta property="article:tag" content="http status codes" />
+  <meta property="article:tag" content="how to fix 502 error" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="502 Bad Gateway vs 503 vs 504: What Each One Really Means" />
+  <meta name="twitter:description" content="502 Bad Gateway, 503 Service Unavailable and 504 Gateway Timeout are all server side, but they point at different failures. Learn what each means, how Cloudflare&#x27;s 520 to 526 codes differ, and how to check whether a site is really down." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "502 Bad Gateway vs 503 vs 504: What Each One Really Means",
+  "headline": "502 Bad Gateway, 503 and 504: what each error actually means",
+  "description": "502 Bad Gateway, 503 Service Unavailable and 504 Gateway Timeout are all server side, but they point at different failures. Learn what each means, how Cloudflare's 520 to 526 codes differ, and how to check whether a site is really down.",
+  "url": "https://netdebug.app/blog/502-503-504-gateway-errors-explained.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "502 bad gateway, 504 gateway timeout, 503 service unavailable, cloudflare error 522, http status codes, how to fix 502 error",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "502 Bad Gateway, 503 and 504: what each error actually means",
+      "item": "https://netdebug.app/blog/502-503-504-gateway-errors-explained.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between a 502 and a 504 error?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 502 Bad Gateway means a proxy received an invalid response from the server behind it, which usually means that server crashed or is not listening. A 504 Gateway Timeout means no response arrived within the deadline, which usually means something is slow rather than dead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a 502 error my fault or the website's?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The website's. All 5xx codes are generated by a server, so your connection reached it successfully. Confirm by checking the same URL from a different network, such as a phone on cellular data. If it still returns 502, the problem is entirely on their side."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does 503 Service Unavailable mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The server you reached is deliberately refusing requests right now. Common reasons are maintenance mode, overload protection, rate limiting, or a load balancer with no healthy backends. A Retry-After header in the response means it was intentional."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between Cloudflare error 521 and 522?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "521 means the origin server actively refused the connection, which usually means the web server is stopped. 522 means the connection timed out with no response at all, which usually means a firewall is silently dropping packets from Cloudflare's addresses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What causes Cloudflare error 526?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The TLS certificate on the origin server is expired, self signed, or does not cover the hostname being requested. A frequent cause is a certificate that was renewed on disk but never loaded, because web servers hold certificates in memory until the process reloads."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I fix a 502 error on my own site?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Connect directly to the application's port, bypassing the proxy. If nothing is listening, the application crashed or is bound to the wrong address, and the proxy is not at fault. If something is listening, check that the proxy is configured for the correct port or socket."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is 504 Gateway Timeout the same as connection timed out?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A 504 came from a server telling you its upstream was too slow, so your request reached the site. ERR_CONNECTION_TIMED_OUT means your request never reached any server at all, which can be a local network, routing or firewall problem."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Web</span>
+        <h1>502 Bad Gateway, 503 and 504: what each error actually means</h1>
+        <p class="standfirst">All four are the server's fault, not your connection. The difference between them tells you whether something crashed, something is slow, or someone made a decision.</p>
+        <div class="post-meta">
+          <span>8 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <div class="symptom">
+          <div class="symptom-label">What you see</div>
+          <p>502 Bad Gateway<br />503 Service Unavailable<br />504 Gateway Timeout<br />Error 522: Connection timed out</p>
+        </div>
+
+        <p>All four mean a server failed, not your connection. That is the first useful thing to know, because it saves you restarting a router that was never involved. The second useful thing is that each number points at a different stage of the failure, and the difference matters enormously if the site happens to be yours.</p>
+
+        <p>These codes exist because almost no website is a single server any more. There is a proxy or load balancer at the front, and one or more application servers behind it. The proxy is the thing generating the error, and it is telling you something specific about its relationship with the machine behind it.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#model">Why these errors exist at all</a></li>
+            <li><a href="#codes">What each code actually means</a></li>
+            <li><a href="#cloudflare">The Cloudflare 5xx codes</a></li>
+            <li><a href="#visitor">If you are just trying to use the site</a></li>
+            <li><a href="#owner">If the site is yours</a></li>
+            <li><a href="#confusion">The codes people confuse</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="model">Why these errors exist at all</h2>
+
+        <p>A request to a modern site passes through several hands. A CDN edge node takes it first. That forwards to a load balancer. The load balancer picks an application server. The application server queries a database and renders a response, which travels back along the same chain.</p>
+
+        <p>Each link can fail independently, and each intermediate device needs a way to say "I am fine, but the thing behind me is not." That is exactly what the 502 and 504 codes are for. 502 means the upstream gave a broken answer. 504 means it gave no answer in time. 503 is different again: it means the server you reached knows it cannot serve you right now, and is saying so deliberately.</p>
+
+        <p>Reading them this way tells you roughly how far your request travelled before it died.</p>
+
+        <h2 id="codes">What each code actually means</h2>
+
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Literal meaning</th><th>What it usually is</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>500</strong><br />Internal Server Error</td><td>The application crashed while handling the request</td><td>A code bug, an unhandled exception, a failed database query. The server is running, the code is not.</td></tr>
+            <tr><td><strong>502</strong><br />Bad Gateway</td><td>A proxy got an invalid response from upstream</td><td>The application process died or restarted, is listening on a different port than the proxy expects, or crashed mid response.</td></tr>
+            <tr><td><strong>503</strong><br />Service Unavailable</td><td>The server is deliberately refusing right now</td><td>Maintenance mode, overload protection, rate limiting, a health check failing, or no backends available in the pool.</td></tr>
+            <tr><td><strong>504</strong><br />Gateway Timeout</td><td>The upstream did not answer within the deadline</td><td>A slow database query, an external API hanging, or a request doing more work than the proxy's timeout allows.</td></tr>
+          </tbody>
+        </table>
+
+        <p>The distinction between 502 and 504 is the one worth remembering. <strong>502 is a broken answer, 504 is no answer.</strong> A 502 usually means something crashed. A 504 usually means something is slow. Those lead to completely different investigations.</p>
+
+        <p>503 deserves its own note: it is the only one of the four that is often intentional. A site put into maintenance mode returns 503 on purpose, and well configured ones include a <code>Retry-After</code> header telling clients when to come back. A 503 during a traffic spike is overload protection working as designed rather than a fault.</p>
+
+        <h2 id="cloudflare">The Cloudflare 5xx codes</h2>
+
+        <p>If the error page carries a Cloudflare ray ID, the number is more specific than a generic 502 and tells you a lot more.</p>
+
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>520</strong></td><td>The origin returned something Cloudflare could not interpret. Usually an empty response or a malformed header.</td></tr>
+            <tr><td><strong>521</strong></td><td>The origin actively refused the connection. The web server is down, or its firewall is blocking Cloudflare's addresses.</td></tr>
+            <tr><td><strong>522</strong></td><td>The connection to the origin timed out. Often a firewall silently dropping packets rather than refusing them, or an overloaded server.</td></tr>
+            <tr><td><strong>523</strong></td><td>The origin is unreachable. Frequently a DNS record pointing at an address that no longer exists.</td></tr>
+            <tr><td><strong>524</strong></td><td>The connection succeeded but the origin took too long to finish responding. The 100 second limit is the usual culprit.</td></tr>
+            <tr><td><strong>525</strong> / <strong>526</strong></td><td>TLS handshake failure between Cloudflare and the origin, or an origin certificate that failed validation. 526 specifically means the certificate is invalid or expired.</td></tr>
+          </tbody>
+        </table>
+
+        <p>521 and 522 look similar and are not. <strong>521 is a refusal, 522 is silence.</strong> A refusal means something answered and said no, which points at the web server being stopped. Silence means packets are disappearing, which points at a firewall rule dropping them.</p>
+
+        <h2 id="visitor">If you are just trying to use the site</h2>
+
+        <p>There is not much you can do about someone else's server, but it is worth spending thirty seconds establishing that it really is someone else's problem.</p>
+
+        <ol class="steps">
+          <li>
+            <strong>Check the status code from a different path</strong>
+            <p>Run an <a href="/docs/http-check.html">HTTP(S) Check</a> against the URL. It shows the status code the server actually returned, plus the full redirect chain. If it reports 502 from your phone on cellular data as well as from your laptop on Wi-Fi, that is the server, definitively.</p>
+          </li>
+          <li>
+            <strong>Try the bare domain and a known good path</strong>
+            <p>If the homepage returns 200 and one page returns 500, the site is up and one route is broken. That is a very different situation from the whole thing being down, and worth mentioning if you report it.</p>
+          </li>
+          <li>
+            <strong>Check it is not a DNS or certificate problem wearing a 5xx costume</strong>
+            <p>A <a href="/docs/dns-lookup.html">DNS lookup</a> confirms the name resolves, and a <a href="/docs/tls-cert-inspector.html">TLS inspection</a> confirms the certificate is valid. An expired certificate at the origin produces a 526 from Cloudflare, which looks like a server error but is really a certificate problem.</p>
+          </li>
+          <li>
+            <strong>Wait, then retry</strong>
+            <p>502 and 504 during a deployment or a traffic spike often clear themselves within minutes. Refreshing aggressively during an overload makes it marginally worse for everyone.</p>
+          </li>
+        </ol>
+
+<div class="ndt-launch" data-tool="http" data-target="https://example.com">
+          <a href="https://netdebug.app/open/http?target=https://example.com" rel="nofollow">Open HTTP(S) Check in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># What status is the server actually returning?</span>
+<span class="scheme">https://netdebug.app/open/</span>http?<span class="key">target</span>=<span class="value">https://example.com</span>
+
+<span class="comment"># Does the name still resolve, and to what?</span>
+<span class="scheme">https://netdebug.app/open/</span>dns?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">server</span>=<span class="value">1.1.1.1</span>
+
+<span class="comment"># Is the certificate at the origin still valid?</span>
+<span class="scheme">https://netdebug.app/open/</span>tls?<span class="key">target</span>=<span class="value">example.com</span></code></pre>
+
+        <div class="app-cta">
+          <h3>Check a site from a network the server has never seen</h3>
+          <p>HTTP(S) Check reports the real status code and redirect chain, DNS Lookup confirms what the name resolves to, and TLS Inspector checks the certificate. Running them from a phone on cellular data is the fastest way to prove a problem is not local to your network.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="owner">If the site is yours</h2>
+
+        <h3>Fixing a 502</h3>
+        <p>Something behind the proxy is not answering correctly. In rough order of likelihood: the application process crashed or is in a restart loop, the proxy is configured to talk to the wrong port or socket, the application is bound to localhost while the proxy connects over the network, or a deployment left the old process stopped and the new one not yet listening.</p>
+        <p>The quickest confirmation is to connect to the application port directly, bypassing the proxy entirely. A <a href="/docs/port-connect.html">TCP connect</a> to the upstream host and port tells you within a second whether anything is listening. If nothing is, the proxy is not at fault and the application is.</p>
+
+        <h3>Fixing a 504</h3>
+        <p>Something is slow rather than dead. Check for a long running database query, an external API that is not responding, a lock or deadlock, or a request that legitimately needs more time than the proxy's timeout allows. Raising the timeout hides the symptom, and is occasionally the right answer for a genuinely slow report, but usually the real fix is upstream.</p>
+        <p>A useful signal: if 504s cluster at particular times of day, suspect a scheduled job competing for the database. If they cluster on particular URLs, suspect one slow query.</p>
+
+        <h3>Fixing a 503</h3>
+        <p>First establish whether it is deliberate. Maintenance mode, a feature flag, a rate limiter or a WAF rule can all produce it intentionally. If not, the usual cause is that a load balancer has no healthy backends, which means the health check is failing. Health checks fail for their own reasons, sometimes as simple as the check hitting a path that now requires authentication.</p>
+
+        <h3>Fixing a 521 or 522</h3>
+        <p>Your origin is not accepting connections from the CDN. Confirm the web server is running, then check the firewall: if you restricted inbound traffic to a set of addresses, the CDN's ranges need to be in it, and those ranges change. A 522 specifically suggests packets are being dropped rather than refused, which almost always means a firewall rule.</p>
+
+        <h3>Fixing a 526</h3>
+        <p>The certificate on your origin is expired, self signed, or does not cover the hostname the CDN is requesting. Inspect what the origin is actually serving rather than what your certificate manager claims, because a renewed certificate that was never loaded by the web server is a very common cause. There is more on reading certificate problems in the post on <a href="/blog/ssl-certificate-error-connection-not-private.html">SSL certificate errors</a>.</p>
+
+        <h2 id="confusion">The codes people confuse</h2>
+
+        <p><strong>504 Gateway Timeout vs ERR_CONNECTION_TIMED_OUT.</strong> The first came from a server and means an upstream was slow. The second never reached a server at all, and means your connection attempt failed. One is their problem, the other might be yours.</p>
+
+        <p><strong>502 vs 503.</strong> 502 is an accident, 503 is usually a decision. If you are seeing 503 with a <code>Retry-After</code> header, someone chose that.</p>
+
+        <p><strong>500 vs 502.</strong> 500 means the application ran and threw an error, so it is alive and the bug is in the code. 502 means the proxy could not get a usable response at all, so the application may not be running.</p>
+
+        <p><strong>403 and 429 appearing as outages.</strong> A WAF or rate limiter returning 403 or 429 is not a server failure, but it looks like one to a user. If the status code is in the 400s, the server is healthy and is refusing you specifically.</p>
+
+        <h2>The short version</h2>
+
+        <p>All of these are server side, so nothing on your network needs restarting. 502 means a broken answer from upstream, 504 means no answer in time, 503 means a deliberate refusal, and 500 means the application itself crashed. With Cloudflare, 521 is a refusal and 522 is silence, which point at a stopped server and a firewall rule respectively. Check the actual status code and the redirect chain before assuming anything, and if the site is yours, connect straight to the upstream port to find out whether the proxy or the application is at fault.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>What is the difference between a 502 and a 504 error?</h3>
+          <p>A 502 Bad Gateway means a proxy received an invalid response from the server behind it, which usually means that server crashed or is not listening. A 504 Gateway Timeout means no response arrived within the deadline, which usually means something is slow rather than dead.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is a 502 error my fault or the website's?</h3>
+          <p>The website's. All 5xx codes are generated by a server, so your connection reached it successfully. Confirm by checking the same URL from a different network, such as a phone on cellular data. If it still returns 502, the problem is entirely on their side.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What does 503 Service Unavailable mean?</h3>
+          <p>The server you reached is deliberately refusing requests right now. Common reasons are maintenance mode, overload protection, rate limiting, or a load balancer with no healthy backends. A Retry-After header in the response means it was intentional.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the difference between Cloudflare error 521 and 522?</h3>
+          <p>521 means the origin server actively refused the connection, which usually means the web server is stopped. 522 means the connection timed out with no response at all, which usually means a firewall is silently dropping packets from Cloudflare's addresses.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What causes Cloudflare error 526?</h3>
+          <p>The TLS certificate on the origin server is expired, self signed, or does not cover the hostname being requested. A frequent cause is a certificate that was renewed on disk but never loaded, because web servers hold certificates in memory until the process reloads.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I fix a 502 error on my own site?</h3>
+          <p>Connect directly to the application's port, bypassing the proxy. If nothing is listening, the application crashed or is bound to the wrong address, and the proxy is not at fault. If something is listening, check that the proxy is configured for the correct port or socket.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is 504 Gateway Timeout the same as connection timed out?</h3>
+          <p>No. A 504 came from a server telling you its upstream was too slow, so your request reached the site. ERR_CONNECTION_TIMED_OUT means your request never reached any server at all, which can be a local network, routing or firewall problem.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/ssl-certificate-error-connection-not-private.html">Reading SSL certificate errors</a>
+          <a href="/blog/is-a-website-down-or-just-me.html">Is the website down, or just you?</a>
+          <a href="/docs/http-check.html">HTTP(S) Check documentation</a>
+          <a href="/docs/tls-cert-inspector.html">TLS Certificate Inspector documentation</a>
+          <a href="/blog/docker-container-networking-problems.html">Why your Docker container isn't reachable</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+/* Blog-specific additions. Loaded *after* /docs/docs.css, which supplies the
+   shared chrome (tokens, nav, footer, code/pre, tables, callouts). Only the
+   pieces that exist solely on blog pages live here so the two stylesheets
+   never drift apart on colours or spacing. */
+
+/* ── Blog index ── */
+.blog-hero {
+  padding: 56px 0 8px;
+  max-width: 760px;
+}
+
+.blog-list {
+  display: grid;
+  gap: 14px;
+  padding: 16px 0 24px;
+}
+
+.section-intro {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  margin: -4px 0 0;
+}
+
+.blog-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color .25s, transform .15s, background .25s;
+}
+
+.blog-card:hover {
+  border-color: var(--border-hover);
+  background: var(--surface-2);
+  transform: translateY(-2px);
+}
+
+.blog-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.blog-card p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.blog-card .read-more {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+/* ── Post + card metadata row ── */
+.post-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.post-meta .dot::before {
+  content: "\00B7";
+  padding: 0 2px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  background: var(--brand-subtle);
+  border: 1px solid rgba(255,93,36,.2);
+  color: var(--brand);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+
+/* ── Post body ── */
+.post {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 0 48px;
+}
+
+.post-header {
+  padding: 48px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+
+.post-header h1 {
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.post-header .standfirst {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.post-body h2 {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+  margin: 40px 0 14px;
+  scroll-margin-top: 24px;
+}
+
+.post-body h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 28px 0 10px;
+  scroll-margin-top: 24px;
+}
+
+.post-body p,
+.post-body li {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.post-body p { margin-bottom: 18px; }
+
+.post-body ul,
+.post-body ol {
+  padding-left: 24px;
+  margin-bottom: 20px;
+}
+
+.post-body li { margin-bottom: 8px; }
+
+.post-body strong { color: var(--text); font-weight: 600; }
+
+.post-body a {
+  color: var(--brand);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,93,36,.3);
+}
+
+.post-body a:hover { border-bottom-color: var(--brand); }
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.post-body hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+
+/* ── In-post table of contents ── */
+.toc-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 18px 22px;
+  margin-bottom: 32px;
+}
+
+.toc-box .toc-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 10px;
+}
+
+.toc-box ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.toc-box li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.toc-box a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 0;
+}
+
+.toc-box a:hover { color: var(--brand); }
+
+/* ── Symptom box: the exact error text a reader searched for ── */
+.symptom {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin: 8px 0 24px;
+}
+
+.symptom .symptom-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+}
+
+.symptom p {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ── Numbered troubleshooting steps ── */
+.steps {
+  counter-reset: step;
+  list-style: none;
+  padding-left: 0 !important;
+  margin: 0 0 24px;
+}
+
+.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 0 44px;
+  margin-bottom: 22px;
+}
+
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--brand-subtle);
+  border: 1px solid rgba(255,93,36,.25);
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.steps > li > strong {
+  display: block;
+  color: var(--text);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+/* ── Verdict table (reading results) ── */
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 24px;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.post-body th,
+.post-body td {
+  text-align: left;
+  padding: 11px 15px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.post-body tr:last-child td { border-bottom: 0; }
+
+.post-body th {
+  background: var(--surface-2);
+  font-weight: 600;
+  color: var(--text);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.post-body td { color: var(--text-secondary); }
+
+/* ── App call to action inside a post ── */
+.app-cta {
+  background: linear-gradient(135deg, var(--surface-2), var(--surface));
+  border: 1px solid rgba(255,93,36,.2);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  margin: 32px 0;
+}
+
+.app-cta h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.app-cta p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.65;
+}
+
+.app-cta .app-store-badge {
+  display: inline-flex;
+  text-decoration: none;
+  border-bottom: 0;
+}
+
+.app-cta .app-store-badge img {
+  height: 46px;
+  width: auto;
+  display: block;
+}
+
+/* ── FAQ ── */
+.faq-item {
+  border-top: 1px solid var(--border);
+  padding: 18px 0;
+}
+
+.faq-item:last-child { border-bottom: 1px solid var(--border); }
+
+.faq-item h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.faq-item p {
+  margin: 0;
+  font-size: 15px;
+}
+
+/* ── Related posts / post footer nav ── */
+.related {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  margin-top: 40px;
+}
+
+.related h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.related-grid a {
+  display: block;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: border-color .2s, background .2s;
+}
+
+.related-grid a:hover {
+  border-color: var(--border-hover);
+  background: var(--surface-2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 620px) {
+  .post-header { padding: 32px 0 20px; }
+  .post-body p, .post-body li { font-size: 15.5px; }
+  .post-body h2 { font-size: 22px; }
+  .blog-card { padding: 20px; }
+  .app-cta { padding: 22px 20px; }
+  .post-body table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}

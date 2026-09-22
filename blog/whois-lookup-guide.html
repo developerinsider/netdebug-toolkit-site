@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Registrant details are redacted now, but registrar, creation and expiry dates, nameservers and status codes are still public. Learn to read them, understand the domain expiry timeline, and use IP lookups that were never redacted." />
+  <title>WHOIS and RDAP: What You Can Still Find Out About a Domain</title>
+  <link rel="canonical" href="https://netdebug.app/blog/whois-lookup-guide.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="WHOIS and RDAP: What You Can Still Find Out About a Domain" />
+  <meta property="og:description" content="Registrant details are redacted now, but registrar, creation and expiry dates, nameservers and status codes are still public. Learn to read them, understand the domain expiry timeline, and use IP lookups that were never redacted." />
+  <meta property="og:url" content="https://netdebug.app/blog/whois-lookup-guide.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="DNS" />
+  <meta property="article:tag" content="whois lookup" />
+  <meta property="article:tag" content="rdap" />
+  <meta property="article:tag" content="who owns this domain" />
+  <meta property="article:tag" content="domain expiry date" />
+  <meta property="article:tag" content="domain status codes" />
+  <meta property="article:tag" content="ip address owner lookup" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WHOIS and RDAP: What You Can Still Find Out About a Domain" />
+  <meta name="twitter:description" content="Registrant details are redacted now, but registrar, creation and expiry dates, nameservers and status codes are still public. Learn to read them, understand the domain expiry timeline, and use IP lookups that were never redacted." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "WHOIS and RDAP: What You Can Still Find Out About a Domain",
+  "headline": "WHOIS and RDAP: what you can still find out about a domain",
+  "description": "Registrant details are redacted now, but registrar, creation and expiry dates, nameservers and status codes are still public. Learn to read them, understand the domain expiry timeline, and use IP lookups that were never redacted.",
+  "url": "https://netdebug.app/blog/whois-lookup-guide.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "whois lookup, rdap, who owns this domain, domain expiry date, domain status codes, ip address owner lookup",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "WHOIS and RDAP: what you can still find out about a domain",
+      "item": "https://netdebug.app/blog/whois-lookup-guide.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is WHOIS information redacted now?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Privacy regulations require registrars to withhold personal data such as registrant names, addresses, phone numbers and email addresses. Operational fields including registrar, creation and expiry dates, nameservers and status codes remain public."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between WHOIS and RDAP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "WHOIS is an old protocol returning unstructured text that every registry formats differently. RDAP returns structured JSON over HTTPS with consistent field names and proper internationalisation support. Most registries run both, and RDAP is the better default."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does clientTransferProhibited mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The registrar has locked the domain against transfer to another registrar, normally at the owner's request. It is a good thing to see on a domain you own, because it blocks the most common form of domain hijacking, and enabling it is usually free."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when a domain expires?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It goes through stages. First an auto-renew grace period of up to about 45 days at normal price, then a redemption period of about 30 days where the site goes dark and recovery costs many times a renewal, then about five days of pending delete, and finally release."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I tell if a domain is a scam from a WHOIS lookup?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The creation date is a strong signal. Phishing and scam domains are usually registered days or weeks before use, because older ones get blocked. A link claiming to be from a bank on a domain created two weeks ago deserves serious suspicion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is IP address WHOIS data also redacted?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. IP allocations are held by regional internet registries and issued to organisations rather than individuals, so the data was never subject to the same redaction. A lookup gives you the organisation, the allocation size, the country, the abuse contact and the ASN."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "My domain has not expired but the site is down. What should I check?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Compare the nameservers listed at the registry against the NS records DNS actually returns. If the registry points at a provider that no longer serves the zone, every lookup fails while the registration stays perfectly valid."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">DNS</span>
+        <h1>WHOIS and RDAP: what you can still find out about a domain</h1>
+        <p class="standfirst">Privacy rules removed the contact details and left the operational facts, which were always the more useful half. Here is how to read what remains.</p>
+        <div class="post-meta">
+          <span>7 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>WHOIS used to answer one question: who owns this domain, and how do I contact them. Then privacy law arrived, registrars started redacting almost everything, and a lot of people concluded the tool had stopped being useful.</p>
+
+        <p>It has not. The contact details mostly went away, but the operational facts did not, and those turn out to be the more useful half. Expiry dates, registrar, nameservers, status codes and creation dates are all still public, and each of them answers a question that comes up regularly.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#rdap">WHOIS, RDAP and why you see two answers</a></li>
+            <li><a href="#redacted">What is redacted and what is not</a></li>
+            <li><a href="#status">Status codes are the interesting part</a></li>
+            <li><a href="#lifecycle">The expiry timeline, and the expensive middle of it</a></li>
+            <li><a href="#ip">IP lookups, which are not redacted</a></li>
+            <li><a href="#uses">Five things worth looking up</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="rdap">WHOIS, RDAP and why you see two answers</h2>
+
+        <p>WHOIS is old. It dates from a time when the internet was small enough that a single text file of contacts was reasonable, and it shows: the protocol has no authentication, no standard response format, and every registry formats its output slightly differently.</p>
+
+        <p>RDAP is the modern replacement. It returns structured JSON over HTTPS, uses consistent field names, supports internationalised text properly, and can offer different levels of detail to different requesters. Most registries now run both.</p>
+
+        <p>Practically, RDAP is the better default because the data comes back in predictable fields rather than free text that has to be parsed by guesswork. Plain WHOIS is still worth having available, because a few registries expose fields in WHOIS that their RDAP service omits, and some country code domains have not fully migrated. The <a href="/docs/whois.html">Whois tool</a> lets you pick which to use, which makes comparing the two straightforward when an answer looks incomplete.</p>
+
+        <h2 id="redacted">What is redacted and what is not</h2>
+
+        <p>Since privacy regulations tightened, registrant names, addresses, phone numbers and email addresses are usually replaced with placeholders like "REDACTED FOR PRIVACY" or a forwarding address at the registrar. Privacy services do the same thing commercially.</p>
+
+        <p>What remains public, and is often more useful anyway:</p>
+
+        <table>
+          <thead>
+            <tr><th>Field</th><th>What it tells you</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Registrar</strong></td><td>Which company the domain is registered through. This is who to contact about abuse, and who you deal with for a transfer.</td></tr>
+            <tr><td><strong>Creation date</strong></td><td>When the domain was first registered. Extremely informative, for reasons below.</td></tr>
+            <tr><td><strong>Expiry date</strong></td><td>When it lapses if nobody renews. The answer to "why did our site disappear overnight".</td></tr>
+            <tr><td><strong>Updated date</strong></td><td>When the record last changed. A recent update on a domain you own and did not touch is worth investigating.</td></tr>
+            <tr><td><strong>Nameservers</strong></td><td>Which DNS provider actually answers for the domain. The authoritative answer to "where are the records hosted".</td></tr>
+            <tr><td><strong>Status codes</strong></td><td>The domain's current state at the registry, including locks and expiry stages.</td></tr>
+            <tr><td><strong>DNSSEC</strong></td><td>Whether the zone is signed.</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="status">Status codes are the interesting part</h2>
+
+        <p>Status codes are the field most people skim past, and they carry the most operational information. They come in two families.</p>
+
+        <p><strong>Client codes</strong> are set by the registrar, usually at the owner's request:</p>
+
+        <ul>
+          <li><code>clientTransferProhibited</code>: the domain cannot be transferred to another registrar. This is a good thing to see on a domain you own, because it blocks the most common form of domain hijacking. If it is missing from a domain that matters to you, turning it on is free.</li>
+          <li><code>clientUpdateProhibited</code> and <code>clientDeleteProhibited</code>: further locks against modification and deletion.</li>
+          <li><code>clientHold</code>: the registrar has asked the registry to stop publishing the domain in DNS. The domain exists and resolves nowhere, which is usually a billing or compliance dispute.</li>
+        </ul>
+
+        <p><strong>Server codes</strong> are set by the registry itself and generally indicate something more serious:</p>
+
+        <ul>
+          <li><code>serverHold</code>: the registry has suspended it. Court orders, abuse enforcement or registry policy.</li>
+          <li><code>pendingDelete</code>: it is about to be released. The end of the lifecycle below.</li>
+          <li><code>redemptionPeriod</code>: it has expired and is in the expensive recovery window.</li>
+        </ul>
+
+        <p>A domain with <code>ok</code> or <code>active</code> and nothing else is in a completely ordinary state, with no locks. That is fine for something unimportant and a small risk for anything you care about.</p>
+
+        <div class="ndt-launch" data-tool="whois" data-target="example.com" data-mode="rdap">
+          <a href="https://netdebug.app/open/whois?target=example.com&amp;mode=rdap" rel="nofollow">Open Whois in NetDebug Toolkit</a>
+        </div>
+
+        <div class="app-cta">
+          <h3>Look up a domain or an IP from your phone</h3>
+          <p>The Whois tool in NetDebug Toolkit queries either RDAP or classic WHOIS, for domains and for IP addresses. Pair it with DNS Record Explorer to compare what the registry says about nameservers against what DNS actually returns.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="lifecycle">The expiry timeline, and the expensive middle of it</h2>
+
+        <p>A domain does not vanish the moment it expires. It goes through several stages, and the difference between them is measured in hundreds of currency units.</p>
+
+        <ol class="steps">
+          <li>
+            <strong>Expiry date passes</strong>
+            <p>For most generic domains, nothing dramatic happens immediately. The registrar may stop serving the site or park it.</p>
+          </li>
+          <li>
+            <strong>Auto-renew grace period, roughly 0 to 45 days</strong>
+            <p>You can renew at the normal price. Many registrars keep the domain resolving through part of this, which is why an expired domain sometimes still works.</p>
+          </li>
+          <li>
+            <strong>Redemption period, roughly 30 days</strong>
+            <p>The domain is removed from DNS and the site goes dark. It can still be recovered, but at a redemption fee that is typically an order of magnitude higher than a renewal. This is the stage worth avoiding, and the reason to check expiry dates before they arrive.</p>
+          </li>
+          <li>
+            <strong>Pending delete, roughly 5 days</strong>
+            <p>Nothing can be done. The owner cannot recover it and nobody else can register it yet.</p>
+          </li>
+          <li>
+            <strong>Released</strong>
+            <p>It becomes available again. For anything with existing traffic or links, drop catching services compete for it within seconds of release, so assuming you can simply re-register it later is optimistic.</p>
+          </li>
+        </ol>
+
+        <p>All of which argues for checking expiry dates on the domains you depend on before anything goes wrong. It is a lookup that takes seconds, and saving it as an automation across your domains turns it into one tap, with the results kept in <a href="/docs/run-history.html">Run History</a> so you can see dates approaching.</p>
+
+        <p>Worth remembering that a domain can also fail without expiring. If the nameservers listed at the registry no longer serve the zone, every lookup fails while the registration remains perfectly valid. That is a <a href="/blog/dns-server-not-responding.html">DNS failure</a> rather than a registration one, and comparing the registry's nameserver list against the NS records DNS actually returns will tell you which you have.</p>
+
+        <h2 id="ip">IP lookups, which are not redacted</h2>
+
+        <p>WHOIS on an IP address is a different system with different rules, run by the regional internet registries, and it was never subject to the same personal data redaction because address blocks are allocated to organisations rather than individuals.</p>
+
+        <p>An IP lookup gives you:</p>
+
+        <ul>
+          <li>The organisation the block is allocated to.</li>
+          <li>The size of the allocation, in CIDR notation.</li>
+          <li>An abuse contact address, which is the correct place to report a problem originating from that address.</li>
+          <li>The country the allocation is registered in, which is not necessarily where the machine physically sits.</li>
+          <li>The autonomous system number, which identifies the network operator in global routing.</li>
+        </ul>
+
+        <p>This is what makes an IP lookup so useful when reading a <a href="/blog/how-to-read-a-traceroute.html">traceroute</a>. A hop that answers slowly means little until you know whether it belongs to your ISP, a transit provider in the middle, or the destination's own network, and that changes who you should be talking to. The <a href="/docs/public-ip-geo-asn.html">public IP and ASN lookup</a> gives you the same organisational detail for your own address.</p>
+
+        <h2 id="uses">Five things worth looking up</h2>
+
+        <h3>1. When your own domains expire</h3>
+        <p>The single most valuable use. Domain expiry outages are entirely preventable and reliably occur at the worst possible moment, usually because the renewal email went to someone who left the company.</p>
+
+        <h3>2. How old a suspicious domain is</h3>
+        <p>This is a genuinely strong signal. Phishing and scam domains are typically registered days or weeks before they are used, because the older ones get blocked. A link claiming to be from a bank, on a domain created eleven days ago, is telling you something important on its own. A legitimate company's domain is usually many years old.</p>
+
+        <h3>3. Which nameservers a domain really uses</h3>
+        <p>During a migration, the registry's nameserver list is the authoritative statement of where queries will be sent. If you have been editing records at a provider that is not in that list, you have been editing a zone nobody asks about, which explains a lot of "the change is not propagating" confusion.</p>
+
+        <h3>4. Where to report abuse</h3>
+        <p>For a domain, the registrar's abuse contact. For an IP address, the registry's abuse contact for that block. These are the addresses that actually get read, as opposed to a generic contact form.</p>
+
+        <h3>5. Whether a domain is genuinely available</h3>
+        <p>A registrar's search box has an incentive to upsell you. A direct query is a plain answer: either the registry has a record or it does not. If it exists but is in <code>pendingDelete</code>, you now know roughly when it will be released, and that a lot of automated services will be waiting for the same moment.</p>
+
+        <h2>The short version</h2>
+
+        <p>Contact details are mostly redacted now, but everything operationally useful is still public: registrar, creation and expiry dates, nameservers and status codes. Prefer RDAP for structured output and keep classic WHOIS for the registries that have not caught up. Check the expiry dates on domains you depend on before the redemption period makes it expensive, treat a very recent creation date on an unfamiliar domain as a warning, and remember that IP address lookups were never redacted and will tell you exactly which organisation to contact.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>Why is WHOIS information redacted now?</h3>
+          <p>Privacy regulations require registrars to withhold personal data such as registrant names, addresses, phone numbers and email addresses. Operational fields including registrar, creation and expiry dates, nameservers and status codes remain public.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the difference between WHOIS and RDAP?</h3>
+          <p>WHOIS is an old protocol returning unstructured text that every registry formats differently. RDAP returns structured JSON over HTTPS with consistent field names and proper internationalisation support. Most registries run both, and RDAP is the better default.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What does clientTransferProhibited mean?</h3>
+          <p>The registrar has locked the domain against transfer to another registrar, normally at the owner's request. It is a good thing to see on a domain you own, because it blocks the most common form of domain hijacking, and enabling it is usually free.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What happens when a domain expires?</h3>
+          <p>It goes through stages. First an auto-renew grace period of up to about 45 days at normal price, then a redemption period of about 30 days where the site goes dark and recovery costs many times a renewal, then about five days of pending delete, and finally release.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I tell if a domain is a scam from a WHOIS lookup?</h3>
+          <p>The creation date is a strong signal. Phishing and scam domains are usually registered days or weeks before use, because older ones get blocked. A link claiming to be from a bank on a domain created two weeks ago deserves serious suspicion.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is IP address WHOIS data also redacted?</h3>
+          <p>No. IP allocations are held by regional internet registries and issued to organisations rather than individuals, so the data was never subject to the same redaction. A lookup gives you the organisation, the allocation size, the country, the abuse contact and the ASN.</p>
+        </div>
+        <div class="faq-item">
+          <h3>My domain has not expired but the site is down. What should I check?</h3>
+          <p>Compare the nameservers listed at the registry against the NS records DNS actually returns. If the registry points at a provider that no longer serves the zone, every lookup fails while the registration stays perfectly valid.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/dns-propagation-explained.html">DNS propagation: why your record is not live yet</a>
+          <a href="/blog/how-to-read-a-traceroute.html">How to read a traceroute</a>
+          <a href="/docs/whois.html">Whois tool documentation</a>
+          <a href="/docs/dns-record-explorer.html">DNS Record Explorer documentation</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

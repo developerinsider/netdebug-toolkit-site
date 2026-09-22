@@ -29,6 +29,56 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Shown only when the requested path is under /open/, which is the
+       Universal Link namespace. Hidden by default so an ordinary 404 is
+       unaffected and needs no JavaScript to render. */
+    #open-fallback { display: none; }
+    body.is-open-link #open-fallback { display: block; }
+    body.is-open-link #generic-404 { display: none; }
+
+    .params {
+      list-style: none;
+      margin: 18px 0 0;
+      padding: 0;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .params li {
+      font-family: SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 4px 0;
+    }
+
+    .params b {
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    .hint {
+      max-width: 560px;
+      /* Left aligned to sit under the buttons, matching .lede above. */
+      margin: 18px 0 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .hint code {
+      font-family: SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92em;
+      color: #ffb491;
+    }
+
+    .hint a { color: var(--brand); }
+
+    button.btn {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
@@ -56,7 +106,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 900px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 28px 24px 48px;
       flex: 1;
@@ -167,7 +217,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px 20px;
-      max-width: 900px;
+      max-width: 1120px;
       width: 100%;
       margin: 0 auto;
       padding: 24px;
@@ -193,6 +243,8 @@
       <div class="nav-links">
         <a href="/#tools">Tools</a>
         <a href="/docs.html">Docs</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
         <a href="/support.html">Support</a>
         <a href="/terms.html">Terms</a>
         <a href="/privacy.html">Privacy</a>
@@ -200,6 +252,36 @@
     </header>
 
     <main>
+      <!-- Shown when someone lands on a /open/<tool> Universal Link without the
+           app installed. iOS only fetches this URL when it cannot hand it to the
+           app, so everyone who sees this page needs the App Store, not a 404. -->
+      <section id="open-fallback">
+        <div class="code">NetDebug Toolkit</div>
+        <h1 id="open-title">Open this in the app</h1>
+        <p class="lede" id="open-lede">
+          This link opens a tool in NetDebug Toolkit with its options already filled in.
+          Install the app, or open it directly if you already have it.
+        </p>
+        <ul class="params" id="open-params"></ul>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://apps.apple.com/app/id6759454574" id="open-store">Install from the App Store</a>
+          <a class="btn" href="#" id="open-retry">Open in the app</a>
+          <button class="btn" type="button" id="open-copy">Copy this link</button>
+        </div>
+
+        <p class="hint">
+          Already have the app? <strong>Open in the app</strong> forces it through the
+          <code>netdebug://</code> link instead. iOS skips a Universal Link when the address
+          was typed or pasted, and when it is opened inside another app's built-in browser,
+          which is the usual reason a link lands here on a device that does have the app.
+        </p>
+        <p class="hint" id="open-after" hidden>
+          Nothing opened? Then the app is not installed on this device yet. Install it above,
+          then come back to this link. You can also <a href="/docs.html">read the docs</a> first.
+        </p>
+      </section>
+
+      <section id="generic-404">
       <div class="code">Error 404</div>
       <h1>This page isn't on the map</h1>
       <p class="lede">
@@ -224,6 +306,7 @@
           <li><a href="/docs/deeplinks.html">Deeplinks</a></li>
         </ul>
       </div>
+      </section>
     </main>
   </div>
 
@@ -231,12 +314,128 @@
     <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
     <nav>
       <a href="/docs.html">Docs</a>
+      <a href="/blog.html">Blog</a>
       <a href="/support.html">Support</a>
       <a href="/terms.html">Terms</a>
       <a href="/privacy.html">Privacy</a>
     </nav>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* A request for /open/<tool> only reaches this page when iOS could not
+       route it into the app, so turn the 404 into an install prompt that
+       still says what the link was for. */
+    (function () {
+      var m = location.pathname.match(/^\/open\/(.+?)\/?$/);
+      if (!m) return;
+
+      var NAMES = {
+        ping: 'Ping', http: 'HTTP(S) Check', speed: 'Speed / Latency Baseline',
+        iperf3: 'iperf3 Client', traceroute: 'Traceroute',
+        mtu: 'Path MTU Discovery', portconnect: 'TCP/UDP Connect',
+        ntp: 'NTP Time Check', publicip: 'Public IP + Geo/ASN', whois: 'Whois',
+        dns: 'DNS Lookup', dnsexplorer: 'DNS Record Explorer',
+        tls: 'TLS Certificate Inspector', portscan: 'Port Scan',
+        reachme: 'External Port Check', lanscan: 'LAN Scan',
+        subnet: 'Subnet Calculator', bonjour: 'Bonjour Browser',
+        upnp: 'UPnP / NAT-PMP', wol: 'Wake-on-LAN'
+      };
+
+      var raw = decodeURIComponent(m[1]);
+      var isAutomation = raw.indexOf('automation/') === 0;
+      var slug = isAutomation ? raw.slice('automation/'.length) : raw.toLowerCase();
+      var name = isAutomation ? 'a saved automation' : NAMES[slug];
+
+      document.body.className += ' is-open-link';
+      document.title = 'Open in NetDebug Toolkit';
+
+      if (name) {
+        var heading = isAutomation
+          ? 'Open this automation in the app'
+          : 'Open ' + name + ' in the app';
+        document.getElementById('open-title').textContent = heading;
+        /* The tab and any link preview should say what the link is for, not
+           report a missing page. */
+        document.title = heading + ' | NetDebug Toolkit';
+        document.getElementById('open-lede').textContent =
+          'This link runs ' + (isAutomation ? 'a saved automation' : name) +
+          ' in NetDebug Toolkit with its options already filled in. ' +
+          'Install the app, or open it directly if you already have it.';
+      }
+
+      /* Echo the parameters back so the page still communicates what the
+         sender intended, even to someone who never installs the app. */
+      var list = document.getElementById('open-params');
+      var params = new URLSearchParams(location.search);
+      var shown = 0;
+      params.forEach(function (value, key) {
+        if (shown >= 8) return;
+        var li = document.createElement('li');
+        var b = document.createElement('b');
+        b.textContent = key;
+        li.appendChild(b);
+        li.appendChild(document.createTextNode(': ' + value));
+        list.appendChild(li);
+        shown++;
+      });
+
+      /* Universal Links are skipped when the user arrived by typing, by a
+         redirect, or through another app's in-app browser, so offer the custom
+         scheme as a manual retry alongside the App Store. */
+      var retry = document.getElementById('open-retry');
+      retry.href = 'netdebug://' + raw + location.search;
+
+      /* If the scheme had nowhere to go the page simply stays put, so reveal
+         the "nothing opened" explanation shortly after the attempt rather than
+         leaving the reader guessing.
+
+         The signal is the page *becoming* hidden after the click, which is what
+         happens when the app takes over. Testing document.hidden on its own is
+         wrong: a page can already be hidden for unrelated reasons and that
+         would suppress the message every time. */
+      retry.addEventListener('click', function () {
+        var left = false;
+        var mark = function () { if (document.hidden) left = true; };
+        document.addEventListener('visibilitychange', mark);
+        window.addEventListener('pagehide', mark);
+        setTimeout(function () {
+          document.removeEventListener('visibilitychange', mark);
+          window.removeEventListener('pagehide', mark);
+          if (!left) {
+            document.getElementById('open-after').hidden = false;
+          }
+        }, 1500);
+      });
+
+      var copy = document.getElementById('open-copy');
+      copy.addEventListener('click', function () {
+        var done = function () {
+          copy.textContent = 'Link copied';
+          setTimeout(function () { copy.textContent = 'Copy this link'; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(location.href).then(done, function () {
+            legacyCopy(location.href, done);
+          });
+        } else {
+          legacyCopy(location.href, done);
+        }
+      });
+
+      function legacyCopy(text, done) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'absolute';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ }
+        document.body.removeChild(ta);
+      }
+    })();
+  </script>
 </body>
 </html>

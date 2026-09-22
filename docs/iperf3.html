@@ -84,6 +84,7 @@
   ]
 }
   </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
 </head>
 <body>
   <div class="glow-bg"></div>
@@ -98,6 +99,8 @@
       <div class="nav-links">
         <a href="../#tools">Tools</a>
         <a href="../docs.html" class="active">Docs</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../deeplink-generator.html">Generator</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>
@@ -187,6 +190,9 @@
             <li>Throughput can vary by device performance, Wi-Fi quality, route, and server load.</li>
           </ul>
           <h4>Deeplink</h4>
+          <div class="ndt-launch" data-tool="iperf3" data-target="10.0.0.1" data-port="5201" data-duration="20" data-direction="download">
+            <a href="https://netdebug.app/open/iperf3?target=10.0.0.1&amp;port=5201&amp;duration=20&amp;direction=download" rel="nofollow">Open iperf3 Client in NetDebug Toolkit</a>
+          </div>
 <pre class="deeplink-example"><code><span class="scheme">netdebug://</span>iperf3?<span class="key">target</span>=<span class="value">10.0.0.1</span>&amp;<span class="key">port</span>=<span class="value">5201</span>&amp;<span class="key">duration</span>=<span class="value">20</span>&amp;<span class="key">direction</span>=<span class="value">download</span></code></pre>
           <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
         </article>
@@ -197,6 +203,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="../blog.html">Blog</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>

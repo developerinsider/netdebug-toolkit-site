@@ -84,6 +84,7 @@
   ]
 }
   </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
 </head>
 <body>
   <div class="glow-bg"></div>
@@ -98,6 +99,8 @@
       <div class="nav-links">
         <a href="../#tools">Tools</a>
         <a href="../docs.html" class="active">Docs</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../deeplink-generator.html">Generator</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>
@@ -182,6 +185,9 @@
             <li>Make sure CIDR notation includes both address and prefix.</li>
           </ul>
           <h4>Deeplink</h4>
+          <div class="ndt-launch" data-tool="subnet" data-target="192.168.1.0/24">
+            <a href="https://netdebug.app/open/subnet?target=192.168.1.0/24" rel="nofollow">Open Subnet Calculator in NetDebug Toolkit</a>
+          </div>
 <pre class="deeplink-example"><code><span class="scheme">netdebug://</span>subnet?<span class="key">target</span>=<span class="value">192.168.1.0/24</span></code></pre>
           <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current target and options already filled in.</p>
         </article>
@@ -192,6 +198,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="../blog.html">Blog</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>

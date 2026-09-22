@@ -69,7 +69,7 @@
     }
 
     .wrap {
-      max-width: 860px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 0 24px;
       position: relative;
@@ -145,6 +145,16 @@
     .page-header p {
       color: var(--text-secondary);
       font-size: 15px;
+    }
+
+    /* .wrap matches the rest of the site so the nav and footer line up;
+       the content blocks keep their own narrower measure, centred inside it. */
+    .page-header,
+    .grid,
+    .wrap > .card {
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .card {
@@ -297,6 +307,8 @@
       <div class="nav-links">
         <a href="/#tools">Tools</a>
         <a href="docs.html">Docs</a>
+        <a href="blog.html">Blog</a>
+        <a href="deeplink-generator.html">Generator</a>
         <a href="support.html" class="active">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
@@ -346,6 +358,7 @@
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
         <a href="docs.html">Docs</a>
+        <a href="blog.html">Blog</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>

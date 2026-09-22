@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="An internet speed test cannot measure your LAN. Learn how to use iperf3 to measure real throughput between two machines, what each link type should deliver, and why a result of 94 Mbps points straight at a cable." />
+  <title>How to Test Network Speed Between Two Computers (iperf3)</title>
+  <link rel="canonical" href="https://netdebug.app/blog/test-network-speed-between-two-computers.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="How to Test Network Speed Between Two Computers (iperf3)" />
+  <meta property="og:description" content="An internet speed test cannot measure your LAN. Learn how to use iperf3 to measure real throughput between two machines, what each link type should deliver, and why a result of 94 Mbps points straight at a cable." />
+  <meta property="og:url" content="https://netdebug.app/blog/test-network-speed-between-two-computers.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Performance" />
+  <meta property="article:tag" content="test network speed between two computers" />
+  <meta property="article:tag" content="iperf3 tutorial" />
+  <meta property="article:tag" content="lan speed test" />
+  <meta property="article:tag" content="slow file transfer network" />
+  <meta property="article:tag" content="gigabit ethernet speed" />
+  <meta property="article:tag" content="wifi throughput test" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="How to Test Network Speed Between Two Computers (iperf3)" />
+  <meta name="twitter:description" content="An internet speed test cannot measure your LAN. Learn how to use iperf3 to measure real throughput between two machines, what each link type should deliver, and why a result of 94 Mbps points straight at a cable." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "How to Test Network Speed Between Two Computers (iperf3)",
+  "headline": "How to test network speed between two computers",
+  "description": "An internet speed test cannot measure your LAN. Learn how to use iperf3 to measure real throughput between two machines, what each link type should deliver, and why a result of 94 Mbps points straight at a cable.",
+  "url": "https://netdebug.app/blog/test-network-speed-between-two-computers.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "test network speed between two computers, iperf3 tutorial, lan speed test, slow file transfer network, gigabit ethernet speed, wifi throughput test",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to test network speed between two computers",
+      "item": "https://netdebug.app/blog/test-network-speed-between-two-computers.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I test the speed between two computers on my network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run iperf3 in server mode on one machine and connect to it from the other with an iperf3 client. It measures raw TCP throughput over the path with no disks or file sharing protocol involved, which isolates the network itself."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is my gigabit network only giving 112 MB/s?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That is a gigabit link working correctly. Networks are measured in bits and file transfers in bytes, so 1000 megabits per second is 125 megabytes per second before overhead, and about 112 after it. The two numbers differ by a factor of eight."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does a 94 Mbps result mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Something in the path negotiated 100 megabit instead of gigabit. The most common cause is a damaged or low grade cable, because gigabit needs all four pairs and silently falls back to 100 megabit if one pair is broken. Swapping the cable is the fastest test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should an iperf3 test run?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "At least 20 seconds. TCP takes a few seconds to reach full speed, so a short test spends much of its time ramping up and reports a figure lower than the path can actually deliver."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is my Wi-Fi throughput so much lower than the link rate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The link rate is a negotiated maximum under ideal conditions. Real throughput is typically 40 to 60 percent of it, because the medium is shared, half duplex and subject to retransmission. A Wi-Fi 5 connection showing 866 Mbps delivering 400 is normal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "My network tests fast but file copies are slow. Why?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The bottleneck is not the network. Likely causes are disk speed, copying many small files instead of one large one, an old file sharing protocol version, encryption overhead, a low power CPU on a NAS, or real time antivirus scanning every file as it is written."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I run an iperf3 test from a phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. An iperf3 client on a phone or tablet is the most practical way to measure what your Wi-Fi actually delivers in each room, because you can carry it to the place where the problem happens."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Performance</span>
+        <h1>How to test network speed between two computers</h1>
+        <p class="standfirst">Your ISP has nothing to do with a slow file copy between two machines in the same building. Here is how to measure the path that is actually involved.</p>
+        <div class="post-meta">
+          <span>7 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>Copying a file between two machines on the same network should be fast. When it is not, the usual reaction is to run an internet speed test, which is entirely the wrong instrument: the traffic never leaves your house, so your ISP has nothing to do with it.</p>
+
+        <p>What you need is a measurement of the network between those two machines, with nothing else involved. That is what iperf3 does. It runs on both ends, sends data as fast as the path allows, and reports what the path can actually carry. No disks, no file sharing protocol, no cloud. Just the network.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#bits">Bits, bytes and the number everyone gets wrong</a></li>
+            <li><a href="#expect">What each link should actually give you</a></li>
+            <li><a href="#setup">Setting up the test</a></li>
+            <li><a href="#reading">Reading the result</a></li>
+            <li><a href="#94">The 94 Mbps clue</a></li>
+            <li><a href="#slow">Why a fast network still copies slowly</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="bits">Bits, bytes and the number everyone gets wrong</h2>
+
+        <p>Networks are measured in bits per second. File transfers are shown in bytes per second. There are eight bits in a byte, so the two numbers differ by a factor of eight, and this single mismatch causes more confusion than any other topic in home networking.</p>
+
+        <p>A gigabit connection is 1000 megabits per second. Divide by eight and you get 125 megabytes per second as the theoretical maximum. Subtract protocol overhead (Ethernet framing, IP, TCP headers) and roughly 940 megabits, or about 112 megabytes per second, is the realistic ceiling.</p>
+
+        <p>So a file copy running at 110 MB/s is not slow. It is a gigabit link performing essentially perfectly. If you were expecting 1000 MB/s because the box said gigabit, the network is fine and the expectation was off by a factor of eight.</p>
+
+        <table>
+          <thead>
+            <tr><th>Link</th><th>Theoretical</th><th>Realistic TCP</th><th>As megabytes/sec</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>100 Mbps Ethernet</td><td>100 Mbps</td><td>94 Mbps</td><td>about 11 MB/s</td></tr>
+            <tr><td>Gigabit Ethernet</td><td>1000 Mbps</td><td>940 Mbps</td><td>about 112 MB/s</td></tr>
+            <tr><td>2.5 Gigabit</td><td>2500 Mbps</td><td>2350 Mbps</td><td>about 280 MB/s</td></tr>
+            <tr><td>10 Gigabit</td><td>10000 Mbps</td><td>9400 Mbps</td><td>about 1120 MB/s</td></tr>
+            <tr><td>Wi-Fi 5, good conditions</td><td>866 Mbps link rate</td><td>350 to 450 Mbps</td><td>about 50 MB/s</td></tr>
+            <tr><td>Wi-Fi 6, good conditions</td><td>1200 Mbps link rate</td><td>600 to 800 Mbps</td><td>about 85 MB/s</td></tr>
+          </tbody>
+        </table>
+
+        <p>Note the gap on the Wi-Fi rows. The link rate your device reports is a negotiated maximum under ideal conditions, and real throughput is typically 40 to 60 percent of it because the medium is shared, half duplex and subject to retransmission. A Wi-Fi connection showing 866 Mbps that delivers 400 is behaving normally, not badly.</p>
+
+        <h2 id="expect">What each link should actually give you</h2>
+
+        <p>Before testing, work out what the answer should be. The slowest component in the path sets the ceiling, and it is often not the one you are thinking about.</p>
+
+        <p>A gigabit laptop connected to a gigabit NAS through a 100 megabit switch gets 94 Mbps. An old powerline adapter in the path caps everything at whatever it manages, which is usually far below its advertised rating. A cheap unmanaged switch with one failing port can drop a single device to 100 megabits while everything else runs at full speed.</p>
+
+        <p>Write down the expected number first. Then measure. The interesting information is in the gap between them.</p>
+
+        <h2 id="setup">Setting up the test</h2>
+
+        <p>iperf3 works as a client and a server. One machine listens, the other connects, and data flows between them.</p>
+
+        <ol class="steps">
+          <li>
+            <strong>Run the server on one machine</strong>
+            <p>Install iperf3 from your package manager (it is available for Windows, macOS, Linux and most NAS platforms, and many NAS models include it already) and start it in server mode. It listens on port <code>5201</code> by default.</p>
+          </li>
+          <li>
+            <strong>Find its IP address</strong>
+            <p>If you are not sure, run a <a href="/docs/lan-scan.html">LAN Scan</a> across your subnet. The server will be one of the devices that answers, and the scan gives you the address to point at.</p>
+          </li>
+          <li>
+            <strong>Connect from the other machine</strong>
+            <p>Point the <a href="/docs/iperf3.html">iperf3 client</a> at that address and port. From a phone or tablet this is the fastest way to measure what the wireless side of your network is really delivering.</p>
+          </li>
+          <li>
+            <strong>Run for at least 20 seconds</strong>
+            <p>TCP takes a moment to reach full speed. A five second test spends much of its time ramping up and reports a number lower than the truth. Twenty to thirty seconds gives a stable figure.</p>
+          </li>
+          <li>
+            <strong>Test both directions</strong>
+            <p>Upload and download can differ, particularly over Wi-Fi where the two ends have different antennas and transmit power. A device that receives at 400 Mbps and sends at 90 is telling you something specific.</p>
+          </li>
+        </ol>
+
+<div class="ndt-launch" data-tool="iperf3" data-target="192.168.1.50" data-port="5201" data-duration="20" data-direction="download">
+          <a href="https://netdebug.app/open/iperf3?target=192.168.1.50&amp;port=5201&amp;duration=20&amp;direction=download" rel="nofollow">Open iperf3 Client in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># Download direction, 20 seconds, default port</span>
+<span class="scheme">https://netdebug.app/open/</span>iperf3?<span class="key">target</span>=<span class="value">192.168.1.50</span>&amp;<span class="key">port</span>=<span class="value">5201</span>&amp;<span class="key">duration</span>=<span class="value">20</span>&amp;<span class="key">direction</span>=<span class="value">download</span>
+
+<span class="comment"># Same test the other way round</span>
+<span class="scheme">https://netdebug.app/open/</span>iperf3?<span class="key">target</span>=<span class="value">192.168.1.50</span>&amp;<span class="key">port</span>=<span class="value">5201</span>&amp;<span class="key">duration</span>=<span class="value">20</span>&amp;<span class="key">direction</span>=<span class="value">upload</span></code></pre>
+
+        <div class="app-cta">
+          <h3>Measure your LAN from the device in your hand</h3>
+          <p>The iperf3 client in NetDebug Toolkit runs TCP throughput tests against any iperf3 server, in either direction, with a configurable duration. It is the quickest way to find out what a phone, tablet or Apple TV is really getting from your Wi-Fi, room by room.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="reading">Reading the result</h2>
+
+        <p>The headline number is throughput, and you compare it against the expected value you wrote down earlier. Three other things are worth noticing.</p>
+
+        <p><strong>Consistency across intervals.</strong> A result that holds steady is a healthy path. One that swings between 300 and 700 Mbps every second points at interference, contention or a device that cannot keep up.</p>
+
+        <p><strong>Retransmits.</strong> If the output reports retransmitted segments, packets are being lost and resent. A handful over a long test is unremarkable. Thousands means something is genuinely dropping traffic, and it is worth following up with a <a href="/blog/how-to-test-packet-loss.html">proper loss test</a>.</p>
+
+        <p><strong>The ramp.</strong> Watch the first few seconds. A path that takes a long time to reach full speed often has high latency or a small window somewhere, which affects real transfers even when the peak number looks fine.</p>
+
+        <p>For Wi-Fi testing specifically, run the same test from several places. One measurement at the desk tells you about the desk. Testing in each room builds a map, and it usually reveals that the problem is one particular spot rather than the network as a whole.</p>
+
+        <h2 id="94">The 94 Mbps clue</h2>
+
+        <p>If your test comes back at almost exactly 94 megabits per second, or roughly 11 megabytes per second, stop looking at everything else. That number is the practical maximum of a 100 megabit link, and something in the path has negotiated 100 megabits instead of gigabit.</p>
+
+        <p>The usual suspects, in order:</p>
+
+        <ul>
+          <li><strong>A damaged or low grade cable.</strong> Gigabit Ethernet needs all four pairs. If one pair is broken, the link silently falls back to 100 megabits, which only needs two. The cable still works, the light still comes on, and nothing reports an error. Swapping the cable is a thirty second test that solves this surprisingly often.</li>
+          <li><strong>An old switch or a 100 megabit port.</strong> Some switches mix port speeds, and plenty of older hardware is fast Ethernet throughout.</li>
+          <li><strong>Something in between.</strong> A powerline adapter, a wall socket wired years ago, or a patch panel with two pairs punched down.</li>
+          <li><strong>A forced duplex or speed setting.</strong> Rare now, but a manually configured interface will refuse to negotiate upward.</li>
+        </ul>
+
+        <p>Most operating systems will tell you the negotiated link speed in the network adapter details. If it says 100 Mbps on hardware you believe is gigabit, you have found the problem and it is physical.</p>
+
+        <h2 id="slow">Why a fast network still copies slowly</h2>
+
+        <p>Suppose iperf3 reports a healthy 940 Mbps and your file copy still runs at 30 MB/s. The network is not the bottleneck, and that is genuinely useful to know. The remaining candidates:</p>
+
+        <p><strong>Disk speed.</strong> A mechanical hard drive writes at 80 to 160 MB/s sequentially and far less with small files. A USB 2.0 enclosure caps around 35 MB/s. A NAS with older drives in a parity array can be slower still on writes.</p>
+
+        <p><strong>Lots of small files.</strong> Copying 50,000 small files is a different operation from copying one large one. Per file overhead dominates and throughput collapses, on any protocol. Archiving first and transferring one file is often dramatically faster.</p>
+
+        <p><strong>Protocol overhead.</strong> SMB, AFP and their various versions differ significantly, and an old protocol version negotiated for compatibility can halve your speed. Encryption and signing, which are on by default in many configurations, cost CPU on both ends.</p>
+
+        <p><strong>CPU on a small device.</strong> A low power NAS or single board computer can be the limit, especially with encryption enabled. If the device's processor is at 100 percent during a transfer, that is your answer.</p>
+
+        <p><strong>Antivirus scanning.</strong> Real time scanning inspects every file as it is written, which can cut transfer speed by more than half. Worth testing with it paused, if policy allows.</p>
+
+        <p>The value of the iperf3 test is exactly this: it separates the network from everything else. Once you know the path can carry 940 megabits, you stop replacing cables and start looking at disks and protocols.</p>
+
+        <h2>The short version</h2>
+
+        <p>Use iperf3, not an internet speed test, because the traffic never leaves your network. Remember the factor of eight: gigabit means about 112 megabytes per second, not 1000. Run for at least 20 seconds and test both directions. A result near 94 Mbps means something negotiated 100 megabit, and a damaged cable pair is the most common cause. And if the network measures fine while file copies do not, the bottleneck is disks, small files or protocol overhead rather than the network at all.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>How do I test the speed between two computers on my network?</h3>
+          <p>Run iperf3 in server mode on one machine and connect to it from the other with an iperf3 client. It measures raw TCP throughput over the path with no disks or file sharing protocol involved, which isolates the network itself.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why is my gigabit network only giving 112 MB/s?</h3>
+          <p>That is a gigabit link working correctly. Networks are measured in bits and file transfers in bytes, so 1000 megabits per second is 125 megabytes per second before overhead, and about 112 after it. The two numbers differ by a factor of eight.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What does a 94 Mbps result mean?</h3>
+          <p>Something in the path negotiated 100 megabit instead of gigabit. The most common cause is a damaged or low grade cable, because gigabit needs all four pairs and silently falls back to 100 megabit if one pair is broken. Swapping the cable is the fastest test.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How long should an iperf3 test run?</h3>
+          <p>At least 20 seconds. TCP takes a few seconds to reach full speed, so a short test spends much of its time ramping up and reports a figure lower than the path can actually deliver.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why is my Wi-Fi throughput so much lower than the link rate?</h3>
+          <p>The link rate is a negotiated maximum under ideal conditions. Real throughput is typically 40 to 60 percent of it, because the medium is shared, half duplex and subject to retransmission. A Wi-Fi 5 connection showing 866 Mbps delivering 400 is normal.</p>
+        </div>
+        <div class="faq-item">
+          <h3>My network tests fast but file copies are slow. Why?</h3>
+          <p>The bottleneck is not the network. Likely causes are disk speed, copying many small files instead of one large one, an old file sharing protocol version, encryption overhead, a low power CPU on a NAS, or real time antivirus scanning every file as it is written.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I run an iperf3 test from a phone?</h3>
+          <p>Yes. An iperf3 client on a phone or tablet is the most practical way to measure what your Wi-Fi actually delivers in each room, because you can carry it to the place where the problem happens.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/slow-internet-speed-test-fine.html">Slow internet when the speed test looks fine</a>
+          <a href="/blog/how-to-test-packet-loss.html">How to test for packet loss</a>
+          <a href="/docs/iperf3.html">iperf3 client documentation</a>
+          <a href="/docs/lan-scan.html">LAN Scan documentation</a>
+          <a href="/blog/server-keeps-dropping-off-network.html">Why your NAS keeps dropping off the network</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

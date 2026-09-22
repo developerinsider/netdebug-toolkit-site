@@ -396,6 +396,29 @@
       font-size: 18px;
     }
 
+    /* ── Blog teasers ── */
+    a.tool-card {
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .tool-card .tool-info h3 {
+      line-height: 1.4;
+    }
+
+    .section-link {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    .section-link:hover {
+      text-decoration: underline;
+    }
+
     /* ── CTA Bottom ── */
     .cta-bottom {
       padding: 56px 0;
@@ -587,6 +610,8 @@
       <div class="nav-links">
         <a href="#tools">Tools</a>
         <a href="docs.html">Docs</a>
+        <a href="blog.html">Blog</a>
+        <a href="deeplink-generator.html">Generator</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
@@ -831,6 +856,105 @@
       </div>
     </section>
 
+    <!-- Blog -->
+    <section class="tools-section">
+      <div class="section-header">
+        <h2>From the blog</h2>
+        <p>Guides to the network problems people actually run into, from Wi-Fi that connects to nothing through to self-hosting behind CGNAT.</p>
+      </div>
+      <div class="category">
+        <div class="tools-grid">
+          <a class="tool-card" href="blog/wifi-connected-but-no-internet.html">
+            <div class="tool-icon">&#128246;</div>
+            <div class="tool-info">
+              <h3>Wi-Fi connected but no internet</h3>
+              <p>Four tests, in order, that tell you whether it is your device, your router, DNS or your ISP.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/dns-server-not-responding.html">
+            <div class="tool-icon">&#128270;</div>
+            <div class="tool-info">
+              <h3>DNS server not responding</h3>
+              <p>NXDOMAIN, SERVFAIL and timeouts are different problems. One comparison tells them apart.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/how-to-test-packet-loss.html">
+            <div class="tool-icon">&#128202;</div>
+            <div class="tool-info">
+              <h3>How to test for packet loss</h3>
+              <p>Why speed tests miss it, how long to run the test, and the traceroute trap that fools everyone.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/high-ping-and-lag.html">
+            <div class="tool-icon">&#9889;</div>
+            <div class="tool-info">
+              <h3>High ping and lag</h3>
+              <p>Lag is latency, not bandwidth. Where the delay is added and which part you can actually fix.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/port-forwarding-not-working.html">
+            <div class="tool-icon">&#128295;</div>
+            <div class="tool-info">
+              <h3>Port forwarding not working</h3>
+              <p>Seven things have to be true. Start with the ten second check that rules out CGNAT.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/ssl-certificate-error-connection-not-private.html">
+            <div class="tool-icon">&#128272;</div>
+            <div class="tool-info">
+              <h3>Your connection is not private</h3>
+              <p>Each certificate error points somewhere different. Start by checking your clock.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/502-503-504-gateway-errors-explained.html">
+            <div class="tool-icon">&#127760;</div>
+            <div class="tool-info">
+              <h3>502, 503 and 504 explained</h3>
+              <p>All server side, all different. Which one means crashed, which means slow, which means deliberate.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/video-calls-freezing-jitter.html">
+            <div class="tool-icon">&#128249;</div>
+            <div class="tool-info">
+              <h3>Video calls keep freezing</h3>
+              <p>A call needs a few megabits. It is jitter that breaks it, and a speed test cannot see jitter.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/who-is-on-my-wifi.html">
+            <div class="tool-icon">&#128421;</div>
+            <div class="tool-info">
+              <h3>Who is on my Wi-Fi?</h3>
+              <p>Scan your subnet, name every device, and judge an unfamiliar one properly.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/self-hosting-behind-cgnat.html">
+            <div class="tool-icon">&#127968;</div>
+            <div class="tool-info">
+              <h3>Self-hosting behind CGNAT</h3>
+              <p>If your router's WAN address is not your public IP, no forwarding rule will ever work. Five options that do.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/homelab-https-certificates.html">
+            <div class="tool-icon">&#128272;</div>
+            <div class="tool-info">
+              <h3>HTTPS for homelab services</h3>
+              <p>Real certificates on services nobody outside can reach, with no open ports and no browser warnings.</p>
+            </div>
+          </a>
+          <a class="tool-card" href="blog/docker-container-networking-problems.html">
+            <div class="tool-icon">&#128230;</div>
+            <div class="tool-info">
+              <h3>Docker container not reachable</h3>
+              <p>Container up, logs clean, nothing connects. Six causes, and the test that rules out the other five.</p>
+            </div>
+          </a>
+        </div>
+        <div style="text-align:center">
+          <a class="section-link" href="blog.html">Read all 30 posts</a>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="cta-bottom">
       <div class="cta-box">
@@ -847,6 +971,7 @@
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
         <a href="docs.html">Docs</a>
+        <a href="blog.html">Blog</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>

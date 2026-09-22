@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Network segmentation limits what a compromised IoT device can reach, but it also breaks device discovery, Wake-on-LAN and several smart home ecosystems. Here is how to plan it, and how to verify the rules from each segment." />
+  <title>VLANs for a Homelab: What to Segment and What Breaks</title>
+  <link rel="canonical" href="https://netdebug.app/blog/homelab-vlan-segmentation.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="VLANs for a Homelab: What to Segment and What Breaks" />
+  <meta property="og:description" content="Network segmentation limits what a compromised IoT device can reach, but it also breaks device discovery, Wake-on-LAN and several smart home ecosystems. Here is how to plan it, and how to verify the rules from each segment." />
+  <meta property="og:url" content="https://netdebug.app/blog/homelab-vlan-segmentation.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Homelab" />
+  <meta property="article:tag" content="homelab vlan" />
+  <meta property="article:tag" content="vlan for iot devices" />
+  <meta property="article:tag" content="network segmentation home" />
+  <meta property="article:tag" content="mdns reflector vlan" />
+  <meta property="article:tag" content="iot network isolation" />
+  <meta property="article:tag" content="guest network vlan" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VLANs for a Homelab: What to Segment and What Breaks" />
+  <meta name="twitter:description" content="Network segmentation limits what a compromised IoT device can reach, but it also breaks device discovery, Wake-on-LAN and several smart home ecosystems. Here is how to plan it, and how to verify the rules from each segment." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "VLANs for a Homelab: What to Segment and What Breaks",
+  "headline": "VLANs for a homelab: what to segment, and what breaks",
+  "description": "Network segmentation limits what a compromised IoT device can reach, but it also breaks device discovery, Wake-on-LAN and several smart home ecosystems. Here is how to plan it, and how to verify the rules from each segment.",
+  "url": "https://netdebug.app/blog/homelab-vlan-segmentation.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "homelab vlan, vlan for iot devices, network segmentation home, mdns reflector vlan, iot network isolation, guest network vlan",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "VLANs for a homelab: what to segment, and what breaks",
+      "item": "https://netdebug.app/blog/homelab-vlan-segmentation.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many VLANs do I need at home?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Four covers most homes: trusted devices, IoT, guest and lab. A fifth management segment for switches and access points is sensible if you have the equipment. More segments multiply firewall rules and discovery workarounds without adding much security."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will VLANs break Chromecast and AirPlay?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, by default. Discovery uses multicast, which does not cross a router, so a phone on one segment cannot see a speaker or television on another. An mDNS reflector configured between that specific pair of segments restores it without opening everything to everything."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Wake-on-LAN work across VLANs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A magic packet is a broadcast and broadcasts stay inside their segment. You need to send it from a device on the target's segment, or use a router feature that forwards directed broadcasts to that specific subnet."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "If I allow trusted devices to reach IoT, can IoT reach them back?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, with a stateful firewall. Rules are about who initiates the connection, and return traffic for an established connection is allowed automatically. Your phone can open a connection to a camera while the camera still cannot start one to your laptop."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why can IoT devices still reach my NAS after I created the VLAN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Test it rather than trusting the configuration screen. From a device on the IoT segment, try a TCP connect to the NAS on its service port. A rule that reads correctly and behaves differently is a common outcome, often because of rule ordering or an overly broad allow rule above it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What order should I move devices in?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Guest first because nothing depends on it, then your lab, then IoT devices nobody interacts with directly, then cameras. Leave televisions and speakers until last, and get the mDNS reflector working with a test device before moving anything the household uses daily."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a separate Wi-Fi network for each VLAN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually yes. Devices choose a network name rather than a VLAN, so each segment needs an SSID mapped to it. Name them clearly, because the SSID is the boundary as far as anyone else in the house is concerned."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Homelab</span>
+        <h1>VLANs for a homelab: what to segment, and what breaks</h1>
+        <p class="standfirst">Creating the VLANs takes an evening. Finding everything that quietly depended on a flat network takes a fortnight. Here is that list up front.</p>
+        <div class="post-meta">
+          <span>7 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>Segmenting a home network is one of those projects that sounds like a weekend and turns into a fortnight, mostly because the hard part is not creating the VLANs. It is discovering, one household complaint at a time, everything that quietly depended on all your devices sharing a single flat network.</p>
+
+        <p>Segmentation is still worth doing. A smart plug running firmware from 2021 should not be able to reach your NAS. But go in knowing what breaks, because that list is longer than the setup guide suggests.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#why">What segmentation actually buys you</a></li>
+            <li><a href="#tiers">How many segments, realistically</a></li>
+            <li><a href="#breaks">What breaks, and what to do about it</a></li>
+            <li><a href="#rules">Firewall rules that make sense</a></li>
+            <li><a href="#order">Doing it without a household revolt</a></li>
+            <li><a href="#verify">Verifying the rules actually work</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="why">What segmentation actually buys you</h2>
+
+        <p>Be precise about the threat, because it changes what you build.</p>
+
+        <p>The realistic risk in a home is not a targeted attacker. It is a device you own, running software you cannot update, that gets compromised and then has unrestricted access to everything else. Cameras, plugs, bulbs, televisions and appliances routinely ship with old components and stop receiving updates a year or two after release. On a flat network, each one of them is a full peer of your laptop and your NAS.</p>
+
+        <p>Segmentation does not stop a device being compromised. It limits what a compromised one can reach, and for a home network that is the whole point. A camera that can only talk to the internet and nothing local is a much smaller problem than one that can browse your file shares.</p>
+
+        <p>The secondary benefit is one homelabbers feel immediately: a lab segment where you can run a second DHCP server, break routing, or test a firewall rule without taking the household offline mid film.</p>
+
+        <h2 id="tiers">How many segments, realistically</h2>
+
+        <p>The common mistake is too many. Every additional segment multiplies the firewall rules you maintain and the discovery problems you work around. Four is plenty for most homes.</p>
+
+        <table>
+          <thead>
+            <tr><th>Segment</th><th>What goes on it</th><th>Should reach</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Trusted</strong></td><td>Laptops, phones, tablets, the NAS</td><td>Everything, including out to the other segments</td></tr>
+            <tr><td><strong>IoT</strong></td><td>Plugs, bulbs, cameras, TVs, appliances</td><td>The internet only, plus a hub if one is needed</td></tr>
+            <tr><td><strong>Guest</strong></td><td>Visitors</td><td>The internet only, with client isolation on</td></tr>
+            <tr><td><strong>Lab</strong></td><td>Anything you are experimenting with</td><td>The internet, and whatever you deliberately allow</td></tr>
+          </tbody>
+        </table>
+
+        <p>A separate management segment for switches, access points and hypervisor interfaces is a sensible fifth if you have the equipment for it. Add it carefully: a management VLAN is the classic way to lock yourself out of the device you are configuring, and recovering usually means a physical console cable and an awkward hour.</p>
+
+        <p>Give each segment a subnet you will recognise at a glance. Putting the VLAN number into the third octet, so VLAN 20 is <code>192.168.20.0/24</code>, costs nothing and makes every future diagnostic easier to read. A <a href="/docs/subnet-calculator.html">subnet calculator</a> confirms the ranges and gives you the broadcast address for each, which you will want later.</p>
+
+        <h2 id="breaks">What breaks, and what to do about it</h2>
+
+        <p>This is the section the setup guides skim, and it is where the fortnight goes.</p>
+
+        <h3>Device discovery stops, completely</h3>
+        <p>AirPlay, Chromecast, printers, HomeKit, Spotify Connect and most smart speakers find each other with multicast, and multicast does not cross a router. Put your phone on Trusted and your speaker on IoT and they become invisible to each other even though a direct connection would work fine.</p>
+        <p>The fix is an mDNS reflector or repeater, which most prosumer firewalls and some consumer mesh systems offer. Configure it to forward announcements between the specific pair of segments that need it, not between everything, because reflecting all traffic everywhere undoes the segmentation you just built. There is more detail on how this fails in the post on <a href="/blog/airplay-chromecast-not-showing-up.html">AirPlay and Chromecast not showing up</a>.</p>
+
+        <h3>Wake-on-LAN stops</h3>
+        <p>A magic packet is a broadcast, and broadcasts stay inside their segment. If you wake a machine from your phone, the phone now has to be on the same segment, or you need a device on the target's segment to send the packet for you. See <a href="/blog/wake-on-lan-not-working.html">Wake-on-LAN not working</a> for why the broadcast address matters so much here.</p>
+
+        <h3>Some hubs demand the same layer 2</h3>
+        <p>Several popular lighting and speaker systems discover their own hardware with link local protocols and simply do not work across segments, regardless of firewall rules. Check before you move them. The pragmatic answer is often to keep one vendor's ecosystem together on IoT and put the controlling app's access through a specific allow rule.</p>
+
+        <h3>Casting from a phone becomes a decision</h3>
+        <p>You want your phone on Trusted and your television on IoT, and you want casting to work. That needs an mDNS reflector between exactly those two, plus a rule allowing Trusted to initiate connections to the television. It works, it just is not automatic.</p>
+
+        <h3>Printers</h3>
+        <p>Printers are among the least trustworthy devices in most homes and among the most annoying to segment, because printing depends on discovery. Same answer: reflector plus a targeted allow rule, and a static address so the rule stays valid.</p>
+
+        <h2 id="rules">Firewall rules that make sense</h2>
+
+        <p>The principle that makes this manageable: <strong>rules are about who initiates, and a stateful firewall handles the replies.</strong></p>
+
+        <p>Allowing Trusted to reach IoT does not allow IoT to reach Trusted. When your phone opens a connection to a camera, the return traffic is part of that established connection and comes back automatically. The camera still cannot start a conversation with your laptop. That asymmetry is most of the security benefit and it costs one rule.</p>
+
+        <p>A sane starting set:</p>
+
+        <ul>
+          <li>Trusted to anywhere: allow.</li>
+          <li>IoT to the internet: allow. IoT to any local segment: block.</li>
+          <li>Guest to the internet: allow. Guest to anything local: block, with client isolation on as well.</li>
+          <li>Lab to the internet: allow. Lab to local: block by default, open specific things as needed.</li>
+          <li>Anything to the management segment: block, except from one specific trusted address.</li>
+        </ul>
+
+        <p>Two exceptions you will probably need. DNS, if your <a href="/blog/homelab-internal-dns.html">internal resolver</a> lives on Trusted, because every segment needs to reach it on port 53. And NTP, for the same reason, if you run a local time source. Allow those specific ports to that specific host rather than opening the segments to each other.</p>
+
+        <p>Log the block rules for a week. What you learn from the logs is the actual list of things that need exceptions, which is far more reliable than predicting it.</p>
+
+        <div class="ndt-launch" data-tool="lanscan" data-subnet="192.168.20.0/24" data-mode="fast">
+          <a href="https://netdebug.app/open/lanscan?subnet=192.168.20.0/24&amp;mode=fast" rel="nofollow">Open LAN Scan in NetDebug Toolkit</a>
+        </div>
+
+        <div class="app-cta">
+          <h3>Check the rules from each segment</h3>
+          <p>Put a phone on one VLAN and run a LAN scan, a Bonjour browse and a TCP connect toward the others. That tests what a device on that segment can genuinely reach, which is the only way to know whether a firewall rule does what you think it does.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="order">Doing it without a household revolt</h2>
+
+        <p>Segment in the order of least disruption, and finish each step before starting the next.</p>
+
+        <ol class="steps">
+          <li>
+            <strong>Guest first</strong>
+            <p>It is isolated by design, nothing you own depends on it, and it is the safest place to learn how your equipment handles VLANs.</p>
+          </li>
+          <li>
+            <strong>Lab second</strong>
+            <p>Move your experiments off the main network. Immediate benefit, no household impact, and you now have somewhere safe to test the next steps.</p>
+          </li>
+          <li>
+            <strong>IoT third, in batches</strong>
+            <p>Move the devices nobody interacts with directly first: plugs, sensors, bulbs. Then cameras. Leave the television and the speakers until last, because those are the ones people notice.</p>
+          </li>
+          <li>
+            <strong>Sort out discovery before the visible devices move</strong>
+            <p>Get the mDNS reflector working with one test device and confirm casting still works before you move the family television.</p>
+          </li>
+          <li>
+            <strong>Management last, and carefully</strong>
+            <p>Have console access available before you change the interface you are managing the device through.</p>
+          </li>
+        </ol>
+
+        <p>One practical note on Wi-Fi: each segment usually needs its own SSID mapped to its VLAN. Devices do not choose a VLAN, they choose a network name, so the SSID is the boundary as far as anyone in the house is concerned. Name them so it is obvious which is which.</p>
+
+        <h2 id="verify">Verifying the rules actually work</h2>
+
+        <p>Firewall configuration and firewall behaviour are different things, and only one of them matters. Test from the segment, not from the admin interface.</p>
+
+        <p>Join a phone to each VLAN in turn and run the same three checks:</p>
+
+        <p><strong>A <a href="/docs/lan-scan.html">LAN scan</a> of the local subnet</strong> shows which devices are on that segment, and confirms things landed where you intended. Devices that show up on the wrong segment are usually a switch port left on the wrong VLAN or a device that ignored the new SSID.</p>
+
+        <p><strong>A <a href="/docs/port-connect.html">TCP connect</a> toward a host on another segment</strong> is the real test of a block rule. From IoT, try to reach the NAS on port 445 or 5000. It should fail. If it succeeds, your rule is not doing what the configuration screen suggests, and better to learn that now.</p>
+
+        <p><strong>A <a href="/docs/bonjour-browser.html">Bonjour browse</a> from each segment</strong> shows exactly what the reflector is forwarding. This is the one that catches over permissive reflector configuration: if a phone on Guest can see every service in the house, the reflector is forwarding more than it should.</p>
+
+        <p>Save those three as one automation per segment. Re-running them after a firmware update is worth the thirty seconds, because firewall and reflector behaviour does change across versions, and <a href="/docs/run-history.html">Run History</a> gives you the previous result to compare against.</p>
+
+        <h2>The short version</h2>
+
+        <p>Four segments is enough for most homes, and more than four is a maintenance decision rather than a security one. Expect discovery, Wake-on-LAN and some vendor ecosystems to break, and plan the mDNS reflector before you move anything anyone watches television on. Write rules in terms of who initiates and let the stateful firewall handle replies. Then test from a device actually sitting on each segment, because a rule that reads correctly and behaves differently is the normal outcome, not the unusual one.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>How many VLANs do I need at home?</h3>
+          <p>Four covers most homes: trusted devices, IoT, guest and lab. A fifth management segment for switches and access points is sensible if you have the equipment. More segments multiply firewall rules and discovery workarounds without adding much security.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Will VLANs break Chromecast and AirPlay?</h3>
+          <p>Yes, by default. Discovery uses multicast, which does not cross a router, so a phone on one segment cannot see a speaker or television on another. An mDNS reflector configured between that specific pair of segments restores it without opening everything to everything.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does Wake-on-LAN work across VLANs?</h3>
+          <p>No. A magic packet is a broadcast and broadcasts stay inside their segment. You need to send it from a device on the target's segment, or use a router feature that forwards directed broadcasts to that specific subnet.</p>
+        </div>
+        <div class="faq-item">
+          <h3>If I allow trusted devices to reach IoT, can IoT reach them back?</h3>
+          <p>No, with a stateful firewall. Rules are about who initiates the connection, and return traffic for an established connection is allowed automatically. Your phone can open a connection to a camera while the camera still cannot start one to your laptop.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why can IoT devices still reach my NAS after I created the VLAN?</h3>
+          <p>Test it rather than trusting the configuration screen. From a device on the IoT segment, try a TCP connect to the NAS on its service port. A rule that reads correctly and behaves differently is a common outcome, often because of rule ordering or an overly broad allow rule above it.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What order should I move devices in?</h3>
+          <p>Guest first because nothing depends on it, then your lab, then IoT devices nobody interacts with directly, then cameras. Leave televisions and speakers until last, and get the mDNS reflector working with a test device before moving anything the household uses daily.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Do I need a separate Wi-Fi network for each VLAN?</h3>
+          <p>Usually yes. Devices choose a network name rather than a VLAN, so each segment needs an SSID mapped to it. Name them clearly, because the SSID is the boundary as far as anyone else in the house is concerned.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/airplay-chromecast-not-showing-up.html">AirPlay or Chromecast not showing up?</a>
+          <a href="/blog/subnet-mask-and-cidr-explained.html">Subnet mask and CIDR explained</a>
+          <a href="/docs/lan-scan.html">LAN Scan documentation</a>
+          <a href="/docs/bonjour-browser.html">Bonjour browser documentation</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

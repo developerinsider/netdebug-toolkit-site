@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A browser shows the same failure whether DNS broke, the connection was refused, the certificate expired or the server errored. Run these four checks in order to find out which, and test from a second network to prove it." />
+  <title>Is the Website Down, or Just You? Four Checks That Settle It</title>
+  <link rel="canonical" href="https://netdebug.app/blog/is-a-website-down-or-just-me.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Is the Website Down, or Just You? Four Checks That Settle It" />
+  <meta property="og:description" content="A browser shows the same failure whether DNS broke, the connection was refused, the certificate expired or the server errored. Run these four checks in order to find out which, and test from a second network to prove it." />
+  <meta property="og:url" content="https://netdebug.app/blog/is-a-website-down-or-just-me.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Web" />
+  <meta property="article:tag" content="is the website down" />
+  <meta property="article:tag" content="website down or just me" />
+  <meta property="article:tag" content="how to check if a website is down" />
+  <meta property="article:tag" content="site not loading" />
+  <meta property="article:tag" content="dns or server problem" />
+  <meta property="article:tag" content="connection refused vs timed out" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Is the Website Down, or Just You? Four Checks That Settle It" />
+  <meta name="twitter:description" content="A browser shows the same failure whether DNS broke, the connection was refused, the certificate expired or the server errored. Run these four checks in order to find out which, and test from a second network to prove it." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Is the Website Down, or Just You? Four Checks That Settle It",
+  "headline": "Is the website down, or just you? Four checks that settle it",
+  "description": "A browser shows the same failure whether DNS broke, the connection was refused, the certificate expired or the server errored. Run these four checks in order to find out which, and test from a second network to prove it.",
+  "url": "https://netdebug.app/blog/is-a-website-down-or-just-me.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "is the website down, website down or just me, how to check if a website is down, site not loading, dns or server problem, connection refused vs timed out",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Is the website down, or just you? Four checks that settle it",
+      "item": "https://netdebug.app/blog/is-a-website-down-or-just-me.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I check if a website is down for everyone or just me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Test it from a completely different network. On a phone, turn Wi-Fi off and use cellular data, which changes your IP address, route, resolver and ISP at once. If the site loads there and not on your usual network, the problem is local to you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between connection refused and connection timed out?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Refused means a machine answered and actively declined the connection, which usually means the service is stopped. Timed out means nothing answered at all, which usually means a firewall is dropping packets or the route is broken. A browser shows the same error for both."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does a website load for my colleague but not for me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Common reasons are anycast routing sending you to a different regional edge, a DNS change that has reached their resolver but not yours, a routing problem specific to your ISP, or a filtering resolver on your network deliberately blocking the domain."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are 'is it down' websites reliable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Partly. Their automated check runs from their own data centre using their own resolver, so a green result does not mean the site works for you. User reports lag the event by minutes and spike for anything that inconveniences people, including changes that are not outages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "A site returns 403 for me. Is it down?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A 403 or 429 means the server is healthy and is refusing you specifically, usually because of a firewall rule, a geographic restriction or bot detection. That is an entirely different problem from an outage and needs a different fix."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I include when reporting a website outage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The exact URL rather than just the domain, the precise status code or error, whether it also fails from a second network, the IP address the name resolved to, and a timestamp with a timezone. Those five details turn a vague report into something an engineer can act on."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Web</span>
+        <h1>Is the website down, or just you? Four checks that settle it</h1>
+        <p class="standfirst">Down is not one condition. It is four, and a browser hides the difference between all of them. Here is how to find out which one you have in under a minute.</p>
+        <div class="post-meta">
+          <span>6 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>A site will not load. Before you tell anyone, or reboot anything, it is worth spending a minute finding out where it actually breaks. "Down" is not one condition. A browser shows you the same blank failure whether the name failed to resolve, the connection was refused, the certificate was rejected, or the server returned an error, and those four have nothing in common except the outcome.</p>
+
+        <p>The good news is that checking them is fast and mechanical. Four questions, in order, and the first one that fails tells you what to do next.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#layers">The four layers where "down" happens</a></li>
+            <li><a href="#second-network">The single most useful test</a></li>
+            <li><a href="#signatures">Failure signatures at a glance</a></li>
+            <li><a href="#regional">When it is down for some people and not others</a></li>
+            <li><a href="#status-sites">What "is it down" websites really tell you</a></li>
+            <li><a href="#report">Reporting it usefully</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="layers">The four layers where "down" happens</h2>
+
+        <p>Loading a page means completing four separate steps. Each can fail on its own while the others work perfectly.</p>
+
+        <ol class="steps">
+          <li>
+            <strong>The name has to resolve</strong>
+            <p>A <a href="/docs/dns-lookup.html">DNS lookup</a> turns the hostname into an address. Run it twice, once against your normal resolver and once against <code>1.1.1.1</code>. If yours fails and the public one works, the site is fine and your resolver is not. If both fail, the domain itself has a problem: an expired registration, deleted records or broken nameservers.</p>
+          </li>
+          <li>
+            <strong>Something has to accept a connection</strong>
+            <p>A <a href="/docs/port-connect.html">TCP connect</a> to port 443 says whether anything is listening at that address. Refused means a server answered and said no, which usually means the web server is stopped. Timed out means packets are vanishing, which points at a firewall or a route problem. The distinction matters, and a browser hides it completely.</p>
+          </li>
+          <li>
+            <strong>The certificate has to be acceptable</strong>
+            <p>A <a href="/docs/tls-cert-inspector.html">TLS inspection</a> shows expiry, the hostnames covered, and the issuer chain. An expired certificate takes a site offline just as effectively as a dead server, and it is one of the most common causes of a site that was working yesterday.</p>
+          </li>
+          <li>
+            <strong>The server has to return something useful</strong>
+            <p>An <a href="/docs/http-check.html">HTTP(S) Check</a> gives you the real status code and the redirect chain. A 502 or 503 means the site is up and its application is not. A redirect loop means a configuration mistake. A 200 means the server is fine and the problem is in the page itself, or in your browser.</p>
+          </li>
+        </ol>
+
+        <p>Four checks, well under a minute, and you know which of four very different problems you have.</p>
+
+        <h2 id="second-network">The single most useful test</h2>
+
+        <p>If you do only one thing, do this: <strong>try it from a completely different network.</strong></p>
+
+        <p>On a phone, turn Wi-Fi off and use cellular data. That one switch changes your IP address, your route, your DNS resolver and your ISP simultaneously. If the site loads on cellular and not on Wi-Fi, the problem is on your network or at your provider, and no amount of investigating the website will help. If it fails on both, the site really is having trouble.</p>
+
+        <p>This is also the fastest way to detect the awkward middle case: a site that is up for the world but blocked, filtered or misrouted for you specifically. Corporate filters, DNS based ad blockers, parental controls and overzealous security software all produce failures that look exactly like an outage.</p>
+
+<div class="ndt-launch" data-tool="dns" data-target="example.com" data-server="1.1.1.1">
+          <a href="https://netdebug.app/open/dns?target=example.com&amp;server=1.1.1.1" rel="nofollow">Open DNS Lookup in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># Run these on Wi-Fi, then again on cellular, and compare</span>
+<span class="scheme">https://netdebug.app/open/</span>dns?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">server</span>=<span class="value">1.1.1.1</span>
+<span class="scheme">https://netdebug.app/open/</span>portconnect?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">port</span>=<span class="value">443</span>&amp;<span class="key">protocol</span>=<span class="value">tcp</span>
+<span class="scheme">https://netdebug.app/open/</span>http?<span class="key">target</span>=<span class="value">https://example.com</span></code></pre>
+
+        <div class="app-cta">
+          <h3>Four checks, one tap</h3>
+          <p>Chain DNS Lookup, TCP Connect, TLS Inspector and HTTP(S) Check into a My Automation workflow and run the whole sequence against any host from your phone. Every result lands on one screen and exports as PDF, PNG or text for a ticket.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="signatures">Failure signatures at a glance</h2>
+
+        <table>
+          <thead>
+            <tr><th>DNS</th><th>TCP 443</th><th>HTTP</th><th>Most likely cause</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Fails on yours, works on 1.1.1.1</td><td>n/a</td><td>n/a</td><td>Your resolver. Change DNS and retry.</td></tr>
+            <tr><td>Fails everywhere</td><td>n/a</td><td>n/a</td><td>Domain expired, records deleted, or nameservers down.</td></tr>
+            <tr><td>Works</td><td>Refused</td><td>n/a</td><td>Web server stopped or crashed. Something answered and said no.</td></tr>
+            <tr><td>Works</td><td>Times out</td><td>n/a</td><td>Firewall dropping packets, or a routing problem. Nothing answered at all.</td></tr>
+            <tr><td>Works</td><td>Connects</td><td>TLS error</td><td>Expired or mismatched certificate.</td></tr>
+            <tr><td>Works</td><td>Connects</td><td>502 / 503 / 504</td><td>Server is up, the application behind it is not.</td></tr>
+            <tr><td>Works</td><td>Connects</td><td>200 but blank page</td><td>Front end problem, a broken script, or a browser extension.</td></tr>
+            <tr><td>Works</td><td>Connects</td><td>Redirect loop</td><td>Misconfigured HTTPS or canonical URL rules.</td></tr>
+            <tr><td>Works</td><td>Connects</td><td>403 or 429</td><td>You are being blocked or rate limited, not experiencing an outage.</td></tr>
+          </tbody>
+        </table>
+
+        <p>That last row deserves emphasis. A site that returns 403 to you and 200 to everyone else is not down. A firewall rule, a geo restriction or a bot detector has decided something about your address, and the fix is entirely different from an outage. More on the 5xx family in the post on <a href="/blog/502-503-504-gateway-errors-explained.html">502, 503 and 504 errors</a>.</p>
+
+        <h2 id="regional">When it is down for some people and not others</h2>
+
+        <p>This confuses people more than anything else, and there are four routine explanations.</p>
+
+        <h3>Anycast and regional edges</h3>
+        <p>Large sites answer from whichever edge location is nearest you. If one region's edge is unhealthy, the site is genuinely down for everyone routed there and completely fine elsewhere. Two people on different continents can honestly disagree about whether a site is working.</p>
+
+        <h3>A DNS change still rolling out</h3>
+        <p>If the site moved recently, some resolvers hold the old address and some have the new one, so visitors land on different servers depending on which cache they sit behind. This is <a href="/blog/dns-propagation-explained.html">DNS propagation</a>, and the TTL on the record tells you how long the split lasts.</p>
+
+        <h3>One ISP has a routing problem</h3>
+        <p>A bad route between your provider and the destination affects only customers of that provider. A <a href="/docs/traceroute.html">traceroute</a> that dies consistently at the same hop, while the site loads fine on cellular, is the signature.</p>
+
+        <h3>Your own resolver is filtering it</h3>
+        <p>Ad blocking resolvers, corporate DNS and parental controls return a deliberate non answer for blocked domains. It looks exactly like the domain does not exist, which is why the two resolver comparison in step one is worth doing every time.</p>
+
+        <h2 id="status-sites">What "is it down" websites really tell you</h2>
+
+        <p>Outage aggregators are useful but worth understanding. Most combine two signals: an automated check from their own servers, and user reports.</p>
+
+        <p>The automated check tells you whether the site answers <em>from their location</em>, which may be a data centre in a country you have never visited, using a resolver you do not share. A green tick there does not mean the site works for you, and a red cross does not mean it is broken for everyone.</p>
+
+        <p>The user reports are more informative in aggregate, but they lag the actual event by several minutes and they spike for anything that inconveniences people, including changes that are not outages at all. A site that redesigned its login flow will produce a report spike indistinguishable from a partial failure.</p>
+
+        <p>Use them as a second opinion after your own four checks, not instead of them. Your own test, run from your own network, is the only one that describes your situation.</p>
+
+        <h2 id="report">Reporting it usefully</h2>
+
+        <p>Whether you are telling a colleague, a vendor or a support desk, a few specifics turn a shrug into an investigation.</p>
+
+        <ul>
+          <li><strong>The exact URL</strong>, not just the domain. "The site is down" and "this one endpoint returns 502" get very different responses.</li>
+          <li><strong>The status code or the precise error</strong>. Connection refused, timed out, certificate expired and 503 are four separate incidents.</li>
+          <li><strong>Whether it fails on a second network too.</strong> This is the detail that most reports lack and that support teams most want.</li>
+          <li><strong>The address it resolved to.</strong> If you and they are resolving different addresses, that is the entire problem and it will otherwise take an hour to find.</li>
+          <li><strong>A timestamp with a timezone.</strong> Correlating against server logs needs this, and saved runs in <a href="/docs/run-history.html">Run History</a> carry it automatically.</li>
+        </ul>
+
+        <p>If you support a service, keep the four checks saved as a single automation pointed at your own hostnames. Running one tap and exporting the result turns an escalation into a document, and doing it on a schedule means you often notice before anyone reports it.</p>
+
+        <h2>The short version</h2>
+
+        <p>Resolve the name against two resolvers, open a TCP connection to 443, inspect the certificate, then fetch the URL and read the status code. The first failure identifies the layer, and a browser shows you none of this. Then repeat the whole thing on cellular data: if it works there, the problem is your network, and if it fails there too, it is genuinely theirs.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>How do I check if a website is down for everyone or just me?</h3>
+          <p>Test it from a completely different network. On a phone, turn Wi-Fi off and use cellular data, which changes your IP address, route, resolver and ISP at once. If the site loads there and not on your usual network, the problem is local to you.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the difference between connection refused and connection timed out?</h3>
+          <p>Refused means a machine answered and actively declined the connection, which usually means the service is stopped. Timed out means nothing answered at all, which usually means a firewall is dropping packets or the route is broken. A browser shows the same error for both.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why does a website load for my colleague but not for me?</h3>
+          <p>Common reasons are anycast routing sending you to a different regional edge, a DNS change that has reached their resolver but not yours, a routing problem specific to your ISP, or a filtering resolver on your network deliberately blocking the domain.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Are 'is it down' websites reliable?</h3>
+          <p>Partly. Their automated check runs from their own data centre using their own resolver, so a green result does not mean the site works for you. User reports lag the event by minutes and spike for anything that inconveniences people, including changes that are not outages.</p>
+        </div>
+        <div class="faq-item">
+          <h3>A site returns 403 for me. Is it down?</h3>
+          <p>No. A 403 or 429 means the server is healthy and is refusing you specifically, usually because of a firewall rule, a geographic restriction or bot detection. That is an entirely different problem from an outage and needs a different fix.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What should I include when reporting a website outage?</h3>
+          <p>The exact URL rather than just the domain, the precise status code or error, whether it also fails from a second network, the IP address the name resolved to, and a timestamp with a timezone. Those five details turn a vague report into something an engineer can act on.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/502-503-504-gateway-errors-explained.html">502, 503 and 504 errors explained</a>
+          <a href="/blog/dns-server-not-responding.html">DNS server not responding</a>
+          <a href="/docs/http-check.html">HTTP(S) Check documentation</a>
+          <a href="/docs/my-automation.html">My Automation documentation</a>
+          <a href="/blog/monitor-homelab-from-your-phone.html">Monitoring a homelab from outside it</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

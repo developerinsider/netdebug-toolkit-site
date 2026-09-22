@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Port forwarding set up correctly but still closed? Learn the seven conditions a connection must survive, how to spot CGNAT and double NAT, and why testing from inside your own network gives you the wrong answer." />
+  <title>Port Forwarding Not Working? Test Every Link in the Chain</title>
+  <link rel="canonical" href="https://netdebug.app/blog/port-forwarding-not-working.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Port Forwarding Not Working? Test Every Link in the Chain" />
+  <meta property="og:description" content="Port forwarding set up correctly but still closed? Learn the seven conditions a connection must survive, how to spot CGNAT and double NAT, and why testing from inside your own network gives you the wrong answer." />
+  <meta property="og:url" content="https://netdebug.app/blog/port-forwarding-not-working.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Networking" />
+  <meta property="article:tag" content="port forwarding not working" />
+  <meta property="article:tag" content="how to check if a port is open" />
+  <meta property="article:tag" content="cgnat" />
+  <meta property="article:tag" content="double nat" />
+  <meta property="article:tag" content="port forwarding test" />
+  <meta property="article:tag" content="open port checker" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Port Forwarding Not Working? Test Every Link in the Chain" />
+  <meta name="twitter:description" content="Port forwarding set up correctly but still closed? Learn the seven conditions a connection must survive, how to spot CGNAT and double NAT, and why testing from inside your own network gives you the wrong answer." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Port Forwarding Not Working? Test Every Link in the Chain",
+  "headline": "Port forwarding not working? Test every link in the chain",
+  "description": "Port forwarding set up correctly but still closed? Learn the seven conditions a connection must survive, how to spot CGNAT and double NAT, and why testing from inside your own network gives you the wrong answer.",
+  "url": "https://netdebug.app/blog/port-forwarding-not-working.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "port forwarding not working, how to check if a port is open, cgnat, double nat, port forwarding test, open port checker",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Port forwarding not working? Test every link in the chain",
+      "item": "https://netdebug.app/blog/port-forwarding-not-working.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I check if a port is really open?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The test has to come from outside your network. Use a service that connects back to your public IP on that port, a friend on a different connection, or your phone on cellular with Wi-Fi off. Testing from inside your own LAN depends on NAT loopback and gives unreliable results."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is my port still closed after setting up forwarding?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually one of these: the service is not listening or is bound to localhost, the host firewall blocks it, the internal IP changed, your router does not hold the real public IP because of double NAT or CGNAT, or your ISP blocks that port."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is CGNAT and how do I know if I am behind it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Carrier grade NAT puts many customers behind one shared public IP, so inbound connections cannot be delivered to you. Compare your router's WAN address with your actual public IP. If the WAN address is in the 100.64.0.0 to 100.127.255.255 range, that is CGNAT."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I port forward if I am behind CGNAT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not with router settings alone. Your options are to ask your ISP for a public or static IP address, to use IPv6 if both ends support it, or to use a relay or mesh VPN service where both sides make outbound connections."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is double NAT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two devices performing NAT in series, usually an ISP supplied modem and router combo with your own router behind it. Forwarding a port on the inner router does nothing because the outer one never passes the traffic along. Putting the ISP device in bridge mode is the usual fix."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my port work for some services but not others?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check whether the service needs UDP as well as TCP. Many game and voice servers do, and a TCP only rule produces connections that establish and then stall. Also check whether your ISP blocks the specific port: 25, 80 and 443 are commonly blocked on residential plans."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Networking</span>
+        <h1>Port forwarding not working? Test every link in the chain</h1>
+        <p class="standfirst">The rule is probably fine. The problem is usually somewhere else in a chain of seven things, and one ten second check rules out the most common cause.</p>
+        <div class="post-meta">
+          <span>7 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>You added the rule. External port 25565, internal 192.168.1.40, TCP, enabled. You saved it, you rebooted the router twice, and your friend still cannot connect. Port checking websites say the port is closed. Everything looks right and nothing works.</p>
+
+        <p>Port forwarding fails for about seven distinct reasons, and they produce nearly identical symptoms. The only way through is to test each link in the chain separately, from the inside out, and stop at the first one that fails. Here is that chain.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#chain">The chain a connection has to survive</a></li>
+            <li><a href="#test-order">Test it in this order</a></li>
+            <li><a href="#cgnat">CGNAT: the reason it may be impossible</a></li>
+            <li><a href="#double-nat">Double NAT</a></li>
+            <li><a href="#other">The other usual suspects</a></li>
+            <li><a href="#loopback">Why testing from inside your own network lies to you</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="chain">The chain a connection has to survive</h2>
+
+        <p>For someone on the internet to reach a service in your house, every one of these has to be true:</p>
+
+        <ol>
+          <li>The service is running and listening on the port you think it is.</li>
+          <li>The host's own firewall allows inbound connections on that port.</li>
+          <li>The device has the internal IP address the forwarding rule points at, and that address has not changed.</li>
+          <li>The router's rule is correct: right protocol, right internal address, right port, enabled.</li>
+          <li>Your router holds a real public IP address, not a private one handed to it by another device or by your ISP.</li>
+          <li>Your ISP is not blocking that port.</li>
+          <li>There is only one NAT layer between the internet and the device.</li>
+        </ol>
+
+        <p>Seven conditions. Most guides check number four and stop, which is why so many people end up convinced their router is broken.</p>
+
+        <h2 id="test-order">Test it in this order</h2>
+
+        <ol class="steps">
+          <li>
+            <strong>Is the service even listening?</strong>
+            <p>From another device on the same network, connect to the internal address and port directly. The <a href="/docs/port-connect.html">TCP/UDP Connect</a> tool does exactly this: give it <code>192.168.1.40</code> and port <code>25565</code> and see whether the connection opens. If this fails, nothing else matters. The application is not running, it is bound to localhost only, or the host firewall is blocking it. Stop here and fix that first.</p>
+          </li>
+          <li>
+            <strong>Confirm the internal IP has not moved</strong>
+            <p>DHCP leases expire. A device that was <code>192.168.1.40</code> in January can be <code>192.168.1.57</code> in March, and your forwarding rule still points at the old address, which may now be someone's tablet. Run a <a href="/docs/lan-scan.html">LAN Scan</a> to see what is actually where, then set a DHCP reservation so it stops moving.</p>
+          </li>
+          <li>
+            <strong>Check what your public IP really is</strong>
+            <p>Open <a href="/docs/public-ip-geo-asn.html">Public IP and Geo/ASN</a> and note the address. Then log into your router and look at its WAN address. <strong>If these two do not match, port forwarding on that router cannot work</strong>, because your router is not the device the internet is talking to. This one check explains a huge share of failures and takes ten seconds.</p>
+          </li>
+          <li>
+            <strong>Ask the outside world to connect back</strong>
+            <p>This is the test that actually matters, and it cannot be done from inside your own network. <a href="/docs/external-port-check.html">External Port Check</a> asks a server on the internet to open a connection to a port on your public IP and reports what happened. Open means the whole chain works. Closed means something refused. Filtered or timed out means something silently dropped it, which usually points at a firewall or at CGNAT.</p>
+          </li>
+          <li>
+            <strong>Ask the router what it thinks it is doing</strong>
+            <p><a href="/docs/upnp-nat-pmp.html">UPnP and NAT-PMP discovery</a> queries the gateway and, when supported, reports the external IP address the gateway believes it has. If the gateway reports a private address there, you have confirmed double NAT or carrier grade NAT without logging into anything.</p>
+          </li>
+        </ol>
+
+<div class="ndt-launch" data-tool="portconnect" data-target="192.168.1.40" data-port="25565" data-protocol="tcp">
+          <a href="https://netdebug.app/open/portconnect?target=192.168.1.40&amp;port=25565&amp;protocol=tcp" rel="nofollow">Open TCP/UDP Connect in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># 1. Does the service answer on the LAN?</span>
+<span class="scheme">https://netdebug.app/open/</span>portconnect?<span class="key">target</span>=<span class="value">192.168.1.40</span>&amp;<span class="key">port</span>=<span class="value">25565</span>&amp;<span class="key">protocol</span>=<span class="value">tcp</span>
+
+<span class="comment"># 2. What does the internet see when it connects back to me?</span>
+<span class="scheme">https://netdebug.app/open/</span>reachme?<span class="key">port</span>=<span class="value">25565</span>
+
+<span class="comment"># 3. What does my gateway think its external address is?</span>
+<span class="scheme">https://netdebug.app/open/</span>upnp</code></pre>
+
+        <div class="app-cta">
+          <h3>Test from outside without a laptop</h3>
+          <p>External Port Check asks a server on the internet to connect back to your public IP, which is the only honest way to test a forwarding rule. Pair it with TCP/UDP Connect for the LAN side and UPnP discovery for the gateway, all in one app.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="cgnat">CGNAT: the reason it may be impossible</h2>
+
+        <p>Carrier grade NAT is the most common reason a perfectly configured forwarding rule does nothing, and most people have never heard of it.</p>
+
+        <p>IPv4 addresses ran out. Rather than give every customer a public address, many providers now put thousands of customers behind one shared public IP. Your router gets an address from a private range, your traffic gets translated again at the provider's equipment, and inbound connections have nowhere to be delivered. Outbound works perfectly, so nothing feels wrong until you try to host something.</p>
+
+        <p>How to spot it: compare your router's WAN address against your actual public IP. If the router's WAN address falls in one of these ranges, you are behind another NAT:</p>
+
+        <table>
+          <thead>
+            <tr><th>Range</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>100.64.0.0</code> to <code>100.127.255.255</code></td><td>Carrier grade NAT. Reserved specifically for this. A very strong signal.</td></tr>
+            <tr><td><code>10.x.x.x</code></td><td>Private. Either CGNAT or another router in front of yours.</td></tr>
+            <tr><td><code>192.168.x.x</code></td><td>Private. Almost always a second router or an ISP modem in router mode.</td></tr>
+            <tr><td><code>172.16.x.x</code> to <code>172.31.x.x</code></td><td>Private. Same story.</td></tr>
+          </tbody>
+        </table>
+
+        <p>If you are behind CGNAT, no router setting will fix it. Your options are to ask your ISP for a public IP address (often available, sometimes for a small fee, sometimes called a static or business IP), to use IPv6 if both ends support it, or to use a relay service such as a tunnel or a mesh VPN that establishes connections outbound from both sides.</p>
+
+        <h2 id="double-nat">Double NAT</h2>
+
+        <p>The domestic version of the same problem. Your ISP supplied a combined modem and router, and you plugged your own router into it. Now there are two devices doing NAT, and forwarding a port on the inner one gets you nowhere because the outer one never sends the traffic along.</p>
+
+        <p>The fix is one of three things: put the ISP device into bridge or modem mode so your router receives the public address directly, set up a matching forwarding rule on both devices, or configure the ISP device to send all unsolicited inbound traffic to your router's address. Bridge mode is the cleanest, and most ISP devices support it even if the option is buried.</p>
+
+        <h2 id="other">The other usual suspects</h2>
+
+        <h3>The host firewall</h3>
+        <p>Windows Defender Firewall blocks inbound connections by default, and it has separate rule sets for private and public network profiles. A machine that decided it was on a "public" network will refuse connections it would otherwise allow. On Linux, check iptables or nftables. On a Mac, check the application firewall.</p>
+
+        <h3>The service is bound to localhost</h3>
+        <p>Many applications listen on <code>127.0.0.1</code> by default, which means they accept connections only from the machine itself. It works when you test locally and fails from everywhere else. The configuration usually needs to be <code>0.0.0.0</code> or the machine's LAN address.</p>
+
+        <h3>TCP forwarded, UDP needed</h3>
+        <p>Game servers, voice servers, VPN endpoints and DNS often need UDP, sometimes as well as TCP. A rule that only covers TCP will half work in a way that is genuinely confusing: the connection establishes and then nothing happens. Check what your service needs, and test with the right protocol.</p>
+
+        <h3>The ISP blocks the port</h3>
+        <p>Port 25 is blocked almost universally to limit spam. Ports 80 and 443 are frequently blocked on residential plans. Some providers block 445 and 137 through 139 for security reasons. If a high, unusual port works and a well known one does not, that is the signature. Moving the service to a non standard port is usually the fastest workaround.</p>
+
+        <h3>Your public IP changed</h3>
+        <p>Most residential connections have dynamic addresses. The rule still works, but whoever is connecting is using an address that now belongs to someone else. Dynamic DNS solves this permanently.</p>
+
+        <h2 id="loopback">Why testing from inside your own network lies to you</h2>
+
+        <p>If you connect to your own public IP from inside your own network, you are asking the router to send a packet out and immediately bring it back in. This is called NAT loopback or hairpinning, and plenty of routers do not support it. The test fails even though everything is configured correctly, and you spend an hour fixing something that was never broken.</p>
+
+        <p>The reverse trap is worse: some routers handle loopback fine, so the test succeeds from inside while the outside world still cannot reach you. Either way, an inside test tells you nothing reliable.</p>
+
+        <p>The only meaningful test comes from outside. That means a port checking service, a friend on a different network, your phone on cellular data with Wi-Fi turned off, or a tool like External Port Check that has a server on the internet do the connecting for you.</p>
+
+        <h2>The short version</h2>
+
+        <p>Work outward, not inward. Confirm the service answers on the LAN, confirm the internal IP has not drifted, then compare your router's WAN address with your real public IP. If those two differ, stop configuring and start dealing with double NAT or CGNAT, because nothing else you do will help. And never trust a test run from inside your own network.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>How do I check if a port is really open?</h3>
+          <p>The test has to come from outside your network. Use a service that connects back to your public IP on that port, a friend on a different connection, or your phone on cellular with Wi-Fi off. Testing from inside your own LAN depends on NAT loopback and gives unreliable results.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why is my port still closed after setting up forwarding?</h3>
+          <p>Usually one of these: the service is not listening or is bound to localhost, the host firewall blocks it, the internal IP changed, your router does not hold the real public IP because of double NAT or CGNAT, or your ISP blocks that port.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is CGNAT and how do I know if I am behind it?</h3>
+          <p>Carrier grade NAT puts many customers behind one shared public IP, so inbound connections cannot be delivered to you. Compare your router's WAN address with your actual public IP. If the WAN address is in the 100.64.0.0 to 100.127.255.255 range, that is CGNAT.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I port forward if I am behind CGNAT?</h3>
+          <p>Not with router settings alone. Your options are to ask your ISP for a public or static IP address, to use IPv6 if both ends support it, or to use a relay or mesh VPN service where both sides make outbound connections.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is double NAT?</h3>
+          <p>Two devices performing NAT in series, usually an ISP supplied modem and router combo with your own router behind it. Forwarding a port on the inner router does nothing because the outer one never passes the traffic along. Putting the ISP device in bridge mode is the usual fix.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why does my port work for some services but not others?</h3>
+          <p>Check whether the service needs UDP as well as TCP. Many game and voice servers do, and a TCP only rule produces connections that establish and then stall. Also check whether your ISP blocks the specific port: 25, 80 and 443 are commonly blocked on residential plans.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/wifi-connected-but-no-internet.html">Wi-Fi connected but no internet: four tests</a>
+          <a href="/blog/who-is-on-my-wifi.html">Who is on my Wi-Fi? Listing every device</a>
+          <a href="/docs/external-port-check.html">External Port Check documentation</a>
+          <a href="/docs/port-connect.html">TCP/UDP Connect documentation</a>
+          <a href="/blog/should-i-disable-upnp.html">Should you disable UPnP?</a>
+          <a href="/blog/self-hosting-behind-cgnat.html">Self-hosting behind CGNAT</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

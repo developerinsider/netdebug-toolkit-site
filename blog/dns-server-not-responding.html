@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="DNS server isn&#x27;t responding, DNS_PROBE_FINISHED_NXDOMAIN or ERR_NAME_NOT_RESOLVED? Learn what each DNS error means and use one two-resolver test to find out whether the fault is yours or the domain&#x27;s." />
+  <title>DNS Server Not Responding: What It Means and How to Fix It</title>
+  <link rel="canonical" href="https://netdebug.app/blog/dns-server-not-responding.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="DNS Server Not Responding: What It Means and How to Fix It" />
+  <meta property="og:description" content="DNS server isn&#x27;t responding, DNS_PROBE_FINISHED_NXDOMAIN or ERR_NAME_NOT_RESOLVED? Learn what each DNS error means and use one two-resolver test to find out whether the fault is yours or the domain&#x27;s." />
+  <meta property="og:url" content="https://netdebug.app/blog/dns-server-not-responding.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="DNS" />
+  <meta property="article:tag" content="dns server not responding" />
+  <meta property="article:tag" content="dns_probe_finished_nxdomain" />
+  <meta property="article:tag" content="err_name_not_resolved" />
+  <meta property="article:tag" content="how to fix dns" />
+  <meta property="article:tag" content="dns lookup" />
+  <meta property="article:tag" content="nxdomain" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DNS Server Not Responding: What It Means and How to Fix It" />
+  <meta name="twitter:description" content="DNS server isn&#x27;t responding, DNS_PROBE_FINISHED_NXDOMAIN or ERR_NAME_NOT_RESOLVED? Learn what each DNS error means and use one two-resolver test to find out whether the fault is yours or the domain&#x27;s." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "DNS Server Not Responding: What It Means and How to Fix It",
+  "headline": "DNS server not responding: what it actually means and how to fix it",
+  "description": "DNS server isn't responding, DNS_PROBE_FINISHED_NXDOMAIN or ERR_NAME_NOT_RESOLVED? Learn what each DNS error means and use one two-resolver test to find out whether the fault is yours or the domain's.",
+  "url": "https://netdebug.app/blog/dns-server-not-responding.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "dns server not responding, dns_probe_finished_nxdomain, err_name_not_resolved, how to fix dns, dns lookup, nxdomain",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "DNS server not responding: what it actually means and how to fix it",
+      "item": "https://netdebug.app/blog/dns-server-not-responding.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does DNS_PROBE_FINISHED_NXDOMAIN mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NXDOMAIN means a DNS resolver answered your query and the answer was that the name does not exist. The usual causes are a typo, an expired domain, a deleted record, or a hostname that only exists on an internal network you are not connected to."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I know if the DNS problem is mine or the website's?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Resolve the same name twice: once against your normal resolver and once against a public one such as 1.1.1.1. If the public resolver works and yours does not, the fault is on your network. If both fail the same way, the problem is with the domain."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between SERVFAIL and NXDOMAIN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NXDOMAIN is a definitive answer that the name does not exist. SERVFAIL means the resolver tried and could not complete the lookup, often because of a DNSSEC validation failure or because the domain's authoritative nameservers are unreachable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I change my DNS server to 1.1.1.1 or 8.8.8.8?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is a reasonable move if your router's built in forwarder or your ISP's resolver is unreliable. Both are fast, public and well maintained. Set them in your router's DHCP settings so every device on the network gets them, rather than configuring each device separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does a site resolve on my phone but not my laptop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The two devices are probably using different resolvers. Encrypted DNS in a browser, a VPN, a content filter or a manually set DNS entry can all override what the network handed out. Compare the resolver each device is actually using before blaming the network."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does it take for a DNS change to take effect?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Up to the record's TTL, which is published with the record itself. A TTL of 3600 means resolvers are allowed to serve the old answer for an hour after you change it. Check the TTL with a record explorer rather than guessing."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">DNS</span>
+        <h1>DNS server not responding: what it actually means and how to fix it</h1>
+        <p class="standfirst">NXDOMAIN, SERVFAIL, timeout and REFUSED are four different problems wearing the same costume. Here is how to tell them apart in about ten seconds.</p>
+        <div class="post-meta">
+          <span>7 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <div class="symptom">
+          <div class="symptom-label">What you see</div>
+          <p>DNS server isn't responding<br />DNS_PROBE_FINISHED_NXDOMAIN<br />ERR_NAME_NOT_RESOLVED<br />Safari can't find the server</p>
+        </div>
+
+        <p>All four of those messages mean the same thing underneath: your device asked "what is the IP address for this name" and did not get a usable answer back. Everything else about your connection can be perfectly fine. The cable is plugged in, the Wi-Fi is strong, packets are flowing. You just cannot turn a name into a number, and since almost nothing on the internet is reached by raw IP any more, the whole thing looks like an outage.</p>
+
+        <p>DNS problems are worth understanding properly because they masquerade as so many other things. "The internet is slow." "This one site is down." "Email stopped working." "The app says no connection." All of those can be DNS, and all of them get misdiagnosed for hours by people restarting routers.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#what-happens">What actually happens when you type a name</a></li>
+            <li><a href="#which-error">Which error are you getting?</a></li>
+            <li><a href="#the-test">The one test that splits the problem in half</a></li>
+            <li><a href="#your-side">If it is your side</a></li>
+            <li><a href="#their-side">If it is the domain's side</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="what-happens">What actually happens when you type a name</h2>
+
+        <p>The chain is longer than most people expect, and any link in it can break independently.</p>
+
+        <ol>
+          <li>Your device checks its own cache. Recently visited names may never leave the machine.</li>
+          <li>It sends a query to the resolver it was handed by DHCP. On a home network that is almost always the router's own address.</li>
+          <li>The router forwards the query to your ISP's resolver, or to whatever resolver it was configured with.</li>
+          <li>That resolver, if it does not already know the answer, walks the hierarchy: root servers, then the top level domain servers for .com or .app, then the authoritative nameservers for the domain itself.</li>
+          <li>The authoritative server returns the record, which gets cached at every step on the way back with a lifetime set by the record's TTL.</li>
+        </ol>
+
+        <p>Five hops, at least three caches, two or more organisations. "DNS is broken" could mean any one of them.</p>
+
+        <h2 id="which-error">Which error are you getting?</h2>
+
+        <p>The exact wording narrows things down a lot, so it is worth reading instead of skimming.</p>
+
+        <table>
+          <thead>
+            <tr><th>Message</th><th>What it means</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>NXDOMAIN</strong> (<code>DNS_PROBE_FINISHED_NXDOMAIN</code>)</td><td>A resolver answered, and the answer was "this name does not exist." Usually a typo, an expired domain, a record that was deleted, or a name that only exists on an internal network you are not currently on.</td></tr>
+            <tr><td><strong>SERVFAIL</strong></td><td>A resolver tried and failed. Often a DNSSEC validation failure, or the authoritative nameservers are unreachable or misconfigured.</td></tr>
+            <tr><td><strong>Timeout</strong> / "DNS server isn't responding"</td><td>No answer came back at all. The resolver you are pointed at is down, unreachable, or being blocked. This is the most common home network case.</td></tr>
+            <tr><td><strong>REFUSED</strong></td><td>The server you asked is working but will not answer queries from you. Common when a device is pointed at a resolver that only serves a different network.</td></tr>
+            <tr><td><strong>Resolves, but to the wrong address</strong></td><td>Stale cache, a hosts file entry, a split horizon setup, or DNS hijacking by a network you do not control.</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="the-test">The one test that splits the problem in half</h2>
+
+        <p>Here is the trick that saves the most time: <strong>resolve the same name twice, against two different resolvers.</strong> Once with whatever your network gave you, and once explicitly against a public one like <code>1.1.1.1</code> or <code>8.8.8.8</code>.</p>
+
+        <p>The <a href="/docs/dns-lookup.html">DNS Lookup</a> tool has a custom server field for exactly this. Two lookups, ten seconds, and the answer is immediately obvious:</p>
+
+        <table>
+          <thead>
+            <tr><th>Default resolver</th><th>1.1.1.1</th><th>Verdict</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Fails</td><td>Works</td><td><strong>Your resolver is the problem.</strong> Router DNS forwarder stuck, ISP resolver down, or a filtering service blocking it. Change DNS and move on.</td></tr>
+            <tr><td>Fails</td><td>Fails</td><td><strong>The domain is the problem</strong>, or nothing is getting out of your network at all. Check that you can ping 1.1.1.1 first.</td></tr>
+            <tr><td>Works</td><td>Works</td><td>DNS is fine. Your problem is somewhere else: routing, TLS, the server itself.</td></tr>
+            <tr><td>Different answers</td><td>Different answers</td><td>Something is intercepting or rewriting your DNS, or you are looking at a record mid propagation.</td></tr>
+          </tbody>
+        </table>
+
+        <p>Two lookups. That single comparison eliminates half the possible causes before you touch a single setting.</p>
+
+<div class="ndt-launch" data-tool="dns" data-target="example.com">
+          <a href="https://netdebug.app/open/dns?target=example.com" rel="nofollow">Open DNS Lookup in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># Same name, two resolvers</span>
+<span class="scheme">https://netdebug.app/open/</span>dns?<span class="key">target</span>=<span class="value">example.com</span>
+<span class="scheme">https://netdebug.app/open/</span>dns?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">server</span>=<span class="value">1.1.1.1</span></code></pre>
+
+        <div class="app-cta">
+          <h3>Compare resolvers without leaving your phone</h3>
+          <p>NetDebug Toolkit's DNS Lookup takes a custom resolver address, so you can test your router, your ISP and a public resolver side by side. DNS Record Explorer pulls A, AAAA, CNAME, MX, TXT, NS and SRV records with their TTLs in one pass.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="your-side">If it is your side</h2>
+
+        <h3>The router's DNS forwarder has wedged</h3>
+        <p>This is the single most common cause on home networks and it is maddening because nothing looks wrong. Consumer routers run a small forwarding resolver, and after weeks of uptime it can stop answering while continuing to route traffic normally. Everything else works. Names stop resolving.</p>
+        <p>The fix is a router reboot, and the long term fix is to stop depending on it: set your router's DHCP to hand out <code>1.1.1.1</code> and <code>1.0.0.1</code>, or <code>8.8.8.8</code> and <code>8.8.4.4</code>, directly to clients.</p>
+
+        <h3>Your ISP's resolver is having a bad day</h3>
+        <p>ISP resolvers go down more often than people realise, and the failures are frequently partial: some names resolve, some do not, some take four seconds. If your router forwards to the ISP, you inherit all of that. The two resolver comparison above catches it immediately.</p>
+
+        <h3>A VPN, profile or filtering app is intercepting queries</h3>
+        <p>Anything that installs a DNS proxy (a VPN, a content filter, a parental control app, an ad blocker that works at the DNS layer) becomes a new single point of failure. A VPN that disconnected badly and left its resolver configured behind is a classic. If the problem follows your device to a different network, this is almost certainly it.</p>
+
+        <h3>DNS over HTTPS is quietly doing something else</h3>
+        <p>Modern browsers and iOS can use encrypted DNS that bypasses the resolver your network handed out. That means the browser and the rest of the system can disagree about whether DNS works. If one app resolves a name and another does not, check for encrypted DNS settings before blaming the network.</p>
+
+        <h3>Stale cache after a change</h3>
+        <p>If the site moved recently and you are still hitting the old address, you are looking at a cached record. Check the TTL in the <a href="/docs/dns-record-explorer.html">DNS Record Explorer</a>: it tells you exactly how many seconds that answer is allowed to live. A 3600 second TTL means an hour of patience in the worst case.</p>
+
+        <h2 id="their-side">If it is the domain's side</h2>
+
+        <p>When a public resolver also fails, the problem is not yours to fix, but it is still worth identifying so you stop trying.</p>
+
+        <h3>The domain expired</h3>
+        <p>Domains fall off a cliff when they expire: the registry pulls the delegation and every lookup returns NXDOMAIN. A quick <a href="/docs/whois.html">Whois</a> lookup shows the expiry date and the registrar. If you own the domain, you now know exactly who to call and what to pay.</p>
+
+        <h3>The nameservers are wrong or unreachable</h3>
+        <p>Pull the NS records with the DNS Record Explorer and then try resolving the domain directly against one of those nameservers. If the NS records point somewhere that no longer serves the zone (a very common outcome after moving hosts) you get failures that look random because different resolvers have cached different states.</p>
+
+        <h3>DNSSEC is misconfigured</h3>
+        <p>When a zone's DNSSEC signatures are stale or the delegation is broken, validating resolvers return SERVFAIL while non validating resolvers answer normally. If <code>8.8.8.8</code> fails but a different resolver succeeds, suspect DNSSEC. It tends to break at exactly 2am on the day a key rolls over.</p>
+
+        <h3>The record was never created</h3>
+        <p>New subdomain, new service, someone forgot the record or created it on the wrong zone. The Record Explorer showing nothing for a name that should exist is a much faster answer than clicking through a hosting control panel.</p>
+
+        <h2>A checklist you can actually follow</h2>
+
+        <ol class="steps">
+          <li>
+            <strong>Confirm the network works at all</strong>
+            <p>Ping <code>1.1.1.1</code>. If that fails, stop. You do not have a DNS problem, you have a connectivity problem.</p>
+          </li>
+          <li>
+            <strong>Resolve the name against your default resolver</strong>
+            <p>Note the exact failure: timeout, NXDOMAIN, SERVFAIL. The wording matters.</p>
+          </li>
+          <li>
+            <strong>Resolve it again against 1.1.1.1</strong>
+            <p>Works? The problem is your resolver. Fails the same way? The problem is the domain.</p>
+          </li>
+          <li>
+            <strong>Pull the full record set</strong>
+            <p>A, AAAA, CNAME, NS and TTL. This tells you whether the record exists, where it points and how long the answer sticks around.</p>
+          </li>
+          <li>
+            <strong>Check the domain itself if everything upstream is clean</strong>
+            <p>Whois for expiry and registrar, NS records for delegation. Two lookups, and you know whether to wait, call someone, or fix your own settings.</p>
+          </li>
+        </ol>
+
+        <p>Save that sequence as an automation and it becomes a single tap the next time someone tells you a site is down. Every run gets timestamped in <a href="/docs/run-history.html">Run History</a>, which is surprisingly useful when a problem is intermittent and you need to prove it happened.</p>
+
+        <h2>The short version</h2>
+
+        <p>DNS failures are not one problem, they are five. Read the exact error, then resolve the same name against two different resolvers. That single comparison tells you whether to change a setting on your own network or go looking at the domain. Everything after that is just following the trail.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>What does DNS_PROBE_FINISHED_NXDOMAIN mean?</h3>
+          <p>NXDOMAIN means a DNS resolver answered your query and the answer was that the name does not exist. The usual causes are a typo, an expired domain, a deleted record, or a hostname that only exists on an internal network you are not connected to.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I know if the DNS problem is mine or the website's?</h3>
+          <p>Resolve the same name twice: once against your normal resolver and once against a public one such as 1.1.1.1. If the public resolver works and yours does not, the fault is on your network. If both fail the same way, the problem is with the domain.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the difference between SERVFAIL and NXDOMAIN?</h3>
+          <p>NXDOMAIN is a definitive answer that the name does not exist. SERVFAIL means the resolver tried and could not complete the lookup, often because of a DNSSEC validation failure or because the domain's authoritative nameservers are unreachable.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Should I change my DNS server to 1.1.1.1 or 8.8.8.8?</h3>
+          <p>It is a reasonable move if your router's built in forwarder or your ISP's resolver is unreliable. Both are fast, public and well maintained. Set them in your router's DHCP settings so every device on the network gets them, rather than configuring each device separately.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why does a site resolve on my phone but not my laptop?</h3>
+          <p>The two devices are probably using different resolvers. Encrypted DNS in a browser, a VPN, a content filter or a manually set DNS entry can all override what the network handed out. Compare the resolver each device is actually using before blaming the network.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How long does it take for a DNS change to take effect?</h3>
+          <p>Up to the record's TTL, which is published with the record itself. A TTL of 3600 means resolvers are allowed to serve the old answer for an hour after you change it. Check the TTL with a record explorer rather than guessing.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/wifi-connected-but-no-internet.html">Wi-Fi connected but no internet: four tests</a>
+          <a href="/blog/dns-propagation-explained.html">DNS propagation: why your new record is not live yet</a>
+          <a href="/docs/dns-lookup.html">DNS Lookup tool documentation</a>
+          <a href="/docs/dns-record-explorer.html">DNS Record Explorer documentation</a>
+          <a href="/blog/is-a-website-down-or-just-me.html">Is the website down, or just you?</a>
+          <a href="/blog/homelab-internal-dns.html">Internal DNS for a homelab</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

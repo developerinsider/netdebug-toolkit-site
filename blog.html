@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Practical guides to the network problems everyone runs into: Wi-Fi with no internet, DNS failures, packet loss, high ping, port forwarding, certificate errors, slow connections and device discovery. Written for people holding a phone, not a packet capture." />
+  <title>Blog | NetDebug Toolkit</title>
+  <link rel="canonical" href="https://netdebug.app/blog.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Blog | NetDebug Toolkit" />
+  <meta property="og:description" content="Practical guides to the network problems everyone runs into: Wi-Fi with no internet, DNS failures, packet loss, high ping, port forwarding, certificate errors, slow connections and device discovery." />
+  <meta property="og:url" content="https://netdebug.app/blog.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Blog | NetDebug Toolkit" />
+  <meta name="twitter:description" content="Practical guides to the network problems everyone runs into: Wi-Fi with no internet, DNS failures, packet loss, high ping, port forwarding, certificate errors, slow connections and device discovery." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Blog | NetDebug Toolkit",
+  "description": "Practical guides to the network problems everyone runs into, written for people diagnosing them from a phone.",
+  "url": "https://netdebug.app/blog.html",
+  "inLanguage": "en",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": 30,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Wi-Fi connected but no internet: how to find the real cause in four tests",
+        "url": "https://netdebug.app/blog/wifi-connected-but-no-internet.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Is the website down, or just you? Four checks that settle it",
+        "url": "https://netdebug.app/blog/is-a-website-down-or-just-me.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "192.168.1.1 not working? How to actually reach your router",
+        "url": "https://netdebug.app/blog/router-admin-page-not-loading.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "Hotel Wi-Fi login page not showing? How to force the captive portal",
+        "url": "https://netdebug.app/blog/captive-portal-not-loading.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "High ping and lag: where the delay actually comes from",
+        "url": "https://netdebug.app/blog/high-ping-and-lag.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "Slow internet when the speed test says it's fine",
+        "url": "https://netdebug.app/blog/slow-internet-speed-test-fine.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 7,
+        "name": "How to test for packet loss, and what counts as too much",
+        "url": "https://netdebug.app/blog/how-to-test-packet-loss.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 8,
+        "name": "Video calls keep freezing? It is almost never your bandwidth",
+        "url": "https://netdebug.app/blog/video-calls-freezing-jitter.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 9,
+        "name": "How to test network speed between two computers",
+        "url": "https://netdebug.app/blog/test-network-speed-between-two-computers.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 10,
+        "name": "How to read a traceroute, and what the asterisks really mean",
+        "url": "https://netdebug.app/blog/how-to-read-a-traceroute.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 11,
+        "name": "DNS server not responding: what it actually means and how to fix it",
+        "url": "https://netdebug.app/blog/dns-server-not-responding.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 12,
+        "name": "DNS propagation: why your new record isn't live yet",
+        "url": "https://netdebug.app/blog/dns-propagation-explained.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 13,
+        "name": "Email going to spam? Check these three DNS records first",
+        "url": "https://netdebug.app/blog/email-going-to-spam-spf-dkim-dmarc.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 14,
+        "name": "WHOIS and RDAP: what you can still find out about a domain",
+        "url": "https://netdebug.app/blog/whois-lookup-guide.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 15,
+        "name": "502 Bad Gateway, 503 and 504: what each error actually means",
+        "url": "https://netdebug.app/blog/502-503-504-gateway-errors-explained.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 16,
+        "name": "\"Your connection is not private\": how to read SSL certificate errors",
+        "url": "https://netdebug.app/blog/ssl-certificate-error-connection-not-private.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 17,
+        "name": "Who is on my Wi-Fi? How to list every device on your network",
+        "url": "https://netdebug.app/blog/who-is-on-my-wifi.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 18,
+        "name": "AirPlay, Chromecast or printer not showing up on the network",
+        "url": "https://netdebug.app/blog/airplay-chromecast-not-showing-up.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 19,
+        "name": "Port forwarding not working? Test every link in the chain",
+        "url": "https://netdebug.app/blog/port-forwarding-not-working.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 20,
+        "name": "Wake-on-LAN not working? Here is the whole chain to check",
+        "url": "https://netdebug.app/blog/wake-on-lan-not-working.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 21,
+        "name": "Subnet mask and CIDR explained, without the binary",
+        "url": "https://netdebug.app/blog/subnet-mask-and-cidr-explained.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 22,
+        "name": "Should you disable UPnP? What the risk actually is",
+        "url": "https://netdebug.app/blog/should-i-disable-upnp.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 23,
+        "name": "Some websites won't load on VPN: the MTU problem nobody mentions",
+        "url": "https://netdebug.app/blog/vpn-slow-websites-hang-mtu.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 24,
+        "name": "Self-hosting behind CGNAT: how to reach your homelab anyway",
+        "url": "https://netdebug.app/blog/self-hosting-behind-cgnat.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 25,
+        "name": "HTTPS for homelab services, without the certificate warnings",
+        "url": "https://netdebug.app/blog/homelab-https-certificates.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 26,
+        "name": "Internal DNS for a homelab: the traps nobody warns you about",
+        "url": "https://netdebug.app/blog/homelab-internal-dns.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 27,
+        "name": "Why your Docker container isn't reachable",
+        "url": "https://netdebug.app/blog/docker-container-networking-problems.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 28,
+        "name": "VLANs for a homelab: what to segment, and what breaks",
+        "url": "https://netdebug.app/blog/homelab-vlan-segmentation.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 29,
+        "name": "Why your NAS or server keeps dropping off the network",
+        "url": "https://netdebug.app/blog/server-keeps-dropping-off-network.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 30,
+        "name": "Monitoring a homelab from outside it",
+        "url": "https://netdebug.app/blog/monitor-homelab-from-your-phone.html"
+      }
+    ]
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <div class="page-header blog-hero">
+      <span class="crumb">Blog</span>
+      <h1>Network problems, explained properly</h1>
+      <p>Guides to the things that actually go wrong: Wi-Fi that connects to nothing, DNS that stops answering, calls that stutter on a fast connection, ports that refuse to open. Every post walks through the tests in the order that narrows the problem down fastest.</p>
+    </div>
+
+    <main class="content">
+      <section class="section">
+        <h2>Start here</h2>
+        <p class="section-intro">When something is broken right now and you need to know where.</p>
+        <div class="blog-list">
+        <a class="blog-card" href="/blog/wifi-connected-but-no-internet.html">
+          <div class="post-meta">
+            <span class="tag">Troubleshooting</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Wi-Fi connected but no internet: how to find the real cause in four tests</h2>
+          <p>Full bars, no internet, and a warning that tells you nothing. Ping the gateway, ping a public IP, resolve a name, fetch a page. The first test that fails is the answer, and each failure points at a completely different fix.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/is-a-website-down-or-just-me.html">
+          <div class="post-meta">
+            <span class="tag">Web</span>
+            <span>6 min read</span>
+          </div>
+          <h2>Is the website down, or just you? Four checks that settle it</h2>
+          <p>A browser shows the same blank failure whether DNS broke, the connection was refused, the certificate expired or the server errored. Four checks separate them, and one more proves whether it is only you.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/router-admin-page-not-loading.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>7 min read</span>
+          </div>
+          <h2>192.168.1.1 not working? How to actually reach your router</h2>
+          <p>The address on the sticker is often wrong, and two of the most common causes are your VPN and your own browser forcing HTTPS. Work through this list before you reset anything and lose every setting.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/captive-portal-not-loading.html">
+          <div class="post-meta">
+            <span class="tag">Troubleshooting</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Hotel Wi-Fi login page not showing? How to force the captive portal</h2>
+          <p>Portals fail more often now because they work by hijacking DNS and redirecting plain HTTP, which is exactly what modern browsers and encrypted DNS are built to prevent. Here is how to force the login page out.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Speed, latency and call quality</h2>
+        <p class="section-intro">Why fast connections still feel slow, and how to measure the numbers that matter.</p>
+        <div class="blog-list">
+        <a class="blog-card" href="/blog/high-ping-and-lag.html">
+          <div class="post-meta">
+            <span class="tag">Performance</span>
+            <span>6 min read</span>
+          </div>
+          <h2>High ping and lag: where the delay actually comes from</h2>
+          <p>A faster plan almost never fixes lag, because lag is latency and latency is not bandwidth. Distance sets a floor you cannot beat, congestion causes the spikes, and a traceroute shows which one you are dealing with.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/slow-internet-speed-test-fine.html">
+          <div class="post-meta">
+            <span class="tag">Performance</span>
+            <span>6 min read</span>
+          </div>
+          <h2>Slow internet when the speed test says it's fine</h2>
+          <p>Speed tests answer one narrow question well and miss four others entirely: DNS delay, latency under load, jitter, and whether large packets survive the path. Test your LAN separately and the bottleneck usually appears immediately.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/how-to-test-packet-loss.html">
+          <div class="post-meta">
+            <span class="tag">Diagnostics</span>
+            <span>7 min read</span>
+          </div>
+          <h2>How to test for packet loss, and what counts as too much</h2>
+          <p>Speed tests are bad at finding loss, which is why calls freeze on connections that test perfectly. How to measure it properly, where to point the test, and why that scary looking middle hop in your traceroute is almost always lying.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/video-calls-freezing-jitter.html">
+          <div class="post-meta">
+            <span class="tag">Performance</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Video calls keep freezing? It is almost never your bandwidth</h2>
+          <p>A call needs a few megabits, so capacity is never the problem. It needs consistency, and a late packet is discarded exactly like a lost one. Measure during the call, and check your upload rather than your download.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/test-network-speed-between-two-computers.html">
+          <div class="post-meta">
+            <span class="tag">Performance</span>
+            <span>7 min read</span>
+          </div>
+          <h2>How to test network speed between two computers</h2>
+          <p>An internet speed test cannot measure your LAN. How to use iperf3 properly, what each link type should really deliver, and why a result of 94 Mbps points straight at a damaged cable rather than a slow network.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/how-to-read-a-traceroute.html">
+          <div class="post-meta">
+            <span class="tag">Diagnostics</span>
+            <span>9 min read</span>
+          </div>
+          <h2>How to read a traceroute, and what the asterisks really mean</h2>
+          <p>A row of asterisks is not a fault and one slow hop is not a bottleneck. The TTL trick behind traceroute explains why, and there are only four patterns in the output that are genuinely worth acting on.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>DNS and domains</h2>
+        <p class="section-intro">Name resolution, record changes, mail authentication and registrations.</p>
+        <div class="blog-list">
+        <a class="blog-card" href="/blog/dns-server-not-responding.html">
+          <div class="post-meta">
+            <span class="tag">DNS</span>
+            <span>7 min read</span>
+          </div>
+          <h2>DNS server not responding: what it actually means and how to fix it</h2>
+          <p>NXDOMAIN, SERVFAIL, REFUSED and a plain timeout are four different problems wearing the same costume. One comparison, resolving the same name against two resolvers, tells you whether to change a setting or go look at the domain.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/dns-propagation-explained.html">
+          <div class="post-meta">
+            <span class="tag">DNS</span>
+            <span>6 min read</span>
+          </div>
+          <h2>DNS propagation: why your new record isn't live yet</h2>
+          <p>Nothing propagates. Records change instantly at the authoritative server and slowly everywhere else, and the TTL tells you exactly how slowly. Plus the reason lowering the TTL after a change does absolutely nothing.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/email-going-to-spam-spf-dkim-dmarc.html">
+          <div class="post-meta">
+            <span class="tag">DNS</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Email going to spam? Check these three DNS records first</h2>
+          <p>SPF, DKIM and DMARC decide whether your mail is trusted before anyone reads a word of it. What each record does, the mistakes that quietly break them, and the alignment rule that fails messages while every individual check passes.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/whois-lookup-guide.html">
+          <div class="post-meta">
+            <span class="tag">DNS</span>
+            <span>7 min read</span>
+          </div>
+          <h2>WHOIS and RDAP: what you can still find out about a domain</h2>
+          <p>Privacy rules removed the contact details and left the operational facts, which were always more useful. Expiry dates, status codes, nameservers, and why a domain registered eleven days ago deserves suspicion.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Web servers and certificates</h2>
+        <p class="section-intro">Reading the errors a server sends you, and the ones your browser invents.</p>
+        <div class="blog-list">
+        <a class="blog-card" href="/blog/502-503-504-gateway-errors-explained.html">
+          <div class="post-meta">
+            <span class="tag">Web</span>
+            <span>8 min read</span>
+          </div>
+          <h2>502 Bad Gateway, 503 and 504: what each error actually means</h2>
+          <p>All four are the server's fault, not your connection. 502 is a broken answer, 504 is no answer, 503 is usually a decision. Plus what Cloudflare's 520 to 526 codes actually mean when you see them.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/ssl-certificate-error-connection-not-private.html">
+          <div class="post-meta">
+            <span class="tag">Security</span>
+            <span>6 min read</span>
+          </div>
+          <h2>"Your connection is not private": how to read SSL certificate errors</h2>
+          <p>Each error code points at a different cause and a different person who can fix it. If several sites break at once, check your clock before anything else, and learn why a site can work in your browser and fail for everyone on a phone.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Home network and security</h2>
+        <p class="section-intro">Devices, discovery, ports and the settings worth changing.</p>
+        <div class="blog-list">
+        <a class="blog-card" href="/blog/who-is-on-my-wifi.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>6 min read</span>
+          </div>
+          <h2>Who is on my Wi-Fi? How to list every device on your network</h2>
+          <p>Thirty devices in an average home is normal now, and most people cannot name half of them. How to scan your subnet, identify what you find, and why an unfamiliar MAC address means much less than it used to.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/airplay-chromecast-not-showing-up.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>6 min read</span>
+          </div>
+          <h2>AirPlay, Chromecast or printer not showing up on the network</h2>
+          <p>A device that is reachable but invisible has a discovery problem, not a connection problem. Multicast does not cross subnets, client isolation kills it entirely, and on iOS one declined permission prompt makes a single app blind.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/port-forwarding-not-working.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Port forwarding not working? Test every link in the chain</h2>
+          <p>The rule is probably fine. A connection from the internet has to survive seven separate conditions, and one ten second comparison between your router's WAN address and your real public IP rules out the most common cause of all.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/wake-on-lan-not-working.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>8 min read</span>
+          </div>
+          <h2>Wake-on-LAN not working? Here is the whole chain to check</h2>
+          <p>Magic packets are fire and forget, so nothing tells you which prerequisite failed. The broadcast address is usually the culprit, and Windows Fast Startup explains why waking from sleep works and waking from shutdown never does.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/subnet-mask-and-cidr-explained.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Subnet mask and CIDR explained, without the binary</h2>
+          <p>What /24 really means, why you always lose two addresses, and the one subnet choice that quietly breaks VPNs for thousands of people. Subnetting explained as a question rather than a conversion table.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/should-i-disable-upnp.html">
+          <div class="post-meta">
+            <span class="tag">Security</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Should you disable UPnP? What the risk actually is</h2>
+          <p>The advice online is split because the two sides describe different threats. What UPnP actually does, which warnings are real, and how to check what your router is genuinely exposing rather than guessing.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/vpn-slow-websites-hang-mtu.html">
+          <div class="post-meta">
+            <span class="tag">Networking</span>
+            <span>6 min read</span>
+          </div>
+          <h2>Some websites won't load on VPN: the MTU problem nobody mentions</h2>
+          <p>Ping works, small pages load, large transfers hang forever on exactly the same sites every time. That deterministic pattern is an MTU black hole, and it is fixed with one number rather than a different VPN provider.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Homelab and self-hosting</h2>
+        <p class="section-intro">Running services at home: exposure, certificates, DNS, containers and segmentation.</p>
+        <div class="blog-list">
+        <a class="blog-card" href="/blog/self-hosting-behind-cgnat.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>8 min read</span>
+          </div>
+          <h2>Self-hosting behind CGNAT: how to reach your homelab anyway</h2>
+          <p>The forwarding rule was probably never the problem. One comparison tells you whether your ISP gave you an address inbound traffic can reach, and the five real options once you know it did not.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/homelab-https-certificates.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>7 min read</span>
+          </div>
+          <h2>HTTPS for homelab services, without the certificate warnings</h2>
+          <p>Real, publicly trusted certificates on services nobody outside your network can reach, with no open ports and no warnings on any device. Plus why a DNS zone on .local will never work reliably.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/homelab-internal-dns.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Internal DNS for a homelab: the traps nobody warns you about</h2>
+          <p>Your own resolver gives you real names, split horizon and network wide blocking. It also makes you responsible for the most load bearing service on the network, and a second DNS entry is not the backup you think it is.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/docker-container-networking-problems.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Why your Docker container isn't reachable</h2>
+          <p>Container running, logs clean, nothing can connect. The four network modes, the localhost binding trap, why containers cannot see your internal DNS, and why Docker quietly outranks your firewall.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/homelab-vlan-segmentation.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>7 min read</span>
+          </div>
+          <h2>VLANs for a homelab: what to segment, and what breaks</h2>
+          <p>Creating the VLANs takes an evening. Finding everything that quietly depended on a flat network takes a fortnight. Here is that list up front, along with rules that make sense and how to test them.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/server-keeps-dropping-off-network.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Why your NAS or server keeps dropping off the network</h2>
+          <p>By the time you go and look, it is fine again. Catch what actually stops, then check the five settings responsible for nearly all of it, starting with a static IP sitting inside the DHCP pool.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+
+        <a class="blog-card" href="/blog/monitor-homelab-from-your-phone.html">
+          <div class="post-meta">
+            <span class="tag">Homelab</span>
+            <span>7 min read</span>
+          </div>
+          <h2>Monitoring a homelab from outside it</h2>
+          <p>Monitoring that runs inside your homelab cannot see expired certificates, stale DNS or a dropped tunnel. Five checks from a phone on cellular data can, and they chain into a single tap.</p>
+          <span class="read-more">Read the post</span>
+        </a>
+        </div>
+      </section>
+
+      <div class="callout">
+        <strong>Looking for tool reference instead?</strong> The <a href="/docs.html">documentation</a> covers every tool in the app, with inputs, options, output and the full deeplink parameter table.
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/docs.html">Docs</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

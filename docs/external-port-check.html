@@ -84,6 +84,7 @@
   ]
 }
   </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
 </head>
 <body>
   <div class="glow-bg"></div>
@@ -98,6 +99,8 @@
       <div class="nav-links">
         <a href="../#tools">Tools</a>
         <a href="../docs.html" class="active">Docs</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../deeplink-generator.html">Generator</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>
@@ -189,6 +192,9 @@
             <li>Pair with UPnP / NAT-PMP to check whether your router can create the forward automatically, and with Port Scan to see what is open on a host from the inside.</li>
           </ul>
           <h4>Deeplink</h4>
+          <div class="ndt-launch" data-tool="reachme" data-port="8080">
+            <a href="https://netdebug.app/open/reachme?port=8080" rel="nofollow">Open External Port Check in NetDebug Toolkit</a>
+          </div>
 <pre class="deeplink-example"><code><span class="scheme">netdebug://</span>reachme?<span class="key">port</span>=<span class="value">8080</span></code></pre>
           <p>Tip: in the app, open the <strong>Export</strong> menu (the share icon) on this screen and choose <strong>Copy Deeplink</strong> to copy this link as a Universal Link with your current port already filled in.</p>
         </article>
@@ -199,6 +205,7 @@
     <footer>
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
+        <a href="../blog.html">Blog</a>
         <a href="../support.html">Support</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>

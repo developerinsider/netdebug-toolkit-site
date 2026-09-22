@@ -65,7 +65,7 @@
     }
 
     .wrap {
-      max-width: 860px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 0 24px;
       position: relative;
@@ -132,7 +132,10 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 36px 32px;
-      margin: 32px 0;
+      /* .wrap matches the rest of the site so the nav and footer line up;
+         the prose keeps its own narrower measure, centred inside it. */
+      max-width: 860px;
+      margin: 32px auto;
     }
 
     .content h1 {
@@ -259,6 +262,8 @@
       <div class="nav-links">
         <a href="/#tools">Tools</a>
         <a href="docs.html">Docs</a>
+        <a href="blog.html">Blog</a>
+        <a href="deeplink-generator.html">Generator</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html" class="active">Privacy</a>
@@ -308,6 +313,7 @@
       <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
       <nav>
         <a href="docs.html">Docs</a>
+        <a href="blog.html">Blog</a>
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>

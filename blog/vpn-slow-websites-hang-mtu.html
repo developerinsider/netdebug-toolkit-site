@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Ping works, small pages load and large transfers hang forever on the same sites every time? That is an MTU black hole. Learn how to measure your real path MTU and fix it with interface MTU or MSS clamping." />
+  <title>Some Websites Won&#x27;t Load on VPN: The MTU Problem</title>
+  <link rel="canonical" href="https://netdebug.app/blog/vpn-slow-websites-hang-mtu.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-itunes-app" content="app-id=6759454574" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="NetDebug Toolkit" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Some Websites Won&#x27;t Load on VPN: The MTU Problem" />
+  <meta property="og:description" content="Ping works, small pages load and large transfers hang forever on the same sites every time? That is an MTU black hole. Learn how to measure your real path MTU and fix it with interface MTU or MSS clamping." />
+  <meta property="og:url" content="https://netdebug.app/blog/vpn-slow-websites-hang-mtu.html" />
+  <meta property="og:image" content="https://netdebug.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NetDebug Toolkit &#8212; 20 network diagnostic tools in one app" />
+  <meta property="article:section" content="Networking" />
+  <meta property="article:tag" content="vpn slow websites not loading" />
+  <meta property="article:tag" content="mtu black hole" />
+  <meta property="article:tag" content="path mtu discovery" />
+  <meta property="article:tag" content="mss clamping" />
+  <meta property="article:tag" content="packet too big" />
+  <meta property="article:tag" content="wireguard mtu" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Some Websites Won&#x27;t Load on VPN: The MTU Problem" />
+  <meta name="twitter:description" content="Ping works, small pages load and large transfers hang forever on the same sites every time? That is an MTU black hole. Learn how to measure your real path MTU and fix it with interface MTU or MSS clamping." />
+  <meta name="twitter:image" content="https://netdebug.app/assets/og-image.png" />
+  <link rel="stylesheet" href="/docs/docs.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Some Websites Won't Load on VPN: The MTU Problem",
+  "headline": "Some websites won't load on VPN: the MTU problem nobody mentions",
+  "description": "Ping works, small pages load and large transfers hang forever on the same sites every time? That is an MTU black hole. Learn how to measure your real path MTU and fix it with interface MTU or MSS clamping.",
+  "url": "https://netdebug.app/blog/vpn-slow-websites-hang-mtu.html",
+  "inLanguage": "en",
+  "image": "https://netdebug.app/assets/og-image.png",
+  "keywords": "vpn slow websites not loading, mtu black hole, path mtu discovery, mss clamping, packet too big, wireguard mtu",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app/"
+  },
+  "about": {
+    "@type": "MobileApplication",
+    "name": "NetDebug Toolkit",
+    "url": "https://netdebug.app",
+    "installUrl": "https://apps.apple.com/app/id6759454574",
+    "operatingSystem": "iOS, iPadOS, tvOS",
+    "applicationCategory": "UtilitiesApplication"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer Insider",
+    "url": "https://developerinsider.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://netdebug.app/assets/icon-512.png"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "NetDebug Toolkit",
+      "item": "https://netdebug.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://netdebug.app/blog.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Some websites won't load on VPN: the MTU problem nobody mentions",
+      "item": "https://netdebug.app/blog/vpn-slow-websites-hang-mtu.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why do some websites not load when my VPN is connected?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A VPN adds headers to every packet, which reduces the space left for your data. If the path also drops oversized packets without sending an ICMP 'packet too big' message, large transfers stall silently while small ones work. That is an MTU black hole."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is an MTU black hole?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is a path where oversized packets are discarded without any error being returned. The sender never learns the packet was too big, so it retransmits the same oversized packet indefinitely. Connections establish and then hang instead of failing cleanly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find my path MTU?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Send packets of decreasing size with fragmentation disabled until one gets through. A path MTU discovery tool automates this binary search and reports the largest size the path carries, plus whether oversized packets produce a proper error or vanish silently."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What MTU should I set for WireGuard or OpenVPN?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Measure the real path MTU first, then set the interface slightly below it. WireGuard commonly works at 1420 and OpenVPN around 1400, but the right value depends on your path. Do not set it lower than necessary, because smaller packets mean more overhead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is MSS clamping and why is it better?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MSS clamping rewrites the maximum segment size during the TCP handshake so both ends agree on a size that fits the path, without depending on ICMP messages getting through. Configured on a router, it fixes the problem for every device behind it at once."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I block ICMP on my firewall?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not all of it. Path MTU Discovery needs ICMP type 3 code 4 on IPv4 and ICMPv6 type 2 on IPv6. Blocking those causes hangs that are extremely hard to diagnose, and on IPv6 it breaks connectivity outright because routers do not fragment."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="/assets/netdebug-launch.js" defer></script>
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="wrap">
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="/" class="brand">
+        <img class="brand-logo" src="/assets/logo-wordmark.png" alt="NetDebug Toolkit logo" />
+        NetDebug Toolkit
+      </a>
+      <div class="nav-links">
+        <a href="/#tools">Tools</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/deeplink-generator.html">Generator</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <article class="post">
+      <div class="post-header">
+        <span class="tag">Networking</span>
+        <h1>Some websites won't load on VPN: the MTU problem nobody mentions</h1>
+        <p class="standfirst">Small things work, large things hang, and it happens on exactly the same sites every time. That pattern has one cause, and it is not your VPN provider.</p>
+        <div class="post-meta">
+          <span>6 min read</span>
+        </div>
+      </div>
+
+      <div class="post-body">
+        <p>Some connections fail in a way that feels haunted. The VPN connects fine. Ping works. Small pages load instantly. Then one site hangs forever, an SSH session opens and freezes the moment you run a command that produces output, a file upload stalls at exactly the same point every time, and a git clone gets to 30 percent and stops.</p>
+
+        <p>Everything that moves small amounts of data works. Everything that moves large amounts breaks. That specific pattern has one overwhelmingly likely cause, and it is not the VPN provider, the website, or your connection speed. It is MTU.</p>
+
+        <div class="toc-box">
+          <div class="toc-title">In this post</div>
+          <ol>
+            <li><a href="#mtu">What MTU is, in one minute</a></li>
+            <li><a href="#blackhole">Why it breaks: the black hole</a></li>
+            <li><a href="#symptoms">The symptom list</a></li>
+            <li><a href="#test">How to find your real path MTU</a></li>
+            <li><a href="#fix">Fixing it</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </div>
+
+        <h2 id="mtu">What MTU is, in one minute</h2>
+
+        <p>The Maximum Transmission Unit is the largest packet a network link will carry in one piece. Standard Ethernet is 1500 bytes, and most of the internet is built around that number.</p>
+
+        <p>The trouble starts when a link along the way carries less:</p>
+
+        <table>
+          <thead>
+            <tr><th>Link type</th><th>Typical MTU</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ethernet</td><td>1500</td></tr>
+            <tr><td>PPPoE (common on DSL)</td><td>1492</td></tr>
+            <tr><td>WireGuard</td><td>1420 or lower</td></tr>
+            <tr><td>OpenVPN</td><td>Around 1400</td></tr>
+            <tr><td>IPsec</td><td>1400 or lower depending on options</td></tr>
+            <tr><td>Various tunnels and mobile networks</td><td>1400 down to 1280</td></tr>
+          </tbody>
+        </table>
+
+        <p>Every tunnel wraps your packet in extra headers, so the space left for your actual data shrinks. Stack a VPN on top of PPPoE on top of a mobile connection and the usable size drops well below 1500 while both ends still assume 1500 is fine.</p>
+
+        <h2 id="blackhole">Why it breaks: the black hole</h2>
+
+        <p>The internet has a mechanism for exactly this situation, and when it works you never notice. A sender marks packets "do not fragment." If a router along the path cannot forward one, it drops the packet and sends back an ICMP message saying "packet too big, the maximum here is 1400." The sender adjusts and everything continues. This is Path MTU Discovery.</p>
+
+        <p>It depends entirely on that ICMP message getting back. And an enormous number of firewalls block ICMP wholesale, usually because someone once read that ICMP is a security risk and blocked all of it rather than the specific types worth blocking.</p>
+
+        <p>When that message is blocked, here is what happens: the sender transmits a full size packet, a router silently discards it, and no error comes back. The sender waits, assumes the packet was lost, and retransmits the same oversized packet. Which is dropped again. Forever.</p>
+
+        <p>That is an MTU black hole, and it explains the symptom perfectly. Small packets fit and sail through. Large packets vanish without a trace. The connection is established and alive, so nothing reports an error. It just hangs.</p>
+
+        <h2 id="symptoms">The symptom list</h2>
+
+        <p>If several of these are true, stop looking anywhere else:</p>
+
+        <ul>
+          <li>Ping works perfectly, because ping packets are tiny.</li>
+          <li>Some websites load instantly, others hang forever, and it is always the same ones.</li>
+          <li>HTTPS fails more than HTTP, because the certificate exchange during the handshake is large.</li>
+          <li>SSH connects and then freezes as soon as a command produces real output.</li>
+          <li>File uploads stall at a consistent point instead of failing immediately.</li>
+          <li>Everything works until you connect the VPN.</li>
+          <li>Email sends short messages fine and hangs on anything with an attachment.</li>
+          <li>The same site works on cellular data and fails on Wi-Fi, or the reverse.</li>
+        </ul>
+
+        <p>The tell that distinguishes MTU from ordinary packet loss is the consistency. Loss is random. MTU problems are deterministic: the same operation fails at the same point every single time, because the packet that cannot fit never fits.</p>
+
+        <h2 id="test">How to find your real path MTU</h2>
+
+        <p>The test is a binary search. Send a packet of a known size with fragmentation disabled and see whether it arrives. Too big, it disappears. Small enough, you get a reply. Narrow the range until you find the largest size that survives.</p>
+
+        <p><a href="/docs/path-mtu.html">Path MTU Discovery</a> does this for you and reports the largest packet the path actually carries, along with whether the path is a black hole (packets vanish silently) or well behaved (you get a proper "too big" response).</p>
+
+        <ol class="steps">
+          <li>
+            <strong>Test without the VPN first</strong>
+            <p>Establish a baseline for your plain connection. Most home connections come back at 1500, or 1492 on DSL with PPPoE.</p>
+          </li>
+          <li>
+            <strong>Test again with the VPN connected</strong>
+            <p>Same target. The difference between the two numbers is your tunnel overhead. If the VPN path reports something like 1380 while your interface is configured for 1500, you have found the problem.</p>
+          </li>
+          <li>
+            <strong>Test toward the specific host that is failing</strong>
+            <p>Path MTU is a property of a path, not of your connection. One destination can be fine while another is not, which is exactly why only some sites break.</p>
+          </li>
+          <li>
+            <strong>Note whether the path is a black hole</strong>
+            <p>This is the crucial detail. If oversized packets produce a proper ICMP response, discovery works and the operating system will adapt on its own. If they simply vanish, nothing will adapt and you must set the size manually.</p>
+          </li>
+        </ol>
+
+<div class="ndt-launch" data-tool="mtu" data-target="example.com" data-mode="auto" data-hops="true">
+          <a href="https://netdebug.app/open/mtu?target=example.com&amp;mode=auto&amp;hops=true" rel="nofollow">Open Path MTU Discovery in NetDebug Toolkit</a>
+        </div>
+
+        <pre><code><span class="comment"># Automatic discovery toward a specific host</span>
+<span class="scheme">https://netdebug.app/open/</span>mtu?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">mode</span>=<span class="value">auto</span>&amp;<span class="key">hops</span>=<span class="value">true</span>
+
+<span class="comment"># Test one specific packet size by hand</span>
+<span class="scheme">https://netdebug.app/open/</span>mtu?<span class="key">target</span>=<span class="value">example.com</span>&amp;<span class="key">mode</span>=<span class="value">manual</span>&amp;<span class="key">size</span>=<span class="value">1400</span></code></pre>
+
+        <div class="app-cta">
+          <h3>Find the packet size that actually fits</h3>
+          <p>Path MTU Discovery in NetDebug Toolkit finds the largest packet a path will carry and tells you whether the path drops oversized packets silently. Test with the VPN on and off and compare the two numbers. Free on the App Store.</p>
+          <a href="https://apps.apple.com/app/id6759454574" class="app-store-badge" target="_blank" rel="noopener" aria-label="Download NetDebug Toolkit on the App Store">
+            <img src="/assets/app-store-badge.svg" alt="Download on the App Store" width="138" height="46" />
+          </a>
+        </div>
+
+        <h2 id="fix">Fixing it</h2>
+
+        <h3>Lower the MTU on the interface</h3>
+        <p>The direct fix. Set the tunnel or network interface to the size you measured, minus a little headroom. If your path carries 1400, setting 1380 is sensible. WireGuard clients usually expose an MTU setting directly. OpenVPN has <code>tun-mtu</code>. Most operating systems allow setting it per interface.</p>
+        <p>Do not go lower than you need. A smaller MTU means more packets for the same data, which means more overhead and slightly lower throughput.</p>
+
+        <h3>Clamp MSS on the router</h3>
+        <p>This is the better fix when you control the router, because it applies to everything behind it automatically. MSS clamping rewrites the maximum segment size in TCP handshakes so both ends agree on a size that fits, without depending on ICMP getting through. Router firmware calls it "MSS clamping" or "clamp MSS to PMTU." Anything running PPPoE should almost certainly have it on.</p>
+
+        <h3>Stop blocking ICMP everywhere</h3>
+        <p>If you administer the firewall, allow ICMP type 3 code 4 (fragmentation needed) on IPv4 and ICMPv6 type 2 (packet too big) on IPv6. Path MTU Discovery cannot function without them, and on IPv6 it is not optional: routers do not fragment at all, so blocking that message breaks connectivity in ways that are extremely hard to diagnose.</p>
+        <p>Blocking all ICMP has been bad advice for twenty years and it is still repeated constantly.</p>
+
+        <h3>Check whether your VPN provider already handles it</h3>
+        <p>Good VPN clients set a conservative MTU automatically. If yours has an advanced setting for it, try lowering it before assuming the service is at fault. Many "this VPN is broken on my network" reports are one number away from working.</p>
+
+        <h2>Why this hits VPNs hardest</h2>
+
+        <p>A VPN adds headers to every packet, which shrinks the usable payload, and it usually terminates behind a firewall that someone configured strictly. That combination is the perfect setup for a black hole: less room than expected, and no error messages to tell anyone about it.</p>
+
+        <p>It is also why the problem seems to follow you. The same laptop works at home and fails at the office, or works on cellular and fails on hotel Wi-Fi, because each network has a different path and a different set of firewall rules. Nothing about the laptop changed.</p>
+
+        <h2>The short version</h2>
+
+        <p>If small things work and large things hang, deterministically, on the same sites every time, you have an MTU problem rather than a speed or reliability problem. Measure the real path MTU with and without the VPN, note whether oversized packets vanish silently, then either lower the interface MTU to what fits or clamp MSS on the router. And if you run the firewall, stop dropping the ICMP messages that would have told everyone about this in the first place.</p>
+      </div>
+
+      <section class="post-body" id="faq">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-item">
+          <h3>Why do some websites not load when my VPN is connected?</h3>
+          <p>A VPN adds headers to every packet, which reduces the space left for your data. If the path also drops oversized packets without sending an ICMP 'packet too big' message, large transfers stall silently while small ones work. That is an MTU black hole.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is an MTU black hole?</h3>
+          <p>It is a path where oversized packets are discarded without any error being returned. The sender never learns the packet was too big, so it retransmits the same oversized packet indefinitely. Connections establish and then hang instead of failing cleanly.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I find my path MTU?</h3>
+          <p>Send packets of decreasing size with fragmentation disabled until one gets through. A path MTU discovery tool automates this binary search and reports the largest size the path carries, plus whether oversized packets produce a proper error or vanish silently.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What MTU should I set for WireGuard or OpenVPN?</h3>
+          <p>Measure the real path MTU first, then set the interface slightly below it. WireGuard commonly works at 1420 and OpenVPN around 1400, but the right value depends on your path. Do not set it lower than necessary, because smaller packets mean more overhead.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is MSS clamping and why is it better?</h3>
+          <p>MSS clamping rewrites the maximum segment size during the TCP handshake so both ends agree on a size that fits the path, without depending on ICMP messages getting through. Configured on a router, it fixes the problem for every device behind it at once.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Should I block ICMP on my firewall?</h3>
+          <p>Not all of it. Path MTU Discovery needs ICMP type 3 code 4 on IPv4 and ICMPv6 type 2 on IPv6. Blocking those causes hangs that are extremely hard to diagnose, and on IPv6 it breaks connectivity outright because routers do not fragment.</p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Keep reading</h2>
+        <div class="related-grid">
+          <a href="/blog/slow-internet-speed-test-fine.html">Slow internet when the speed test looks fine</a>
+          <a href="/blog/how-to-test-packet-loss.html">How to test for packet loss</a>
+          <a href="/docs/path-mtu.html">Path MTU Discovery documentation</a>
+          <a href="/docs/traceroute.html">Traceroute documentation</a>
+          <a href="/blog/how-to-read-a-traceroute.html">How to read a traceroute</a>
+        </div>
+      </section>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copy">&copy; <span id="year"></span> Developer Insider. All rights reserved.</div>
+      <nav>
+        <a href="/blog.html">Blog</a>
+        <a href="/support.html">Support</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
